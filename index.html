@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>biography</title>
+    <title>S!honaax - maindev!</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,22 +64,119 @@
                 <p>Проэкты:</p>
                 <br>
             </div>
-            <div style="display: flex; gap: 10px; min-height: 50px;">
-                <button class="ctrl-btn main-play-btn" href="site/index.html"><a color="white" class="styled-link" href="site/index.html">k.cc</a></button>
-                <button class="ctrl-btn main-play-btn"><a color="white" class="styled-link" href="cookie/index.html">cookie</a></button>
-                <button class="ctrl-btn main-play-btn"><a color="white" class="styled-link" href="dep.html">DEP</a></button>
-                <button class="ctrl-btn main-play-btn" href="teamgz.itch.io"><a color="white" class="styled-link" href="https://teamgz.itch.io">TeV</a></button>
-                <button class="ctrl-btn main-play-btn" href="teamgz.itch.io"><a class="styled-link"color="white" href="https://shark-software.ru">SHK</a></button>
-                <button class="ctrl-btn main-play-btn"><a color="white" class="styled-link" href="games/vault.html">GameV</a></button>
-                <button class="ctrl-btn main-play-btn"><a color="white" class="styled-link" href="files/file.html">fstr</a></button>
-                
-            </div>
+            <style>
+.carousel-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    gap: 10px;
+    padding: 10px 0;
+    scrollbar-width: none;
+    transition: all 0.5s ease; /* Плавные изменения */
+    backdrop-filter: blur(10px); /* Эффект размытия фона */
+    
+}
+
+.carousel-container::-webkit-scrollbar {
+    display: none;
+}
+
+.ctrl-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-width: 100px;
+    padding: 12px 16px;
+    background-color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ctrl-btn:hover {
+    transform: scale(1.05);
+    background-color: #444;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.styled-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.styled-link:hover {
+    color: #ffd700; /* Золотой цвет при наведении */
+}
+
+@media (max-width: 768px) {
+    .ctrl-btn {
+        min-width: 90px;
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ctrl-btn {
+        min-width: 80px;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 18px;
+    border-radius: 50%;
+}
+
+.left { left: 10px; }
+.right { right: 10px; }
+            </style>
             
+           <div class="carousel-container">
+            <button class="ctrl-btn"><a class="styled-link" href="site/index.html">k.cc</a></button>
+            <button class="ctrl-btn"><a class="styled-link" href="cookie/index.html">cookie</a></button>
+            <button class="ctrl-btn"><a class="styled-link" href="dep.html">DEP</a></button>
+            <button class="ctrl-btn"><a class="styled-link" href="https://teamgz.itch.io ">TeV</a></button>
+            <button class="ctrl-btn"><a class="styled-link" href="https://shark-software.ru ">SHK</a></button>
+            <button class="ctrl-btn"><a class="styled-link" href="games/vault.html">GameV</a></button>
+            <button class="ctrl-btn"><a class="styled-link" href="files/file.html">fstr</a></button>
+        </div>
+       
+        
+        <script>
+            const carousel = document.querySelector('.carousel-container');
+            let scrollAmount = 0;
+        
+            setInterval(() => {
+                scrollAmount += 1;
+                if (scrollAmount >= carousel.scrollWidth - carousel.clientWidth) {
+                    scrollAmount = 0;
+                }
+                carousel.scrollTo({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            }, 50);
+            
+        </script>
             
         </div>
         
         <!-- Музыкальный плеер перемещен под основной баннер -->
-        <div class="music-player-panel card-music-player">
+        <div class="music-player-panel card-music-player" style="min-width: 100%;">
             <div class="player-header">
                 <div class="player-title">
                     <i class="fas fa-music"></i>
