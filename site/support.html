@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поддержка - NEVERLOSE</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .support-hero {
+            padding: 160px 0 80px;
+            text-align: center;
+        }
+        
+        .support-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .support-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius-lg);
+            padding: 40px 30px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .support-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: var(--box-shadow);
+            border-color: rgba(0, 200, 255, 0.2);
+        }
+        
+        .support-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            color: var(--light-color);
+        }
+        
+        .support-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .support-description {
+            color: var(--gray-color);
+            margin-bottom: 25px;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius-lg);
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            color: var(--light-color);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 200, 255, 0.1);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-submit {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="background-elements">
+            <div class="gradient-circle circle-1"></div>
+            <div class="gradient-circle circle-2"></div>
+            <div class="gradient-circle circle-3"></div>
+        </div>
+
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <a href="index.html">
+                            <img src="img/logo.svg" alt="NEVERLOSE">
+                        </a>
+                    </div>
+                    <nav class="navigation">
+                        <ul class="nav-list">
+                            <li class="nav-item"><a href="index.html">Главная</a></li>
+                            <li class="nav-item"><a href="forum.html">Форум</a></li>
+                            <li class="nav-item active"><a href="support.html">Справка</a></li>
+                        </ul>
+                    </nav>
+                    <div class="header-actions">
+                        <div class="language-selector">
+                            <button class="language-btn">
+                                <span>Ru</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div class="language-dropdown">
+                                <a href="#" data-lang="ru">Русский</a>
+                                <a href="#" data-lang="en">English</a>
+                            </div>
+                        </div>
+                        <a href="register.html" class="btn btn-outline">Регистрация</a>
+                        <a href="login.html" class="btn btn-primary">Вход</a>
+                    </div>
+                    <button class="mobile-menu-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <section class="support-hero">
+            <div class="container">
+                <h1 class="hero-title">Поддержка</h1>
+                <p class="hero-subtitle">Мы всегда готовы помочь вам с любыми вопросами</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Как мы можем помочь?</h2>
+                    <p class="section-description">Выберите наиболее удобный для вас способ связи</p>
+                </div>
+                
+                <div class="support-options">
+                    <div class="support-card">
+                        <div class="support-icon">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <h3 class="support-title">Живой чат</h3>
+                        <p class="support-description">Получите мгновенную помощь от наших специалистов через чат прямо на сайте.</p>
+                        <a href="#" class="btn btn-outline">Начать чат</a>
+                    </div>
+                    
+                    <div class="support-card">
+                        <div class="support-icon">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <h3 class="support-title">Email поддержка</h3>
+                        <p class="support-description">Отправьте нам электронное письмо, и мы ответим в течение 24 часов.</p>
+                        <a href="mailto:support@neverlose.cc" class="btn btn-outline">Написать письмо</a>
+                    </div>
+                    
+                    <div class="support-card">
+                        <div class="support-icon">
+                            <i class="fa-brands fa-discord"></i>
+                        </div>
+                        <h3 class="support-title">Discord сообщество</h3>
+                        <p class="support-description">Присоединяйтесь к нашему Discord серверу для общения с сообществом.</p>
+                        <a href="https://discord.gg/neverlose" target="_blank" class="btn btn-outline">Присоединиться</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Часто задаваемые вопросы</h2>
+                    <p class="section-description">Ответы на самые популярные вопросы</p>
+                </div>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как начать использовать NEVERLOSE?</h3>
+                            <span class="faq-toggle"><i class="fa-solid fa-plus"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Чтобы начать использовать NEVERLOSE, вам необходимо зарегистрироваться на нашем сайте, выбрать подходящий тарифный план и оплатить его. После этого вы получите доступ к личному кабинету, откуда сможете скачать лаунчер и начать использовать наш продукт.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как обновить клиент до последней версии?</h3>
+                            <span class="faq-toggle"><i class="fa-solid fa-plus"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Наш клиент обновляется автоматически при каждом запуске лаунчера. Если у вас возникли проблемы с обновлением, попробуйте перезапустить лаунчер или выполнить полную переустановку программы.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Что делать, если возникли технические проблемы?</h3>
+                            <span class="faq-toggle"><i class="fa-solid fa-plus"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>В случае возникновения технических проблем, рекомендуем вам:</p>
+                            <ol>
+                                <li>Перезапустить лаунчер и компьютер</li>
+                                <li>Проверить наличие обновлений Windows и драйверов</li>
+                                <li>Временно отключить антивирус</li>
+                                <li>Связаться с нашей службой поддержки, если проблема не решена</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как создать и сохранить собственную конфигурацию?</h3>
+                            <span class="faq-toggle"><i class="fa-solid fa-plus"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Для создания собственной конфигурации настройте все параметры в соответствии с вашими предпочтениями, затем нажмите на кнопку "Сохранить" в нижней части экрана. Вы можете создать несколько конфигураций для разных случаев и переключаться между ними.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как обезопасить свой аккаунт?</h3>
+                            <span class="faq-toggle"><i class="fa-solid fa-plus"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Для обеспечения безопасности вашего аккаунта, рекомендуем:</p>
+                            <ul>
+                                <li>Использовать сложный пароль, содержащий не менее 8 символов</li>
+                                <li>Включить двухфакторную аутентификацию</li>
+                                <li>Не делиться данными для входа с другими лицами</li>
+                                <li>Регулярно менять пароль</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Свяжитесь с нами</h2>
+                    <p class="section-description">Заполните форму, и мы свяжемся с вами в ближайшее время</p>
+                </div>
+                
+                <div class="contact-form">
+                    <form action="#" method="post" id="supportForm">
+                        <div class="form-group">
+                            <label for="name">Ваше имя</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Тема обращения</label>
+                            <select id="subject" name="subject" class="form-control" required>
+                                <option value="">Выберите тему</option>
+                                <option value="technical">Технические проблемы</option>
+                                <option value="billing">Вопросы оплаты</option>
+                                <option value="account">Проблемы с аккаунтом</option>
+                                <option value="other">Другое</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Сообщение</label>
+                            <textarea id="message" name="message" class="form-control" required></textarea>
+                        </div>
+                        
+                        <div class="form-submit">
+                            <button type="submit" class="btn btn-primary btn-lg">Отправить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-logo">
+                        <img src="img/logo.svg" alt="NEVERLOSE">
+                        <p class="footer-tagline">Превосходство в каждой игре</p>
+                    </div>
+                    <div class="footer-links">
+                        <div class="footer-links-column">
+                            <h4 class="footer-links-title">Навигация</h4>
+                            <ul class="footer-links-list">
+                                <li><a href="index.html">Главная</a></li>
+                                <li><a href="forum.html">Форум</a></li>
+                                <li><a href="support.html">Справка</a></li>
+                                <li><a href="blog.html">Блог</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-links-column">
+                            <h4 class="footer-links-title">Информация</h4>
+                            <ul class="footer-links-list">
+                                <li><a href="about.html">О нас</a></li>
+                                <li><a href="terms.html">Условия использования</a></li>
+                                <li><a href="privacy.html">Политика конфиденциальности</a></li>
+                                <li><a href="refund.html">Политика возврата</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-links-column">
+                            <h4 class="footer-links-title">Связь</h4>
+                            <ul class="footer-links-list">
+                                <li><a href="https://discord.gg/neverlose" target="_blank">Discord</a></li>
+                                <li><a href="https://t.me/neverlose" target="_blank">Telegram</a></li>
+                                <li><a href="mailto:support@neverlose.cc">Email</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="footer-newsletter">
+                        <h4 class="footer-newsletter-title">Подпишитесь на новости</h4>
+                        <p class="footer-newsletter-description">Получайте уведомления о новых обновлениях и акциях</p>
+                        <form class="newsletter-form">
+                            <input type="email" placeholder="Ваш email" required>
+                            <button type="submit" class="btn btn-primary">Подписаться</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p class="copyright">© 2023 NEVERLOSE. Все права защищены.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            showNotification('Ваше сообщение успешно отправлено. Мы свяжемся с вами в ближайшее время.', 'success');
+            
+            this.reset();
+        });
+        
+        function showNotification(message, type = 'info') {
+            if (typeof window.showNotification === 'function') {
+                window.showNotification(message, type);
+            } else {
+                alert(message);
+            }
+        }
+    </script>
+</body>
+</html> 

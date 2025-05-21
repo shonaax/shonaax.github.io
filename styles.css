@@ -10,6 +10,12 @@
     --player-border: rgba(255, 255, 255, 0.1);
     --beat-intensity: 0;
 }
+.styled-link {
+    text-decoration: none; /* Убирает подчеркивание */
+    color: #ffffff; /* Цвет текста */
+    
+}
+
 
 * {
     margin: 0;

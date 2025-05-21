@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кликер Печенек</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1>Кликер Печенек</h1>
+            <div class="stats">
+                <div class="cookies">
+                    <span id="cookie-count">0</span> печенек
+                </div>
+                <div class="cookies-per-second">
+                    <span id="cookies-per-second">0</span> печенек в секунду
+                </div>
+                <div class="cookies-per-click">
+                    <span id="cookies-per-click">1</span> печенек за клик
+                </div>
+            </div>
+        </header>
+        
+        <main>
+            <div class="cookie-container">
+                <img src="https://cdn-icons-png.flaticon.com/512/541/541732.png" alt="Печенька" id="cookie-clicker">
+            </div>
+            
+            <div class="panels">
+                <div class="panel" id="upgrades-panel">
+                    <h2>Улучшения</h2>
+                    <div class="upgrades-list" id="upgrades-list">
+                        <!-- Здесь будут генерироваться улучшения -->
+                    </div>
+                </div>
+                
+                <div class="panel" id="shop-panel">
+                    <h2>Магазин</h2>
+                    <div class="shop-items" id="shop-items">
+                        <!-- Здесь будут генерироваться товары -->
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <button id="save-button" class="button">Сохранить игру</button>
+            <button id="reset-button" class="button warning">Сбросить игру</button>
+        </footer>
+    </div>
+    
+    <div id="notification" class="notification"></div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 

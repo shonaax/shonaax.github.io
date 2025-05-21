@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kovalenko - Премиум чит-клиент</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="background-elements">
+            <div class="gradient-circle circle-1"></div>
+            <div class="gradient-circle circle-2"></div>
+            <div class="gradient-circle circle-3"></div>
+        </div>
+
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <a href="index.html">
+                            <img src="img/logo.svg" alt="k.image">
+                        </a>
+                    </div>
+                    <nav class="navigation">
+                        <ul class="nav-list">
+                            <li class="nav-item active"><a href="index.html">Главная</a></li>
+                            <li class="nav-item"><a href="forum.html">Форум</a></li>
+                            <li class="nav-item"><a href="support.html">Справка</a></li>
+                        </ul>
+                    </nav>
+                    <div class="header-actions">
+                        <div class="language-selector">
+                            <button class="language-btn">
+                                <span>Ru</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div class="language-dropdown">
+                                <a href="#" data-lang="ru">Русский</a>
+                                <a href="#" data-lang="en">English</a>
+                            </div>
+                        </div>
+                        <a href="register.html" class="btn btn-outline">Регистрация</a>
+                        <a href="login.html" class="btn btn-primary">Вход</a>
+                    </div>
+                    <button class="mobile-menu-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">kovalenko</h1>
+                    <p class="hero-subtitle">Премиум чит-клиент нового поколения</p>
+                    <div class="hero-cta">
+                        <a href="#features" class="btn btn-primary btn-lg">Возможности</a>
+                        <a href="#pricing" class="btn btn-outline btn-lg">Купить</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">50,000+</span>
+                            <span class="stat-label">Активных пользователей</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">99.9%</span>
+                            <span class="stat-label">Стабильность</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Поддержка</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="img/menu.png" alt="Interface">
+                    <div class="floating-badge">
+                        <span>Новая версия</span>
+                        <strong>2.0</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Преимущества kovalenko</h2>
+                    <p class="section-description">Наш продукт сочетает в себе инновационные технологии и эффективность работы</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="feature-title">Высокая степень защиты</h3>
+                        <p class="feature-description">Уникальная система обхода античитов с регулярными обновлениями</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-sliders"></i>
+                        </div>
+                        <h3 class="feature-title">Настраиваемый интерфейс</h3>
+                        <p class="feature-description">Полностью кастомизируемый интерфейс под ваши предпочтения</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h3 class="feature-title">Мгновенная производительность</h3>
+                        <p class="feature-description">Оптимизированный код с минимальным влиянием на FPS</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-cloud"></i>
+                        </div>
+                        <h3 class="feature-title">Облачные конфигурации</h3>
+                        <p class="feature-description">Сохраняйте и делитесь своими настройками через облачное хранилище</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="pricing-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Выберите свой план</h2>
+                    <p class="section-description">Мы предлагаем гибкие тарифы для любых потребностей</p>
+                </div>
+                <div class="pricing-tabs">
+                    <button class="pricing-tab active" data-period="month">Месяц</button>
+                    <button class="pricing-tab" data-period="quarter">3 месяца</button>
+                    <button class="pricing-tab" data-period="year">Год</button>
+                </div>
+                <div class="pricing-cards">
+                    <div class="pricing-card">
+                        <div class="pricing-card-header">
+                            <h3 class="pricing-title">Стандарт</h3>
+                            <div class="pricing-price">
+                                <span class="price">1200 ₽</span>
+                                <span class="period">/ месяц</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li>Базовые функции</li>
+                            <li>Стандартные обновления</li>
+                            <li>Доступ к форуму</li>
+                            <li>Базовая поддержка</li>
+                        </ul>
+                        <div class="pricing-cta">
+                            <a href="#" class="btn btn-outline btn-block">Выбрать план</a>
+                        </div>
+                    </div>
+                    <div class="pricing-card featured">
+                        <div class="pricing-card-badge">Популярный</div>
+                        <div class="pricing-card-header">
+                            <h3 class="pricing-title">Премиум</h3>
+                            <div class="pricing-price">
+                                <span class="price">2500 ₽</span>
+                                <span class="period">/ месяц</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li>Все функции Стандарт</li>
+                            <li>Расширенные настройки</li>
+                            <li>Приоритетные обновления</li>
+                            <li>Премиум поддержка</li>
+                            <li>Эксклюзивные скины</li>
+                        </ul>
+                        <div class="pricing-cta">
+                            <a href="#" class="btn btn-primary btn-block">Выбрать план</a>
+                        </div>
+                    </div>
+                    <div class="pricing-card">
+                        <div class="pricing-card-header">
+                            <h3 class="pricing-title">VIP</h3>
+                            <div class="pricing-price">
+                                <span class="price">4000 ₽</span>
+                                <span class="period">/ месяц</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li>Все функции Премиум</li>
+                            <li>Закрытый VIP форум</li>
+                            <li>Бета-доступ к новым функциям</li>
+                            <li>Индивидуальная поддержка 24/7</li>
+                            <li>Приватные конфигурации</li>
+                        </ul>
+                        <div class="pricing-cta">
+                            <a href="#" class="btn btn-outline btn-block">Выбрать план</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Что говорят наши пользователи</h2>
+                    <p class="section-description">Реальные отзывы от игроков по всему миру</p>
+                </div>
+                <div class="testimonials-slider">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"Использую kovalenko уже больше года. Лучший чит-клиент из всех, что я пробовал. Отличная поддержка и стабильные обновления."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <img src="img/avatar-1.jpg" alt="User avatar" class="author-avatar">
+                            <div class="author-info">
+                                <h4 class="author-name">Алексей</h4>
+                                <span class="author-rating">★★★★★</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"Пробовал много разных решений, но остановился на kovalenko. Стабильность и функциональность на высоте. Рекомендую!"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <img src="img/avatar-2.jpg" alt="User avatar" class="author-avatar">
+                            <div class="author-info">
+                                <h4 class="author-name">Михаил</h4>
+                                <span class="author-rating">★★★★★</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <p>"Отличный продукт, особенно радует техподдержка. Любые вопросы решаются быстро и эффективно."</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <img src="img/avatar-3.jpg" alt="User avatar" class="author-avatar">
+                            <div class="author-info">
+                                <h4 class="author-name">Дмитрий</h4>
+                                <span class="author-rating">★★★★☆</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Часто задаваемые вопросы</h2>
+                    <p class="section-description">Ответы на самые популярные вопросы</p>
+                </div>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как происходит процесс оплаты?</h3>
+                            <span class="faq-toggle"><i class="fa-solid fa-plus"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Мы принимаем различные способы оплаты, включая банковские карты, электронные кошельки и криптовалюты. После оплаты доступ к продукту предоставляется автоматически.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как часто выходят обновления?</h3>
+                            <span class="faq-toggle"><i class="fa-solid fa-plus"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Мы выпускаем обновления еженедельно. Крупные обновления функционала выходят примерно раз в месяц.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Безопасно ли использовать ваш продукт?</h3>
+                            <span class="faq-toggle"><i class="fa-solid fa-plus"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Мы уделяем особое внимание безопасности наших пользователей. Наша система постоянно совершенствуется для обеспечения максимальной защиты.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Могу ли я перенести свою лицензию на другой аккаунт?</h3>
+                            <span class="faq-toggle"><i class="fa-solid fa-plus"></i></span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Перенос лицензии возможен, но не чаще одного раза в месяц. Для этого обратитесь в нашу службу поддержки.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-logo">
+                        <img src="img/logo.jpg" alt="NEVERLOSE">
+                        <p class="footer-tagline">Превосходство в каждой игре</p>
+                    </div>
+                    <div class="footer-links">
+                        <div class="footer-links-column">
+                            <h4 class="footer-links-title">Навигация</h4>
+                            <ul class="footer-links-list">
+                                <li><a href="index.html">Главная</a></li>
+                                <li><a href="forum.html">Форум</a></li>
+                                <li><a href="support.html">Справка</a></li>
+                                <li><a href="blog.html">Блог</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-links-column">
+                            <h4 class="footer-links-title">Информация</h4>
+                            <ul class="footer-links-list">
+                                <li><a href="about.html">О нас</a></li>
+                                <li><a href="terms.html">Условия использования</a></li>
+                                <li><a href="privacy.html">Политика конфиденциальности</a></li>
+                                <li><a href="refund.html">Политика возврата</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-links-column">
+                            <h4 class="footer-links-title">Связь</h4>
+                            <ul class="footer-links-list">
+                                <li><a href="https://discord.gg/kovalenko" target="_blank">Discord</a></li>
+                                <li><a href="https://t.me/asharkdev" target="_blank">Telegram</a></li>
+                                <li><a href="mailto:support@proton.me">Email</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="footer-newsletter">
+                        <h4 class="footer-newsletter-title">Подпишитесь на новости</h4>
+                        <p class="footer-newsletter-description">Получайте уведомления о новых обновлениях и акциях</p>
+                        <form class="newsletter-form">
+                            <input type="email" placeholder="Ваш email" required>
+                            <button type="submit" class="btn btn-primary">Подписаться</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p class="copyright">© 2023 kovalenko. Все права защищены.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html> 
