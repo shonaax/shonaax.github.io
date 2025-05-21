@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoliaKiww - Файловый хостинг</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .login-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+        
+        input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: #3182ce;
+        }
+        
+        .error-msg {
+            color: #e53e3e;
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .content-container {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+        
+        .logout-btn {
+            background-color: #e53e3e;
+            width: auto;
+            padding: 0.5rem 1rem;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c53030;
+        }
+        
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .file-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .file-content {
+            padding: 1.5rem;
+        }
+        
+        .file-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .file-icon {
+            background: #ebf8ff;
+            padding: 0.75rem;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+        
+        .file-icon svg {
+            width: 24px;
+            height: 24px;
+            color: #3182ce;
+        }
+        
+        .file-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        
+        .file-desc {
+            color: #718096;
+            margin-bottom: 1.5rem;
+        }
+        
+        .download-btn {
+            display: block;
+            text-align: center;
+            background: #48bb78;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .download-btn:hover {
+            background: #38a169;
+        }
+    </style>
+</head>
+<body>
+    <!-- Логин форма -->
+    <div id="login-container" class="login-container">
+        <div class="login-box">
+            <h1>FoliaKiww</h1>
+            <p style="text-align: center; margin-bottom: 1.5rem; color: #718096;">Введите пароль для доступа к файлам</p>
+            <input type="password" id="password-input" placeholder="Пароль">
+            <button id="login-btn">Войти</button>
+            <p id="error-msg" class="error-msg">Неверный пароль!</p>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div id="content-container" class="content-container">
+        <header class="header">
+            <h1>FoliaKiww</h1>
+            <button id="logout-btn" class="logout-btn">Выйти</button>
+        </header>
+
+        <div class="files-grid">
+            <!-- Файл 1: beta.html -->
+            <div class="file-card">
+                <div class="file-content">
+                    <div class="file-header">
+                        <div class="file-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <h2 class="file-title">beta.html</h2>
+                    </div>
+                    <p class="file-desc">HTML файл для тестирования</p>
+                    <button onclick="downloadFile('files/beta.html', 'beta.html')" class="download-btn">Скачать</button>
+                </div>
+            </div>
+
+            <!-- Файл 2: example.txt -->
+            <div class="file-card">
+                <div class="file-content">
+                    <div class="file-header">
+                        <div class="file-icon" style="background: #faf5ff;">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: #9f7aea;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <h2 class="file-title">example.txt</h2>
+                    </div>
+                    <p class="file-desc">Текстовый файл с примером</p>
+                    <button onclick="downloadFile('files/example.txt', 'example.txt')" class="download-btn">Скачать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  <!-- Файл 2: example.txt -->
+            <div class="file-card">
+                <div class="file-content">
+                    <div class="file-header">
+                        <div class="file-icon" style="background: #faf5ff;">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: #9f7aea;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <h2 class="file-title">example.txt</h2>
+                    </div>
+                    <p class="file-desc">Текстовый файл с примером</p>
+                    <button onclick="downloadFile('files/MyDockFinder (1).zip', 'MyDockFinder (1).zip')" class="download-btn">Скачать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы DOM
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const passwordInput = document.getElementById('password-input');
+            const errorMsg = document.getElementById('error-msg');
+            const loginContainer = document.getElementById('login-container');
+            const contentContainer = document.getElementById('content-container');
+            
+            // Проверка пароля
+            function checkPassword() {
+                if(passwordInput.value === 'kira') {
+                    loginContainer.style.display = 'none';
+                    contentContainer.style.display = 'block';
+                    errorMsg.style.display = 'none';
+                } else {
+                    errorMsg.style.display = 'block';
+                }
+            }
+            
+            // Выход из системы
+            function logout() {
+                loginContainer.style.display = 'flex';
+                contentContainer.style.display = 'none';
+                passwordInput.value = '';
+            }
+            
+            // Функция для скачивания файлов
+            function downloadFile(url, filename) {
+                // Создаем скрытую ссылку для скачивания
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                link.target = '_blank';
+                
+                // Добавляем на страницу и кликаем
+                document.body.appendChild(link);
+                link.click();
+                
+                // Удаляем ссылку
+                document.body.removeChild(link);
+            }
+            
+            // Делаем функцию доступной глобально
+            window.downloadFile = downloadFile;
+            
+            // События
+            loginBtn.addEventListener('click', checkPassword);
+            logoutBtn.addEventListener('click', logout);
+            
+            // Проверка пароля при нажатии Enter
+            passwordInput.addEventListener('keyup', function(event) {
+                if(event.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

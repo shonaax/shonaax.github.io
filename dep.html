@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игровой автомат</title>
+    <style>
+:root {
+            --primary-color: #ffd700;
+            --secondary-color: #ff6b6b;
+            --bg-color: #121212;
+            --panel-color: #222;
+            --border-color: #444;
+            --text-color: #fff;
+            --button-color: #4CAF50;
+            --button-hover: #45a049;
+            --disabled-color: #666;
+            --win-color: #ffd700;
+            --jackpot-color: #ff0000;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-image: radial-gradient(circle at center, #2a2a2a 0%, #121212 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--panel-color);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, 
+                var(--primary-color), 
+                var(--secondary-color), 
+                var(--primary-color));
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.3;
+            animation: gradientBG 15s ease infinite;
+            background-size: 200% 200%;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            letter-spacing: 2px;
+        }
+        
+        .balance-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .balance {
+            font-size: 28px;
+            color: var(--primary-color);
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 50px;
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .balance::before {
+            content: "💰";
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        
+        .slot-machine {
+            background-color: var(--panel-color);
+            border: 5px solid var(--border-color);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .slot-machine::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--primary-color), 
+                transparent);
+            animation: lightEffect 3s linear infinite;
+        }
+        
+        @keyframes lightEffect {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .slots {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            perspective: 1000px;
+        }
+        
+        .slot {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            margin: 0 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            color: #333;
+            border: 4px solid #ddd;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+        
+        .slot::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.8) 0%, 
+                rgba(255,255,255,0) 50%);
+            pointer-events: none;
+        }
+        
+        .slot-value {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .controls {
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        button {
+            background-color: var(--button-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 50px;
+            margin: 0 5px;
+            transition: all 0.3s;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(255,255,255,0.3), 
+                transparent);
+            transform: translateX(-100%);
+        }
+        
+        button:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:hover::after {
+            animation: shine 1.5s infinite;
+        }
+        
+        @keyframes shine {
+            100% { transform: translateX(100%); }
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        button:disabled {
+            background-color: var(--disabled-color);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        button:disabled::after {
+            display: none;
+        }
+        
+        .bet-controls {
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .bet-amount {
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .bet-label {
+            margin-right: 10px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        input {
+            padding: 12px;
+            width: 80px;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: #333;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .bet-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .bet-button {
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #555;
+        }
+        
+        .result {
+            font-size: 26px;
+            min-height: 40px;
+            margin: 25px 0;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .win {
+            color: var(--win-color);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            animation: pulse 0.5s 3, blink 0.5s 3;
+        }
+        
+        .jackpot {
+            color: var(--jackpot-color);
+            font-size: 32px;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+            animation: jackpot 1s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes blink {
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes jackpot {
+            0% { transform: scale(1); text-shadow: 0 0 15px rgba(255, 0, 0, 0.7); }
+            100% { transform: scale(1.1); text-shadow: 0 0 25px rgba(255, 0, 0, 1); }
+        }
+        
+        .symbols {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .symbol {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+        }
+        
+        .symbol-icon {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+        
+        .symbol-value {
+            font-size: 14px;
+            color: var(--primary-color);
+        }
+        
+        .paytable {
+            margin-top: 30px;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .paytable h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        .paytable-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        
+        .paytable-row:last-child {
+            border-bottom: none;
+        }
+        
+        .history {
+            margin-top: 30px;
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--panel-color);
+        }
+        
+        .history::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .history::-webkit-scrollbar-track {
+            background: var(--panel-color);
+            border-radius: 4px;
+        }
+        
+        .history::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        .history-item {
+            padding: 5px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .win-item {
+            color: var(--win-color);
+        }
+        
+        .jackpot-item {
+            color: var(--jackpot-color);
+            font-weight: bold;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #aaa;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .slot {
+                width: 70px;
+                height: 70px;
+                font-size: 40px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            .bet-controls {
+                flex-direction: column;
+            }
+        }
+        
+        /* Анимации для барабанов */
+        @keyframes spin {
+            0% { transform: rotateX(0deg); }
+            100% { transform: rotateX(360deg); }
+        }
+        
+        .spinning {
+            animation: spin 0.1s linear infinite;
+        }
+        
+        .stop-spin {
+            animation: stopSpin 1s ease-out forwards;
+        }
+        
+        @keyframes stopSpin {
+            0% { transform: rotateX(0deg); }
+            100% { transform: rotateX(720deg); }
+        }
+        
+        /* Конфетти для джекпота */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            opacity: 0;
+            z-index: 10;
+            animation: confettiFall 5s linear forwards;
+        }
+        
+        @keyframes confettiFall {
+            0% { 
+                transform: translateY(-100px) rotate(0deg); 
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(1000px) rotate(720deg); 
+                opacity: 0;
+            }
+        }
+
+        /* Новые стили для навигации и модального окна */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--panel-color);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            border: 2px solid var(--primary-color);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .withdraw-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        select, input[type="text"], input[type="number"] {
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: black;
+            font-weight: bold;
+        }
+
+        .withdraw-status {
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .success {
+            color: var(--primary-color);
+        }
+
+        .error {
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="user-info">
+                <div class="user-avatar">Mr.</div>
+                <div>
+                    <div><strong> Mr. Beast</strong> 
+                    </div>
+                    <div id="nav-balance">1000 ₽</div>
+                </div>
+            </div>
+            <button onclick="openWithdrawModal()">Вывод</button>
+        </nav>
+        
+        <h1>🎰 Депер школы 🎰</h1>
+        
+        <div class="balance">
+            Баланс: <span id="balance">1000</span> ₽
+        </div>
+        
+        <div class="bet-controls">
+            <button onclick="changeBet(-50)">ставка -50</button>
+            <input type="number" id="bet-amount" value="50" min="10" step="10">
+            <button onclick="changeBet(50)">ставка +50</button>
+        </div>
+        
+        <div class="slot-machine">
+            <div class="slots">
+                <div class="slot" id="slot1">🍒</div>
+                <div class="slot" id="slot2">🍋</div>
+                <div class="slot" id="slot3">🍊</div>
+            </div>
+            
+            <div class="controls">
+                <button id="spin-btn" onclick="spin()">Крутить!</button>
+            </div>
+            
+            <div class="result" id="result"></div>
+        </div>
+        
+        <div class="symbols">
+            <div class="symbol">🍒 = x2</div>
+            <div class="symbol">🍋 = x3</div>
+            <div class="symbol">🍊 = x4</div>
+            <div class="symbol">7️⃣ = x10</div>
+        </div>
+        
+        <div class="paytable">
+            <p>3 одинаковых символа = множитель x5</p>
+            <p>3 семёрки = ДЖЕКПОТ x100</p>
+        </div>
+    </div>
+
+    <!-- Модальное окно вывода -->
+    <div class="modal" id="withdraw-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2>Вывод средств</h2>
+            
+            <div class="withdraw-form" id="withdraw-form">
+                <div class="form-group">
+                    <label for="withdraw-method">Способ вывода:</label>
+                    <select id="withdraw-method" onchange="updateWithdrawFields()">
+                        <option value="sber">Сбербанк</option>
+                        <option value="tinkoff">Тинькофф</option>
+                        <option value="steam">Steam</option>
+                        <option value="qiwi">QIWI</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="card-number-group">
+                    <label for="card-number">Номер карты:</label>
+                    <input type="text" id="card-number" placeholder="0000 0000 0000 0000">
+                </div>
+                
+                <div class="form-group" id="steam-id-group" style="display: none;">
+                    <label for="steam-id">Steam ID:</label>
+                    <input type="text" id="steam-id" placeholder="STEAM_0:0:12345678">
+                </div>
+                
+                <div class="form-group" id="qiwi-number-group" style="display: none;">
+                    <label for="qiwi-number">Номер QIWI:</label>
+                    <input type="text" id="qiwi-number" placeholder="+71234567890">
+                </div>
+                
+                <div class="form-group">
+                    <label for="withdraw-amount">Сумма вывода:</label>
+                    <input type="number" id="withdraw-amount" min="100" :max="balance" value="100">
+                    <small>Доступно: <span id="available-amount">1000</span> ₽</small>
+                </div>
+                
+                <button onclick="submitWithdraw()">Вывести</button>
+            </div>
+            
+            <div class="progress-bar" id="progress-bar">
+                <div class="progress" id="progress">0%</div>
+            </div>
+            
+            <div class="withdraw-status" id="withdraw-status"></div>
+        </div>
+    </div>
+
+    <script>
+        // Начальные значения
+        let balance = 1000;
+        let betAmount = 50;
+        let isSpinning = false;
+        let db;
+        
+        // Инициализация IndexedDB
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open('SlotMachineDB', 1);
+                
+                request.onerror = function(event) {
+                    console.error("Ошибка IndexedDB:", event.target.error);
+                    reject(event.target.error);
+                };
+                
+                request.onsuccess = function(event) {
+                    db = event.target.result;
+                    console.log("База данных успешно открыта");
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = function(event) {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains('userData')) {
+                        const store = db.createObjectStore('userData', { keyPath: 'id' });
+                        console.log("Хранилище 'userData' создано");
+                    }
+                };
+            });
+        }
+        
+        // Сохранение данных
+        function saveData() {
+            if (!db) return;
+            
+            const transaction = db.transaction(['userData'], 'readwrite');
+            const store = transaction.objectStore('userData');
+            
+            const data = {
+                id: 1,
+                balance: balance,
+                betAmount: betAmount
+            };
+            
+            const request = store.put(data);
+            
+            request.onsuccess = function() {
+                console.log("Данные сохранены");
+            };
+            
+            request.onerror = function(event) {
+                console.error("Ошибка сохранения:", event.target.error);
+            };
+        }
+        
+        // Загрузка данных
+        function loadData() {
+            return new Promise((resolve, reject) => {
+                if (!db) {
+                    reject("База данных не инициализирована");
+                    return;
+                }
+                
+                const transaction = db.transaction(['userData'], 'readonly');
+                const store = transaction.objectStore('userData');
+                const request = store.get(1);
+                
+                request.onsuccess = function(event) {
+                    const data = event.target.result;
+                    if (data) {
+                        balance = data.balance || 1000;
+                        betAmount = data.betAmount || 50;
+                        updateBalance();
+                        document.getElementById('bet-amount').value = betAmount;
+                        console.log("Данные загружены");
+                    }
+                    resolve();
+                };
+                
+                request.onerror = function(event) {
+                    console.error("Ошибка загрузки:", event.target.error);
+                    reject(event.target.error);
+                };
+            });
+        }
+        
+        // Символы для слотов
+        const symbols = ['🍒', '🍋', '🍊', '7️⃣'];
+        // Множители для символов
+        const multipliers = {
+            '🍒': 2,
+            '🍋': 3,
+            '🍊': 4,
+            '7️⃣': 10
+        };
+        
+        // Обновление отображения баланса
+        function updateBalance() {
+            document.getElementById('balance').textContent = balance;
+            document.getElementById('nav-balance').textContent = balance + ' ₽';
+            document.getElementById('available-amount').textContent = balance;
+            document.getElementById('withdraw-amount').max = balance;
+        }
+        
+        // Изменение ставки
+        function changeBet(amount) {
+            betAmount = parseInt(document.getElementById('bet-amount').value) + amount;
+            if (betAmount < 10) betAmount = 10;
+            if (betAmount > balance) betAmount = balance;
+            document.getElementById('bet-amount').value = betAmount;
+            saveData();
+        }
+        
+        // Анимация вращения слота
+        function spinSlot(slotElement, duration, finalSymbol) {
+            let startTime = null;
+            const symbolsCount = symbols.length;
+            let currentIndex = 0;
+            
+            function animate(time) {
+                if (!startTime) startTime = time;
+                const progress = (time - startTime) / duration;
+                
+                if (progress < 1) {
+                    currentIndex = (currentIndex + 1) % symbolsCount;
+                    slotElement.textContent = symbols[currentIndex];
+                    requestAnimationFrame(animate);
+                } else {
+                    slotElement.textContent = finalSymbol;
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // Основная функция вращения
+        function spin() {
+            if (isSpinning || balance < betAmount) return;
+            
+            isSpinning = true;
+            balance -= betAmount;
+            updateBalance();
+            saveData();
+            document.getElementById('result').textContent = '';
+            document.getElementById('result').className = 'result';
+            
+            // Генерация случайных результатов
+            const results = [
+                symbols[Math.floor(Math.random() * symbols.length)],
+                symbols[Math.floor(Math.random() * symbols.length)],
+                symbols[Math.floor(Math.random() * symbols.length)]
+            ];
+            
+            // Вращение каждого слота с разной длительностью
+            const spinDurations = [1000, 1500, 2000];
+            spinSlot(document.getElementById('slot1'), spinDurations[0], results[0]);
+            spinSlot(document.getElementById('slot2'), spinDurations[1], results[1]);
+            spinSlot(document.getElementById('slot3'), spinDurations[2], results[2]);
+            
+            // Проверка результатов после завершения анимации
+            setTimeout(() => {
+                isSpinning = false;
+                checkResults(results);
+            }, Math.max(...spinDurations) + 100);
+        }
+        
+        // Проверка результатов и расчет выигрыша
+        function checkResults(results) {
+            let winAmount = 0;
+            const resultElement = document.getElementById('result');
+            
+            // Проверка на джекпот (три семёрки)
+            if (results[0] === '7️⃣' && results[1] === '7️⃣' && results[2] === '7️⃣') {
+                winAmount = betAmount * 100;
+                resultElement.textContent = `ДЖЕКПОТ! +${winAmount} ₽`;
+                resultElement.className = 'result jackpot';
+            } 
+            // Проверка на три одинаковых символа
+            else if (results[0] === results[1] && results[1] === results[2]) {
+                const multiplier = multipliers[results[0]] * 5;
+                winAmount = betAmount * multiplier;
+                resultElement.textContent = `Три ${results[0]}! +${winAmount} ₽ (x${multiplier})`;
+                resultElement.className = 'result win';
+            } 
+            // Проверка на два одинаковых символа
+            else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
+                // Находим символ, который встречается дважды
+                const matchingSymbol = results[0] === results[1] ? results[0] : 
+                                     results[1] === results[2] ? results[1] : results[0];
+                const multiplier = multipliers[matchingSymbol];
+                winAmount = betAmount * multiplier;
+                resultElement.textContent = `Два ${matchingSymbol}! +${winAmount} ₽ (x${multiplier})`;
+                resultElement.className = 'result win';
+            } else {
+                resultElement.textContent = 'Попробуйте ещё раз!';
+                resultElement.className = 'result';
+            }
+            
+            if (winAmount > 0) {
+                balance += winAmount;
+                updateBalance();
+                saveData();
+            }
+        }
+        
+        // Функции для модального окна вывода
+        function openWithdrawModal() {
+            document.getElementById('withdraw-modal').style.display = 'flex';
+            document.getElementById('withdraw-amount').value = Math.min(100, balance);
+            document.getElementById('withdraw-form').style.display = 'block';
+            document.getElementById('progress-bar').style.display = 'none';
+            document.getElementById('withdraw-status').style.display = 'none';
+        }
+        
+        function closeModal() {
+            document.getElementById('withdraw-modal').style.display = 'none';
+        }
+        
+        function updateWithdrawFields() {
+            const method = document.getElementById('withdraw-method').value;
+            
+            document.getElementById('card-number-group').style.display = 'none';
+            document.getElementById('steam-id-group').style.display = 'none';
+            document.getElementById('qiwi-number-group').style.display = 'none';
+            
+            if (method === 'sber' || method === 'tinkoff') {
+                document.getElementById('card-number-group').style.display = 'flex';
+            } else if (method === 'steam') {
+                document.getElementById('steam-id-group').style.display = 'flex';
+            } else if (method === 'qiwi') {
+                document.getElementById('qiwi-number-group').style.display = 'flex';
+            }
+        }
+        
+        function submitWithdraw() {
+            const amount = parseInt(document.getElementById('withdraw-amount').value);
+            const method = document.getElementById('withdraw-method').value;
+            
+            if (isNaN(amount) || amount < 100) {
+                alert('Минимальная сумма вывода - 100 ₽');
+                return;
+            }
+            
+            if (amount > balance) {
+                alert('Недостаточно средств на балансе');
+                return;
+            }
+            
+            // Проверка данных в зависимости от метода
+            if ((method === 'sber' || method === 'tinkoff') && !document.getElementById('card-number').value) {
+                alert('Введите номер карты');
+                return;
+            }
+            
+            if (method === 'steam' && !document.getElementById('steam-id').value) {
+                alert('Введите Steam ID');
+                return;
+            }
+            
+            if (method === 'qiwi' && !document.getElementById('qiwi-number').value) {
+                alert('Введите номер QIWI');
+                return;
+            }
+            
+            // Скрываем форму и показываем прогресс бар
+            document.getElementById('withdraw-form').style.display = 'none';
+            document.getElementById('progress-bar').style.display = 'block';
+            
+            // Генерируем случайное время обработки (60-300 секунд)
+            const processingTime = Math.floor(Math.random() * 241) + 60;
+            
+            // Запускаем прогресс бар
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 1;
+                document.getElementById('progress').style.width = progress + '%';
+                document.getElementById('progress').textContent = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    completeWithdraw(amount);
+                }
+            }, (processingTime * 10));
+        }
+        
+        function completeWithdraw(amount) {
+            balance -= amount;
+            updateBalance();
+            saveData();
+            
+            document.getElementById('withdraw-status').textContent = 'Вывод успешно выполнен!';
+            document.getElementById('withdraw-status').className = 'withdraw-status success';
+            document.getElementById('withdraw-status').style.display = 'block';
+            
+            // Через 3 секунды закрываем модальное окно
+            setTimeout(() => {
+                closeModal();
+            }, 3000);
+        }
+        
+        // Инициализация при загрузке страницы
+        window.onload = async function() {
+            await initDB();
+            await loadData();
+            updateBalance();
+        };
+    </script>
+</body>
+</html>
