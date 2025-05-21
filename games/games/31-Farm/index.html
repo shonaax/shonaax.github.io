@@ -1,0 +1,1348 @@
+<style>
+@import url("https://fonts.googleapis.com/css?family=Cairo&display=swap");
+html {
+  font-family: "Cairo", sans-serif;
+  height: 100%;
+  width: 100%;
+  min-height: 620px;
+  min-width: 500px;
+  background-color: #92c96c;
+}
+html body {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.gameWrapper {
+  box-sizing: border-box;
+  height: 600px;
+  width: 400px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  z-index: 12;
+  background-image: url(https://i.imgur.com/h3pV9JT.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  border-radius: 10px;
+  box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+.gameWrapper .coop-buy {
+  position: absolute;
+  top: 16px;
+  left: 132px;
+  background-image: url(https://i.imgur.com/uZu6dxm.png);
+  height: 180px;
+  width: 140px;
+  background-size: initial;
+  background-repeat: no-repeat;
+  transform: scale(1);
+  cursor: pointer;
+  image-rendering: pixelated;
+  transition: transform 0.1s ease-out;
+}
+.gameWrapper .coop-buy:hover {
+  transform: scale(1.1);
+}
+.gameWrapper .coop {
+  background-image: url(https://i.imgur.com/rGVqMYL.png);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  user-select: none;
+  pointer-events: none;
+  display: none;
+}
+.gameWrapper .coop.show {
+  display: block;
+}
+.gameWrapper .confirm-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  height: auto;
+  width: 90%;
+  box-sizing: border-box;
+  background: #576f46;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.2s linear;
+  align-content: flex-start;
+  box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  position: absolute;
+  padding: 40px 20px 20px 20px;
+  color: white;
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 1.4em;
+  transform: scale(0);
+}
+.gameWrapper .confirm-wrapper span {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+}
+.gameWrapper .confirm-wrapper .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-weight: 800;
+  cursor: pointer;
+  padding-top: 15px;
+  padding-right: 15px;
+}
+.gameWrapper .confirm-wrapper .close svg {
+  height: 20px;
+  width: 20px;
+}
+.gameWrapper .confirm-wrapper .close svg polygon:last-of-type {
+  fill: #ffd515;
+}
+.gameWrapper .confirm-wrapper .close svg polygon:first-of-type {
+  fill: rgba(0, 0, 0, 0.5);
+}
+.gameWrapper .confirm-wrapper .close svg:hover polygon:last-of-type {
+  fill: #ff4345 !important;
+}
+.gameWrapper .confirm-wrapper .text {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.gameWrapper .confirm-wrapper .buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.gameWrapper .confirm-wrapper .buttons .button {
+  background: white;
+  padding: 5px 20px;
+  color: #415234;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 20px;
+  border: 2px solid #415234;
+  user-select: none;
+  cursor: pointer;
+}
+.gameWrapper .confirm-wrapper .buttons .button:hover {
+  background: #68a73c;
+  color: white;
+  border: 2px solid white;
+}
+.gameWrapper .confirm-wrapper.show {
+  transform: scale(1);
+}
+.gameWrapper .crop-chooser {
+  display: flex;
+  flex-wrap: wrap;
+  height: 320px;
+  width: 320px;
+  box-sizing: border-box;
+  background: #92c96c;
+  border-radius: 10px;
+  overflow: hidden;
+  transform: scale(0);
+  transition: all 0.2s linear;
+  align-content: flex-start;
+  box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+}
+.gameWrapper .crop-chooser .header {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: #69240a;
+  font-weight: 700;
+  user-select: none;
+}
+.gameWrapper .crop-chooser .footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+.gameWrapper .crop-chooser .close {
+  color: red;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-weight: 800;
+  cursor: pointer;
+  padding-top: 15px;
+  padding-right: 15px;
+}
+.gameWrapper .crop-chooser .close svg {
+  height: 20px;
+  width: 20px;
+}
+.gameWrapper .crop-chooser .close svg polygon:last-of-type {
+  fill: #904b2f;
+}
+.gameWrapper .crop-chooser .close svg polygon:first-of-type {
+  fill: rgba(0, 0, 0, 0.5);
+}
+.gameWrapper .crop-chooser .close svg:hover polygon:last-of-type {
+  fill: #ff422c !important;
+}
+.gameWrapper .crop-chooser .crop-type-option {
+  height: 80px;
+  width: 80px;
+  background: #73450c;
+  position: relative;
+  cursor: pointer;
+}
+.gameWrapper .crop-chooser .crop-type-option .crop-type-descriptions {
+  color: black;
+  font-size: 13px;
+  position: absolute;
+  bottom: -85px;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  font-weight: 600;
+  user-select: none;
+}
+.gameWrapper .crop-chooser .crop-type-option .crop-type-descriptions .name {
+  font-weight: 800;
+  font-size: 16px;
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+.gameWrapper .crop-chooser .crop-type-option .crop-type-descriptions div {
+  padding-bottom: 5px;
+  width: 100%;
+}
+.gameWrapper .crop-chooser .crop-type-option.corn {
+  background-image: url("https://i.imgur.com/T7oQsTN.png");
+  background-position: -200px;
+  background-position: -400px;
+  background-size: auto 80px;
+}
+.gameWrapper .crop-chooser .crop-type-option.corn.hide {
+  opacity: 0.5;
+}
+.gameWrapper .crop-chooser .crop-type-option.blueberry {
+  background-image: url("https://i.imgur.com/0XbDbXt.png");
+  background-position: -200px;
+  background-position: -400px;
+  background-size: auto 80px;
+}
+.gameWrapper .crop-chooser .crop-type-option.blueberry.hide {
+  opacity: 0.5;
+}
+.gameWrapper .crop-chooser .crop-type-option.watermelon {
+  background-image: url("https://i.imgur.com/ocsKyLS.png");
+  background-position: -200px;
+  background-position: -400px;
+  background-size: auto 80px;
+}
+.gameWrapper .crop-chooser .crop-type-option.watermelon.hide {
+  opacity: 0.5;
+}
+.gameWrapper .crop-chooser .crop-type-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.45);
+}
+.gameWrapper .crop-chooser.show {
+  transform: scale(1);
+}
+.gameWrapper .plotWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  height: 320px;
+  width: 320px;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 75px;
+  transform: scale(0.9);
+}
+.gameWrapper .plotWrapper .tutorial {
+  background: white;
+  padding: 5px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 0;
+  display: flex;
+  position: absolute;
+  top: -40px;
+  left: 0;
+}
+.gameWrapper .plotWrapper .tutorial:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 11px solid #fff;
+  position: absolute;
+  left: 10px;
+  bottom: -11px;
+}
+.gameWrapper .plotWrapper .plotBox {
+  border: 2px solid #a05b4a;
+  position: relative;
+  box-sizing: border-box;
+  height: 80px;
+  width: 80px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("https://i.imgur.com/T7oQsTN.png");
+}
+.gameWrapper .plotWrapper .plotBox.available {
+  background-position: 0px;
+  background-size: auto 80px;
+  animation: availablePlotAnim 0.8s linear infinite alternate;
+}
+.gameWrapper .plotWrapper .plotBox.ready {
+  animation: plotReadyAnim 0.7s linear alternate infinite;
+}
+.gameWrapper .plotWrapper .plotBox.plot {
+  background-position: 0px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.seed-corn {
+  background-position: -80px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.seedling-corn {
+  background-position: -160px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.adolescent-corn {
+  background-position: -240px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.mature-corn {
+  background-position: -320px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.adult-corn {
+  background-position: -400px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.seed-blueberry {
+  background-image: url("https://i.imgur.com/0XbDbXt.png");
+  background-position: -80px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.seedling-blueberry {
+  background-image: url("https://i.imgur.com/0XbDbXt.png");
+  background-position: -160px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.adolescent-blueberry {
+  background-image: url("https://i.imgur.com/0XbDbXt.png");
+  background-position: -240px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.mature-blueberry {
+  background-image: url("https://i.imgur.com/0XbDbXt.png");
+  background-position: -320px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.adult-blueberry {
+  background-image: url("https://i.imgur.com/0XbDbXt.png");
+  background-position: -400px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.seed-watermelon {
+  background-image: url("https://i.imgur.com/ocsKyLS.png");
+  background-position: -80px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.seedling-watermelon {
+  background-image: url("https://i.imgur.com/ocsKyLS.png");
+  background-position: -160px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.adolescent-watermelon {
+  background-image: url("https://i.imgur.com/ocsKyLS.png");
+  background-position: -240px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.mature-watermelon {
+  background-image: url("https://i.imgur.com/ocsKyLS.png");
+  background-position: -320px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox.adult-watermelon {
+  background-image: url("https://i.imgur.com/ocsKyLS.png");
+  background-position: -400px;
+  background-size: auto 80px;
+}
+.gameWrapper .plotWrapper .plotBox:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  border: 2px solid white;
+  background-color: #4f1507;
+}
+.gameWrapper .plotWrapper .plotBox:hover .tooltip {
+  opacity: 0.95;
+}
+.UIWrapper {
+  box-sizing: border-box;
+  width: 100%;
+  padding-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  z-index: 10;
+  user-select: none;
+}
+.UIWrapper .money, .UIWrapper .seeds {
+  position: relative;
+  padding-right: 20px;
+  display: flex;
+  align-items: center;
+}
+.UIWrapper .money .emblem, .UIWrapper .seeds .emblem {
+  height: 40px;
+  width: 40px;
+  background-color: #823c3d;
+  background-image: url(https://art.pixilart.com/7736b1d30d303e4.gif);
+  background-size: 50px;
+  background-repeat: no-repeat;
+  background-position: 50% 20%;
+  border-radius: 40px;
+  border: 2px solid #351a1a;
+  z-index: 2;
+}
+.UIWrapper .money .text, .UIWrapper .seeds .text {
+  background: linear-gradient(180deg, #b2875a 80%, #705135 80%);
+  height: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-radius: 40px;
+  padding: 0px 20px 0px 54px;
+  margin-left: -40px;
+  border: 2px solid #351a1a;
+}
+.UIWrapper .money .text span, .UIWrapper .seeds .text span {
+  color: white;
+  font-weight: 800;
+  font-size: 20px;
+}
+.UIWrapper .money .message, .UIWrapper .seeds .message {
+  position: absolute;
+  bottom: -20px;
+  right: 30px;
+  color: white;
+  font-size: 14px;
+  text-shadow: 3px 4px 4px black;
+  opacity: 0;
+}
+.UIWrapper .seeds {
+  display: none;
+}
+.UIWrapper .seeds .emblem {
+  border-color: #35e835;
+  background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQQqoSo3DNWGMOk5Hy6diLHRpE6h3o_Uw7qT5m3UMvcZZbt3DGv);
+  background-size: 90px;
+  background-position: 50% 50%;
+}
+.UIWrapper .seeds .text {
+  border-color: #35e835;
+}
+.UIWrapper .seeds .text span {
+  color: #03a703;
+}
+.UIMessageWrapper {
+  width: 100%;
+  position: absolute;
+  top: 162px;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0px;
+  user-select: none;
+  z-index: 100;
+}
+.UIMessageWrapper .messsage {
+  background: white;
+  padding: 5px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 25px;
+  opacity: 0;
+}
+@keyframes availablePlotAnim {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+@keyframes plotReadyAnim {
+  from {
+    background-color: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    border: 2px solid #a05b4a;
+    background-color: #4f1507;
+  }
+  to {
+    background-color: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    border: 2px solid white;
+    background-color: #4f1507;
+  }
+}
+.reset {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 5px;
+  opacity: 0.5;
+  font-size: 11px;
+  cursor: pointer;
+}
+.hidden {
+  display: none !important;
+}
+
+
+</style>
+
+
+<div class="gameWrapper">
+    <div id="CoopBuyOption" class="coop-buy">
+  
+    </div>
+    <div id="Coop" class="coop">
+  
+    </div>
+  
+    <div id="CoopExpansionWrapper" class="confirm-wrapper">
+      <div id="closeCoopConfirm" class="close">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1"
+          x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+          <polygon style="" points="512,90.326 346.326,256 512,421.674 490.15,443.534 209.899,256 490.15,68.476 " />
+          <polygon style=""
+            points="490.15,68.476 302.616,256 490.15,443.534 421.674,512 256,346.326 90.326,512 0,421.674   165.674,256 0,90.326 90.326,0 256,165.674 421.674,0 " />
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+        </svg>
+      </div>
+      <div class="text">
+        Do you want to purchase a Chicken Coop for $10,000? <span>(produces $100 per minute while game is running)</span>
+      </div>
+      <div class="buttons">
+  
+        <div class="button no">
+          Nah.
+        </div>
+        <div class="button yes">
+          YES
+        </div>
+      </div>
+  
+    </div>
+  
+    <div id="ConfirmWrapper" class="confirm-wrapper">
+      <div id="closeConfirm" class="close">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1"
+          x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+          <polygon style="" points="512,90.326 346.326,256 512,421.674 490.15,443.534 209.899,256 490.15,68.476 " />
+          <polygon style=""
+            points="490.15,68.476 302.616,256 490.15,443.534 421.674,512 256,346.326 90.326,512 0,421.674   165.674,256 0,90.326 90.326,0 256,165.674 421.674,0 " />
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+        </svg>
+      </div>
+      <div class="text">
+        Are you sure you want to purchase this plot for $100?
+      </div>
+      <div class="buttons">
+  
+        <div class="button no">
+          Nah.
+        </div>
+        <div class="button yes">
+          YES
+        </div>
+      </div>
+  
+    </div>
+    <div id="cropChooserWrapper" class="crop-chooser">
+      <div id="closeChooser" class="close">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1"
+          x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+          <polygon style="" points="512,90.326 346.326,256 512,421.674 490.15,443.534 209.899,256 490.15,68.476 " />
+          <polygon style=""
+            points="490.15,68.476 302.616,256 490.15,443.534 421.674,512 256,346.326 90.326,512 0,421.674   165.674,256 0,90.326 90.326,0 256,165.674 421.674,0 " />
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+          <g>
+          </g>
+        </svg>
+      </div>
+  
+      <div class="header">
+        Choose a Crop!
+      </div>
+  
+      <div class="footer">
+        <div class="crop-type-option corn">
+          <div class="crop-type-descriptions">
+            <div class="name">Corn</div>
+            <div class="cost">Cost: $25</div>
+            <div class="time">Time: 1m</div>
+            <div class="profit">Profit: $50</div>
+          </div>
+        </div>
+        <!-- STRAWBERRIES -->
+        <div class="crop-type-option blueberry">
+          <div class="crop-type-descriptions">
+            <div class="name">Blueberry</div>
+            <div class="cost">Cost: $25</div>
+            <div class="time">Time: 1m</div>
+            <div class="profit">Profit: $50</div>
+          </div>
+        </div>
+  
+        <!-- BLUEBERRIES -->
+        <div class="crop-type-option watermelon">
+          <div class="crop-type-descriptions">
+            <div class="name">Watermelon</div>
+            <div class="cost">Cost: $25</div>
+            <div class="time">Time: 1m</div>
+            <div class="profit">Profit: $50</div>
+          </div>
+        </div>
+  
+        <!-- CORN -->
+      </div>
+    </div>
+  
+    <div id="plotWrapper" class="plotWrapper">
+      <div id="tutorialFloat" class="tutorial">
+        Click to Purchase!
+      </div>
+  
+      <div class="hidden plotBoxSaved">
+        <div title="Ready for Planting" class="plotBox plot ready">
+        </div>
+      </div>
+  
+      <div title="Available for Purchase | Cost: $100" class="plotBox available tutorialOne">
+      </div>
+  
+    </div>
+  
+    <div class="UIWrapper">
+      <div class="money">
+        <div class="emblem">
+  
+        </div>
+        <div class="text">
+          <span>$</span>
+          <span id="moneyBox"></span>
+        </div>
+        <div id="MoneyBoxMessage" class="message">
+  
+        </div>
+      </div>
+    </div>
+  
+    <div class="UIMessageWrapper">
+      <div id="UIMessageWrapper" class="messsage">
+  
+      </div>
+    </div>
+  
+    <div id="resetAll" class="reset">
+      reset
+    </div>
+  
+    <div class="hidden">
+  
+      <input type="button" value="PLAY" onclick="playHarvestSound()">
+      <audio id="harvestSound" src="https://freesound.org/data/previews/171/171269_2392286-lq.mp3"></audio>
+  
+      <input type="button" value="PLAY" onclick="playPlantSound()">
+      <audio id="plantSound" src="https://freesound.org/data/previews/487/487532_5382295-lq.mp3"></audio>
+  
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        //GameSounds
+function playHarvestSound() {
+  var audio = document.getElementById("harvestSound");
+  audio.play();
+}
+
+function playPlantSound() {
+  var audio = document.getElementById("plantSound");
+  audio.play();
+}
+
+//RESET LOCAL STORAGE
+$(document).on("click", "#resetAll", function() {
+  localStorage.clear();
+  console.log("All LocalStorage Items Clear");
+});
+//END RESET LOCAL STORAGE
+
+//Set Game Variables
+var NumPlots = 0; //a reset for the number of plots a user has
+var Money = 160; //the amount of money to start
+var PlotCost = 100; //Cost of a Plot of land
+
+var SeedCostT1 = 30; //Cost of seeds to plant
+var SeedCostT2 = 50; //Cost of seeds to plant
+var SeedCostT3 = 120; //Cost of seeds to plant
+
+var counterLimitT1 = 32; //Time it takes to grow to corn \ MUST BE DIVISIBLE BY 4
+var counterLimitT2 = 64; //X amount of the counter limit for other crops
+var counterLimitT3 = 120; //X amount of the counter limit for other crops
+
+var ProfitT1 = 55; //Profit per harvest
+var ProfitT2 = 95; //Profit modifier for other crops
+var ProfitT3 = 180; //Profit modifier for other crops
+
+var coopProfit = 150; //Profit from the purchased coop
+
+//Get DOM elements
+var cropChooserWrapper = $("#cropChooserWrapper");
+var cropChooserOptions = $("#cropChooserWrapper > .footer > .crop-type-option");
+var plotWrapper = $("#plotWrapper");
+var plot = $(".plotBox");
+var MoneyBox = $("#moneyBox");
+var MoneyBoxMessage = $("#MoneyBoxMessage");
+var BottomMessageUI = $("#UIMessageWrapper");
+var ConfirmWrapper = $("#ConfirmWrapper");
+var ConfirmWrapperOptions = $("#ConfirmWrapper > .buttons > .button");
+var tutorialFloaty = $("#tutorialFloat");
+var seedSelection = ".seed-selection";
+
+//Purchase Coop
+var coopBuyOption = $("#CoopBuyOption");
+var coopBuyOptions = $("#CoopExpansionWrapper > .buttons > .button");
+var CoopExpansionWrapper = $("#CoopExpansionWrapper");
+var Coop = $("#Coop");
+
+//Grab code for spaner plots & remove when done
+var spawnSavedPlot = $(".plotBoxSaved").html();
+$(".plotBoxSaved").remove();
+//Grab code for new plot
+var spawnNewPlot = $("<div />")
+  .append($(".plotBox").clone())
+  .html();
+
+//LOCAL STORAGE VARIABLES
+//NUMBER OF PRE-PURCHASED PLOTS
+var NumPlotsFromStorage = localStorage.getItem("NumPlots");
+if (NumPlotsFromStorage == null || NumPlotsFromStorage == "NaN") {
+  //if no saved plots then reset to variable
+  NumPlots = NumPlots;
+} else {
+  //otherwise set the number to what is in storage
+  NumPlots = parseInt(NumPlotsFromStorage);
+}
+console.log("you have " + NumPlots + " purchased plots");
+
+//AMOUNT OF MONEY
+var MoneyFromStorage = localStorage.getItem("NumMoney");
+if (MoneyFromStorage == null || MoneyFromStorage == "NaN") {
+  //same as above
+  Money = Money;
+} else {
+  //same as above
+  Money = parseInt(MoneyFromStorage);
+}
+console.log("you have $" + Money);
+
+//SET STUFF
+$("#moneyBox").html(Money);
+
+//GET COOP INFO
+var CoopFromStorage = localStorage.getItem("CoopPurchased");
+if (CoopFromStorage == null || CoopFromStorage == "NaN") {
+  //same as above
+  //Money = Money;
+  console.log("you don't own the coop!");
+} else if (CoopFromStorage == "true") {
+  //Show the Coop
+  showTheCoop();
+  //Start the Counter
+  runTheCoop();
+  //Update Money Stuff
+  disableCoopPurchase();
+  console.log("you own the coop!");
+} else if (CoopFromStorage == "false") {
+  console.log("you don't own the coop!");
+}
+
+//SET STUFF
+$("#moneyBox").html(Money);
+
+//Set HTML on starting elements (cost, time, and profit)
+cropChooserWrapper
+  .find(".corn")
+  .find(".cost")
+  .html("Cost: $" + SeedCostT1);
+cropChooserWrapper
+  .find(".corn")
+  .find(".time")
+  .html("Time: " + counterLimitT1 + "s");
+cropChooserWrapper
+  .find(".corn")
+  .find(".profit")
+  .html("Profit: $" + ProfitT1);
+
+cropChooserWrapper
+  .find(".blueberry")
+  .find(".cost")
+  .html("Cost: $" + SeedCostT2);
+cropChooserWrapper
+  .find(".blueberry")
+  .find(".time")
+  .html("Time: " + counterLimitT2 + "s");
+cropChooserWrapper
+  .find(".blueberry")
+  .find(".profit")
+  .html("Profit: $" + ProfitT2);
+
+cropChooserWrapper
+  .find(".watermelon")
+  .find(".cost")
+  .html("Cost: $" + SeedCostT3);
+cropChooserWrapper
+  .find(".watermelon")
+  .find(".time")
+  .html("Time: " + counterLimitT3 + "s");
+cropChooserWrapper
+  .find(".watermelon")
+  .find(".profit")
+  .html("Profit: $" + ProfitT3);
+
+//CREATE SAVED PLOTS
+function spawnSavedPlots() {
+  var reqPlotsForSpawn = NumPlots; //get number of plots minus 1
+  if (reqPlotsForSpawn >= 1 && NumPlots <= 16) {
+    //if 1 or more AND less than 16 then spawn purchased plots
+    //console.log("you have enough plots to spawn");
+    plot.remove();
+    tutorialFloaty.hide(); //hide tutorial if player has already played the game
+    for (var i = 0; i < NumPlots; i++) {
+      plotWrapper.append(spawnSavedPlot); //add the plots the user owns
+      //console.log("1 plot appended");
+    }
+  } else {
+    //console.log("NOTHING was spawned");
+  }
+  //plotWrapper.append(spawnNewPlot);
+}
+spawnSavedPlots();
+makePlotAvailable();
+//END CREATE SAVED PLOTS
+
+//RUN STUFF
+//TURN OFF TUTORIAL
+$(document).on("click", ".tutorialOne", function() {
+  tutorialFloaty.fadeOut();
+  $(this).removeClass("tutorialOne");
+});
+//END TURN OFF TUTORIAL
+
+$("#closeChooser").click(function() {
+  hideSeedSelectionMenu();
+});
+
+$("#closeConfirm").click(function() {
+  hideConfirmMenu();
+});
+
+$("#closeCoopConfirm").click(function() {
+  hideCoopMenu();
+});
+
+var currentPlot = "";
+
+//CLICK ON A PLOT
+$(document).on("click", ".plotBox", function(event) {
+  //console.log("clicked on plot");
+  if ($(this).hasClass("available")) {
+    //IF PLOT IS AVAILABLE
+    currentPlot = $(this);
+    hideConfirmMenu();
+    function HideShowConfirmMenu() {
+      showConfirmMenu();
+    }
+    // use setTimeout() to execute
+    setTimeout(HideShowConfirmMenu, 100);
+    //convertPlot($(this));
+    //makePlotAvailable();
+    //IF PLOT IS READY TO HARVEST
+  } else if ($(this).hasClass("ready-to-harvest")) {
+    //IF PLOT IS SEEDED
+    var cropType = checkCropType($(this));
+    harvestPlot($(this), cropType);
+  } else if ($(this).hasClass("ready")) {
+    hideSeedSelectionMenu();
+    function HideShowSelectionMenu() {
+      showSeedSelectionMenu();
+      playPlantSound();
+    }
+    // use setTimeout() to execute
+    setTimeout(HideShowSelectionMenu, 100);
+
+    //setUpSeed($(this));
+    currentPlot = $(this);
+  } else {
+    //do nothing
+  }
+});
+
+function checkCropType(plotInfo) {
+  var cropType = "";
+  if (plotInfo.hasClass("corn")) {
+    return "corn";
+  } else if (plotInfo.hasClass("blueberry")) {
+    return "blueberry";
+  } else if (plotInfo.hasClass("watermelon")) {
+    return "watermelon";
+  } else {
+    return "none";
+  }
+}
+
+function checkCropCost(plotType) {
+  if (plotType == "corn") {
+    return SeedCostT1;
+    //console.log("crop is type corn and the cost is: " + SeedCost);
+  } else if (plotType == "blueberry") {
+    return SeedCostT2;
+    //console.log("crop is type strawberry and the cost is: " + SeedCost * SeedCostModifier);
+  } else if (plotType == "watermelon") {
+    return SeedCostT3;
+    //console.log("crop is type blueberry and the cost is: " + SeedCost * SeedCostModifier);
+  } else {
+    //do nothing
+  }
+}
+
+function checkCropProfit(plotType) {
+  if (plotType == "corn") {
+    return ProfitT1;
+  } else if (plotType == "blueberry") {
+    return ProfitT2;
+  } else if (plotType == "watermelon") {
+    return ProfitT3;
+  } else {
+    //do nothing
+  }
+}
+
+function checkCropTimerLimit(plotType) {
+  if (plotType == "corn") {
+    return counterLimitT1;
+    //console.log("plot type is corn");
+  } else if (plotType == "blueberry") {
+    return counterLimitT2;
+    //console.log("plot type is blueberry");
+  } else if (plotType == "watermelon") {
+    return counterLimitT3;
+    //console.log("plot type is watermelon");
+  } else {
+    //do nothing
+  }
+}
+
+//PLANT SEED NEW
+cropChooserOptions.click(function() {
+  var cropType = "";
+  cropType = $(this)
+    .attr("class")
+    .split(" ")
+    .pop();
+  console.log("crop type is " + cropType);
+  //Add seed type to parent when planting seed for first time
+  currentPlot.addClass(cropType);
+  //Get cost of Crop based on type
+  var cropCostLocal = checkCropCost(cropType);
+  //console.log("this crop will cost you $" + cropCostLocal);
+  //Actually plant the seed
+  plantSeed(currentPlot, cropType, cropCostLocal);
+});
+
+//Click on yes or no option to purchase plot
+ConfirmWrapperOptions.click(function() {
+  //console.log($(this));
+  if ($(this).hasClass("yes")) {
+    convertPlot(currentPlot);
+    makePlotAvailable();
+    hideConfirmMenu();
+  } else if ($(this).hasClass("no")) {
+    hideConfirmMenu();
+  } else {
+  }
+});
+
+//Function that plants the seed after getting and setting variables
+function plantSeed(plotInfo, plotType, cropCost) {
+  console.log("You have: $" + Money);
+  if (Money >= cropCost) {    
+    var cropType = plotType;
+    plotInfo.removeClass("plot");
+    plotInfo.removeClass("ready");
+    plotInfo.addClass("seed-" + cropType);
+
+    console.log("This crop cost you: $" + cropCost);
+    Money = Money - cropCost;
+    console.log("You now have: $" + Money + "left");
+    MoneyBox.html(Money);
+    startPlotTimer(plotInfo, cropType);
+    hideSeedSelectionMenu();
+  } else {
+    console.log("You DO NOT have enough money!");
+    BottomMessageUI.html("You DO NOT have enough money!");
+    animateBottomUITooltip();
+  }
+} //END PLANT SEED
+
+//MAKES A PLOT AVAILABLE TO USE IF CONDITIONS MET
+function makePlotAvailable() {
+  var NumPlotsAvail = $("#plotWrapper > .available").length;
+  var NumPlotCurrent = $("#plotWrapper > .plotBox").length;
+  //console.log(NumPlotsAvail);
+  if (Money >= PlotCost && NumPlotsAvail == 0 && NumPlotCurrent <= 15) {
+    plotWrapper.append(spawnNewPlot);
+    //console.log(spawnNewPlot);
+    console.log("a new plot has been added");
+  } else {
+    //Do Nothing
+    console.log("needs more money to spawn new plot");
+  }
+}
+
+//Converts plot from available to harvestable
+function convertPlot(plotInfo) {
+  if (Money >= PlotCost) {
+    plotInfo.removeClass("available").addClass("plot ready");
+    Money = Money - PlotCost;
+    SaveMoneyAmmount(Money);
+    MoneyBox.html(Money);
+    MoneyBoxMessage.html("-$" + PlotCost);
+    console.log("> you have used $" + PlotCost);
+    console.log(">> you have purchased a plot");
+    SaveNumPlots();
+    animateMoneyTooltip();
+    plotInfo.attr("title", "Ready for Planting!");
+  } else {
+    console.log("You DO NOT have enough money!");
+    BottomMessageUI.html("You DO NOT have enough money!");
+    animateBottomUITooltip();
+  }
+}
+
+//HARVEST PLOT
+function harvestPlot(plotInfo, plotType) {
+  playHarvestSound();
+  console.log("Prior to harvest you have $" + Money);
+  var localProfit = 0;
+
+  localProfit = checkCropProfit(plotType);
+
+  //console.log("This Has A Grown Crop!");
+  plotInfo.removeClass();
+  plotInfo.addClass("plotBox plot ready");
+  //animateBottomUITooltip();
+  //MAKE MONEY
+  Money = Money + localProfit;
+  SaveMoneyAmmount(Money);
+  MoneyBox.html(Money);
+  console.log("> you have made $" + localProfit);
+  MoneyBoxMessage.html("+ $" + localProfit);
+  console.log("after harvest you now have: $" + Money);
+  animateMoneyTooltip();
+  makePlotAvailable();
+  plotInfo.attr("title", "Ready for Planting!");
+  //console.log("new plot has spawned");
+} //END HARVEST PLOT
+
+//PLOT TIMER
+function startPlotTimer(plotInfo, plotType) {
+  var counter = 0;
+  var counterFraction = 4;
+  var plotTypeFinal = plotType;
+  var localCounterLimit = 0;
+
+  localCounterLimit = checkCropTimerLimit(plotType);
+
+  var interval = setInterval(function() {
+    plotInfo.removeClass("plot");
+    plotInfo.attr(
+      "title",
+      Math.abs(counter - localCounterLimit) + " Seconds until ready."
+    );
+    counter++;
+    var counterFractioned = localCounterLimit / counterFraction;
+    //console.log(counterFractioned);
+    //console.log(counter);
+
+    if (counter == counterFractioned * 1) {
+      plotInfo
+        .removeClass("seed-" + plotTypeFinal)
+        .addClass("seedling-" + plotTypeFinal);
+    } else if (counter == counterFractioned * 2) {
+      plotInfo
+        .removeClass("seedling-" + plotTypeFinal)
+        .addClass("adolescent-" + plotTypeFinal);
+    } else if (counter == counterFractioned * 3) {
+      plotInfo
+        .removeClass("adolescent-" + plotTypeFinal)
+        .addClass("mature-" + plotTypeFinal);
+    } else if (counter == localCounterLimit) {
+      plotInfo
+        .removeClass("mature-" + plotTypeFinal)
+        .addClass("ready-to-harvest adult-" + plotTypeFinal);
+      //BottomMessageUI.html("Ready to Harvest!");
+      plotInfo.attr("title", "Ready to Harvest!");
+      clearInterval(interval);
+    } else {
+      //do nothing
+    }
+  }, 1000);
+} //PLOT TIMER
+
+//ANIMATE THE MONEY TIP
+function animateMoneyTooltip() {
+  MoneyBoxMessage.animate(
+    {
+      opacity: "1",
+      bottom: "-20px"
+    },
+    500,
+    function() {
+      MoneyBoxMessage.animate({
+        opacity: "0",
+        bottom: "-30px"
+      });
+    }
+  );
+}
+
+//ANIMATE THE BOTTOM MESSAGE TIP
+function animateBottomUITooltip() {
+  BottomMessageUI.animate(
+    {
+      opacity: "1"
+    },
+    1000,
+    "linear",
+    function() {
+      BottomMessageUI.animate({
+        opacity: "0"
+      });
+    }
+  );
+}
+
+function showSeedSelectionMenu() {
+  cropChooserWrapper.addClass("show");
+  cropChooserWrapper.find(".crop-type-option").addClass("hide");
+  if (Money >= SeedCostT3) {
+    cropChooserWrapper.find(".corn").removeClass("hide");
+    cropChooserWrapper.find(".blueberry").removeClass("hide");
+    cropChooserWrapper.find(".watermelon").removeClass("hide");
+  } else if (Money >= SeedCostT2) {
+    cropChooserWrapper.find(".corn").removeClass("hide");
+    cropChooserWrapper.find(".blueberry").removeClass("hide");
+    //cropChooserWrapper.find(".watermelon").removeClass("hide");
+  } else if (Money >= SeedCostT1) {
+    cropChooserWrapper.find(".corn").removeClass("hide");
+  }
+}
+
+function hideSeedSelectionMenu() {
+  cropChooserWrapper.removeClass("show");
+}
+
+function showConfirmMenu() {
+  ConfirmWrapper.addClass("show");
+}
+
+function hideConfirmMenu() {
+  ConfirmWrapper.removeClass("show");
+}
+
+//Save Plots as they are purchased
+function SaveNumPlots() {
+  NumPlots = NumPlots + 1;
+  localStorage.setItem("NumPlots", NumPlots);
+  //console.log("You have " + NumPlots + " purchased plots");
+}
+
+//Save Money as it is purchased
+function SaveMoneyAmmount(moneyAmount) {
+  localStorage.setItem("NumMoney", moneyAmount);
+  //console.log("You have $" + moneyAmount);
+}
+
+//Show Coop Buy Option
+function showCoopMenu() {
+  CoopExpansionWrapper.addClass("show");
+}
+//Hide Coop Buy Option
+function hideCoopMenu() {
+  CoopExpansionWrapper.removeClass("show");
+}
+
+//Trigger Coop Buy Option
+coopBuyOption.click(function() {
+  showCoopMenu();
+});
+
+//Buy The Coop
+coopBuyOptions.click(function() {
+  if ($(this).hasClass("yes")) {
+    buyTheCoop();
+    hideCoopMenu();
+  } else if ($(this).hasClass("no")) {
+    hideCoopMenu();
+  } else {
+  }
+});
+
+function buyTheCoop() {
+  if (Money >= 10000) {
+    //Show the Coop
+    showTheCoop();
+    //Start the Counter
+    runTheCoop();
+    //Update Money Stuff
+    Money = Money - 10000;
+    SaveMoneyAmmount(Money);
+    MoneyBox.html(Money);
+    MoneyBoxMessage.html("- $" + 10000);
+    console.log("You Have Used: $10,000");
+    console.log("You now own the Coop!");
+    animateMoneyTooltip();
+    //Save Local Storage Boolean
+    localStorage.setItem("CoopPurchased", true);
+    disableCoopPurchase();
+  } else {
+    console.log("You DO NOT have enough money!");
+    BottomMessageUI.html("You DO NOT have enough money!");
+    animateBottomUITooltip();
+  }
+}
+
+function runTheCoop() {
+  setInterval(function() {
+    Money = Money + coopProfit;
+    MoneyBox.html(Money);
+    MoneyBoxMessage.html("+ $" + coopProfit);
+    console.log("You Have Made: " + coopProfit + " from the Coop");
+    animateMoneyTooltip();
+  }, 60 * 1000); // 60 * 1000 milsec
+}
+
+function showTheCoop() {
+  Coop.addClass("show");
+}
+
+function disableCoopPurchase() {
+  coopBuyOption.hide();
+}
+
+    </script>
