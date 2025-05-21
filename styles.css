@@ -1,0 +1,1615 @@
+:root {
+    --bg-color: #0a0a0a;
+    --card-color: #111111;
+    --text-color: #ffffff;
+    --primary-color: #ff00ff;
+    --secondary-color: #00ffff;
+    --accent-color: #9900ff;
+    --glow-color: rgba(153, 0, 255, 0.5);
+    --player-bg: rgba(17, 17, 17, 0.85);
+    --player-border: rgba(255, 255, 255, 0.1);
+    --beat-intensity: 0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: var(--bg-color);
+    background-image: 
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff00ff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+        radial-gradient(circle, rgba(17,17,17,1) 0%, rgba(10,10,10,1) 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    overflow-x: hidden;
+    cursor: none; /* Скрываем стандартный курсор на всей странице */
+    position: relative; /* Для позиционирования частиц фона */
+}
+
+/* Стили для вступительного экрана */
+.entry-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 15, 15, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    backdrop-filter: blur(10px);
+}
+
+.entry-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.entry-content {
+    font-size: 2.8rem;
+    font-weight: 500;
+    color: var(--text-color);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+    animation: pulse-entry 2s infinite alternate;
+    padding: 20px 40px;
+    border-radius: 15px;
+    background: rgba(25, 25, 25, 0.3);
+    border: 1px solid rgba(255, 0, 255, 0.1);
+    box-shadow: 0 0 30px rgba(153, 0, 255, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+@keyframes pulse-entry {
+    0% {
+        text-shadow: 0 0 10px var(--primary-color);
+    }
+    100% {
+        text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--secondary-color);
+    }
+}
+
+.entry-content:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 15px var(--primary-color), 0 0 30px var(--secondary-color);
+    box-shadow: 0 0 40px rgba(153, 0, 255, 0.3);
+}
+
+.entry-content::after {
+    content: 'press ENTER';
+    display: block;
+    font-size: 1rem;
+    margin-top: 15px;
+    opacity: 0.7;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.enter-text {
+    color: var(--primary-color);
+    text-shadow: 0 0 10px var(--primary-color);
+    font-weight: 700;
+}
+
+/* Эффект вспышки при входе */
+.entry-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    z-index: 9998;
+    animation: flash-fade 1s forwards;
+    pointer-events: none;
+}
+
+@keyframes flash-fade {
+    0% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Стили для фоновых частиц */
+.particle-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.bg-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--secondary-color);
+    opacity: 0.3;
+    animation: float-particle infinite linear;
+}
+
+@keyframes float-particle {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-20px) translateX(20px) rotate(90deg);
+    }
+    50% {
+        transform: translateY(0) translateX(40px) rotate(180deg);
+    }
+    75% {
+        transform: translateY(20px) translateX(20px) rotate(270deg);
+    }
+    100% {
+        transform: translateY(0) translateX(0) rotate(360deg);
+    }
+}
+
+/* Улучшенные стили для курсора */
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(153, 0, 255, 0.3);
+    border: 2px solid var(--primary-color);
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Чтобы курсор не мешал кликам */
+    z-index: 9999;
+    transition: transform 0.2s, width 0.2s, height 0.2s, background 0.2s, opacity 0.2s;
+    mix-blend-mode: difference;
+    box-shadow: 0 0 10px rgba(153, 0, 255, 0.7);
+}
+
+.cursor-glow {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--glow-color) 0%, rgba(0,0,0,0) 70%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9997;
+    opacity: 0.6;
+    filter: blur(5px);
+}
+
+.cursor-trail {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Чтобы курсор не мешал кликам */
+    z-index: 9998;
+    opacity: 0.7;
+    box-shadow: 0 0 5px var(--secondary-color);
+    transition: width 0.3s, height 0.3s, opacity 0.3s, background 0.3s;
+}
+
+/* Эффект при клике */
+.click-effect {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9996;
+    animation: click-ripple 0.7s ease-out forwards;
+}
+
+@keyframes click-ripple {
+    0% {
+        width: 10px;
+        height: 10px;
+        opacity: 1;
+        border-width: 2px;
+    }
+    100% {
+        width: 70px;
+        height: 70px;
+        opacity: 0;
+        border-width: 1px;
+    }
+}
+
+/* Эффект при наведении на элементы */
+a:hover ~ .custom-cursor,
+button:hover ~ .custom-cursor,
+.custom-cursor.cursor-hover {
+    width: 40px;
+    height: 40px;
+    background: rgba(153, 0, 255, 0.5);
+    animation: pulse-cursor 1s infinite alternate;
+}
+
+.cursor-trail.cursor-hover {
+    width: 15px;
+    height: 15px;
+    opacity: 0.9;
+    background: var(--accent-color);
+}
+
+@keyframes pulse-cursor {
+    0% {
+        box-shadow: 0 0 10px rgba(153, 0, 255, 0.7);
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(153, 0, 255, 0.9);
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+/* Специальные состояния для курсора */
+.card:hover ~ .custom-cursor {
+    background: rgba(255, 0, 255, 0.3);
+    border-color: var(--accent-color);
+}
+
+.music-player-panel:hover ~ .custom-cursor {
+    background: rgba(0, 255, 255, 0.3);
+    border-color: var(--secondary-color);
+}
+
+/* Улучшенные стили для основных элементов */
+.container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+
+/* Стили для эффекта глитч */
+.glitch-wrapper {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.glitch {
+    font-size: 2.5rem;
+    font-weight: 700;
+    position: relative;
+    text-shadow: 
+        0 0 5px var(--primary-color),
+        0 0 10px var(--primary-color),
+        0 0 20px var(--primary-color);
+    animation: textShadow 2s infinite alternate;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 var(--secondary-color);
+    clip: rect(24px, 550px, 90px, 0);
+    animation: glitch-anim 3s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: 2px 0 var(--primary-color);
+    clip: rect(85px, 550px, 140px, 0);
+    animation: glitch-anim 2s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+    0% {
+        clip: rect(39px, 9999px, 26px, 0);
+    }
+    5% {
+        clip: rect(65px, 9999px, 78px, 0);
+    }
+    10% {
+        clip: rect(34px, 9999px, 95px, 0);
+    }
+    15% {
+        clip: rect(69px, 9999px, 43px, 0);
+    }
+    20% {
+        clip: rect(41px, 9999px, 73px, 0);
+    }
+    25% {
+        clip: rect(92px, 9999px, 67px, 0);
+    }
+    30% {
+        clip: rect(5px, 9999px, 94px, 0);
+    }
+    35% {
+        clip: rect(10px, 9999px, 53px, 0);
+    }
+    40% {
+        clip: rect(50px, 9999px, 31px, 0);
+    }
+    45% {
+        clip: rect(52px, 9999px, 74px, 0);
+    }
+    50% {
+        clip: rect(86px, 9999px, 15px, 0);
+    }
+    55% {
+        clip: rect(6px, 9999px, 87px, 0);
+    }
+    60% {
+        clip: rect(60px, 9999px, 26px, 0);
+    }
+    65% {
+        clip: rect(84px, 9999px, 33px, 0);
+    }
+    70% {
+        clip: rect(32px, 9999px, 49px, 0);
+    }
+    75% {
+        clip: rect(47px, 9999px, 35px, 0);
+    }
+    80% {
+        clip: rect(23px, 9999px, 60px, 0);
+    }
+    85% {
+        clip: rect(45px, 9999px, 47px, 0);
+    }
+    90% {
+        clip: rect(10px, 9999px, 51px, 0);
+    }
+    95% {
+        clip: rect(87px, 9999px, 46px, 0);
+    }
+    100% {
+        clip: rect(83px, 9999px, 31px, 0);
+    }
+}
+
+@keyframes textShadow {
+    0% {
+        text-shadow: 0.4px 0 1px rgba(255,0,255,0.6), -0.4px 0 1px rgba(0,255,255,0.6);
+    }
+    5% {
+        text-shadow: 2.8px 0 1px rgba(255,0,255,0.6), -2.8px 0 1px rgba(0,255,255,0.6);
+    }
+    10% {
+        text-shadow: 0.02px 0 1px rgba(255,0,255,0.6), -0.02px 0 1px rgba(0,255,255,0.6);
+    }
+    15% {
+        text-shadow: 0.4px 0 1px rgba(255,0,255,0.6), -0.4px 0 1px rgba(0,255,255,0.6);
+    }
+    20% {
+        text-shadow: 1.6px 0 1px rgba(255,0,255,0.6), -1.6px 0 1px rgba(0,255,255,0.6);
+    }
+    25% {
+        text-shadow: 0.8px 0 1px rgba(255,0,255,0.6), -0.8px 0 1px rgba(0,255,255,0.6);
+    }
+    30% {
+        text-shadow: 1.3px 0 1px rgba(255,0,255,0.6), -1.3px 0 1px rgba(0,255,255,0.6);
+    }
+    35% {
+        text-shadow: 2.1px 0 1px rgba(255,0,255,0.6), -2.1px 0 1px rgba(0,255,255,0.6);
+    }
+    40% {
+        text-shadow: 2.6px 0 1px rgba(255,0,255,0.6), -2.6px 0 1px rgba(0,255,255,0.6);
+    }
+    45% {
+        text-shadow: 0.7px 0 1px rgba(255,0,255,0.6), -0.7px 0 1px rgba(0,255,255,0.6);
+    }
+    50% {
+        text-shadow: 0.8px 0 1px rgba(255,0,255,0.6), -0.8px 0 1px rgba(0,255,255,0.6);
+    }
+    55% {
+        text-shadow: 2.5px 0 1px rgba(255,0,255,0.6), -2.5px 0 1px rgba(0,255,255,0.6);
+    }
+    60% {
+        text-shadow: 2.7px 0 1px rgba(255,0,255,0.6), -2.7px 0 1px rgba(0,255,255,0.6);
+    }
+    65% {
+        text-shadow: 2.1px 0 1px rgba(255,0,255,0.6), -2.1px 0 1px rgba(0,255,255,0.6);
+    }
+    70% {
+        text-shadow: 1.2px 0 1px rgba(255,0,255,0.6), -1.2px 0 1px rgba(0,255,255,0.6);
+    }
+    75% {
+        text-shadow: 1.6px 0 1px rgba(255,0,255,0.6), -1.6px 0 1px rgba(0,255,255,0.6);
+    }
+    80% {
+        text-shadow: 0.7px 0 1px rgba(255,0,255,0.6), -0.7px 0 1px rgba(0,255,255,0.6);
+    }
+    85% {
+        text-shadow: 0.4px 0 1px rgba(255,0,255,0.6), -0.4px 0 1px rgba(0,255,255,0.6);
+    }
+    90% {
+        text-shadow: 2.6px 0 1px rgba(255,0,255,0.6), -2.6px 0 1px rgba(0,255,255,0.6);
+    }
+    95% {
+        text-shadow: 2.8px 0 1px rgba(255,0,255,0.6), -2.8px 0 1px rgba(0,255,255,0.6);
+    }
+    100% {
+        text-shadow: 1.5px 0 1px rgba(255,0,255,0.6), -1.5px 0 1px rgba(0,255,255,0.6);
+    }
+}
+
+.glitch.intensify-glitch::before,
+.glitch.intensify-glitch::after {
+    animation-duration: 0.7s;
+}
+
+.card {
+    background-color: var(--card-color);
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 0 25px rgba(255, 0, 255, 0.3),
+                0 0 50px rgba(0, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 35px rgba(255, 0, 255, 0.4),
+                0 0 70px rgba(0, 255, 255, 0.2);
+}
+
+.card:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 0, 255, 0.1) 40%,
+        rgba(255, 0, 255, 0.1) 60%,
+        transparent 70%
+    );
+    transform: rotate(45deg);
+    animation: shine 6s linear infinite;
+    pointer-events: none;
+}
+
+/* Улучшенные стили для аватара */
+.avatar {
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 25px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--primary-color);
+    box-shadow: 0 0 20px var(--primary-color);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.05) rotate(5deg);
+    box-shadow: 0 0 30px var(--primary-color), 0 0 50px var(--secondary-color);
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.avatar:hover img {
+    transform: scale(1.1);
+}
+
+/* Улучшенные стили для ссылок */
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 25px;
+}
+
+.link-card {
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.link-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: var(--primary-color);
+}
+
+.link-card:hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: scan 1.5s linear;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes scan {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.link-card i {
+    font-size: 1.2rem;
+    margin-right: 12px;
+    color: var(--primary-color);
+}
+
+.copy-status {
+    margin-left: auto;
+    font-size: 0.7rem;
+    opacity: 0.7;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.link-card.copied .copy-status {
+    color: var(--secondary-color);
+}
+
+.sparkles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.sparkles::before, 
+.sparkles::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 10px 2px var(--primary-color),
+        0 0 20px 4px var(--secondary-color);
+    animation: sparkle 8s linear infinite;
+    opacity: 0;
+}
+
+.sparkles::before {
+    top: 20%;
+    left: 15%;
+    animation-delay: 1s;
+}
+
+.sparkles::after {
+    top: 60%;
+    left: 75%;
+    animation-delay: 3s;
+}
+
+@keyframes sparkle {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    10% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    20% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+.footer {
+    text-align: center;
+    font-size: 0.8rem;
+    margin-top: 10px;
+    opacity: 0.6;
+}
+
+/* Стили для счетчика просмотров */
+.visitors-counter {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.visitors-counter:hover {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    border-color: var(--primary-color);
+}
+
+.counter-icon {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse-glow 3s infinite alternate;
+}
+
+.counter-info {
+    flex: 1;
+}
+
+.counter-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2px;
+}
+
+.counter-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    text-shadow: 0 0 5px var(--primary-color);
+}
+
+@keyframes pulse-glow {
+    0% {
+        text-shadow: 0 0 5px var(--primary-color);
+    }
+    50% {
+        text-shadow: 0 0 15px var(--primary-color), 0 0 25px var(--secondary-color);
+    }
+    100% {
+        text-shadow: 0 0 5px var(--primary-color);
+    }
+}
+
+.music-player {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background-color: rgba(17, 17, 17, 0.75);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    width: 54px;
+    height: 54px;
+}
+
+.music-player:hover {
+    width: 280px;
+    box-shadow: 0 0 25px rgba(255, 0, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.2);
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    width: 280px;
+    gap: 12px;
+}
+
+.music-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    flex-shrink: 0;
+}
+
+.music-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
+.music-btn i {
+    font-size: 14px;
+}
+
+.music-btn.playing i:before {
+    content: "\f04c"; /* change to pause icon */
+}
+
+.volume-control {
+    position: relative;
+    width: 80px;
+    height: 6px;
+}
+
+.volume-slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.volume-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.volume-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 3px;
+    transition: width 0.2s ease;
+    box-shadow: 0 0 8px var(--primary-color);
+}
+
+.music-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.music-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 4px;
+    opacity: 0.9;
+}
+
+.music-equalizer {
+    display: flex;
+    align-items: flex-end;
+    height: 12px;
+    gap: 2px;
+}
+
+.music-equalizer span {
+    width: 3px;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 1px;
+    transition: height 0.2s ease;
+}
+
+.music-equalizer.active span {
+    animation: equalize 1.3s steps(10, end) infinite;
+}
+
+.music-equalizer span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.music-equalizer span:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.music-equalizer span:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.music-equalizer span:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+@keyframes equalize {
+    0% {
+        height: 3px;
+    }
+    50% {
+        height: 10px;
+    }
+    100% {
+        height: 3px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+    
+    .glitch {
+        font-size: 2rem;
+    }
+    
+    .avatar {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .music-player {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    .music-player:hover {
+        width: 220px;
+    }
+    
+    .player-controls {
+        width: 220px;
+    }
+    
+    .volume-control {
+        width: 60px;
+    }
+}
+
+/* Отдельная панель музыкального плеера - обновленные стили */
+.music-player-panel {
+    background-color: var(--player-bg);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--player-border);
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.3), 
+                0 0 50px rgba(0, 255, 255, 0.1);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+    opacity: 0.95;
+}
+
+.music-player-panel:hover {
+    opacity: 1;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 40px rgba(255, 0, 255, 0.4), 
+                0 0 60px rgba(0, 255, 255, 0.2);
+}
+
+/* Плеер теперь в контейнере, а не фиксированный */
+.card-music-player {
+    width: 100%;
+    max-height: 60px;
+    transform: translateY(0);
+}
+
+.card-music-player.expanded {
+    max-height: 500px;
+}
+
+.player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(255, 0, 255, 0.1), rgba(0, 255, 255, 0.1));
+    cursor: pointer;
+    border-bottom: 1px solid var(--player-border);
+}
+
+.player-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-color);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+    text-transform: lowercase;
+}
+
+.player-title i {
+    color: var(--primary-color);
+    font-size: 1rem;
+}
+
+.player-toggle-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.music-player-panel.expanded .player-toggle-btn i {
+    transform: rotate(180deg);
+}
+
+.player-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.album-art {
+    width: 100%;
+    height: 160px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--player-border);
+}
+
+.album-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.8);
+    transition: all 0.3s ease;
+}
+
+.album-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.album-art:hover .album-overlay {
+    opacity: 1;
+}
+
+.album-art:hover img {
+    transform: scale(1.05);
+    filter: brightness(0.6);
+}
+
+.play-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 0, 255, 0.3);
+    border: 2px solid var(--primary-color);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px var(--primary-color);
+}
+
+.play-btn:hover {
+    transform: scale(1.1);
+    background: rgba(255, 0, 255, 0.5);
+}
+
+.play-btn.playing i:before {
+    content: "\f04c";
+}
+
+.music-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.song-info {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.song-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 5px;
+    text-shadow: 0 0 5px var(--primary-color);
+}
+
+.artist-name {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.time {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    width: 40px;
+    text-align: center;
+}
+
+.progress-bar-container {
+    flex: 1;
+    padding: 5px 0;
+    cursor: pointer;
+}
+
+.progress-bar {
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-current {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 2px;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 10px var(--secondary-color);
+}
+
+.control-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ctrl-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.ctrl-btn:hover:not(:disabled) {
+    color: var(--text-color);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.ctrl-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.main-play-btn {
+    width: 45px;
+    height: 45px;
+    background-color: rgba(255, 0, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--primary-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+}
+
+.main-play-btn:hover {
+    background-color: rgba(255, 0, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.main-play-btn.playing i:before {
+    content: "\f04c";
+}
+
+.volume-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.volume-slider-container {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    height: 20px;
+}
+
+.volume-control:hover .volume-slider-container {
+    width: 80px;
+}
+
+.volume-slider {
+    position: absolute;
+    width: 70px;
+    height: 4px;
+    margin-left: 10px;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.volume-progress {
+    position: absolute;
+    margin-left: 10px;
+    width: 70px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.volume-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 2px;
+    transition: width 0.2s ease;
+}
+
+/* Анимируем бликовые эффекты для плеера */
+.music-player-panel::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 0, 255, 0.1) 40%,
+        rgba(255, 0, 255, 0.1) 60%,
+        transparent 70%
+    );
+    transform: rotate(45deg);
+    animation: playerShine 8s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes playerShine {
+    0% {
+        top: -150%;
+        left: -150%;
+    }
+    100% {
+        top: 150%;
+        left: 150%;
+    }
+}
+
+@media (max-width: 480px) {
+    .music-player-panel {
+        width: calc(100% - 30px);
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+    }
+}
+
+/* Стили для аудио-реактивных элементов */
+body.music-playing {
+    --primary-pulse: var(--primary-color);
+    --secondary-pulse: var(--secondary-color);
+}
+
+/* Пульсирующий фон при воспроизведении музыки */
+body.music-playing:before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, transparent 60%, rgba(255, 0, 255, 0.05) 100%);
+    animation: bgPulse 1.5s infinite alternate;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes bgPulse {
+    0% {
+        opacity: 0.2;
+    }
+    100% {
+        opacity: calc(0.2 + var(--beat-intensity, 0) * 0.6);
+    }
+}
+
+/* Аудио-реактивное свечение для элементов */
+.avatar.audio-reactive {
+    animation: none;
+}
+
+body.music-playing .avatar.audio-reactive {
+    box-shadow: 0 0 15px var(--primary-color);
+    animation: avatarPulse 0.5s infinite alternate ease-in-out;
+}
+
+@keyframes avatarPulse {
+    0% {
+        box-shadow: 0 0 10px var(--primary-color);
+    }
+    100% {
+        box-shadow: 
+            0 0 calc(15px + var(--beat-intensity, 0) * 20px) var(--primary-color),
+            0 0 calc(20px + var(--beat-intensity, 0) * 30px) var(--secondary-color);
+    }
+}
+
+/* Реактивное свечение для имени */
+body.music-playing .glitch {
+    animation: textShadow 2s infinite alternate, textPulse 0.5s infinite alternate ease-in-out;
+}
+
+@keyframes textPulse {
+    0% {
+        text-shadow: 
+            0 0 5px var(--primary-color),
+            0 0 10px var(--primary-color),
+            0 0 20px var(--primary-color);
+    }
+    100% {
+        text-shadow: 
+            0 0 calc(5px + var(--beat-intensity, 0) * 10px) var(--primary-color),
+            0 0 calc(10px + var(--beat-intensity, 0) * 15px) var(--primary-color),
+            0 0 calc(20px + var(--beat-intensity, 0) * 20px) var(--primary-color);
+    }
+}
+
+/* Реактивное свечение для ссылок */
+body.music-playing .link-card:hover {
+    border-color: var(--primary-color);
+    animation: linkPulse 0.5s infinite alternate ease-in-out;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+@keyframes linkPulse {
+    0% {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        opacity: 1;
+    }
+    100% {
+        box-shadow: 
+            0 5px 15px rgba(0, 0, 0, 0.3),
+            0 0 calc(10px + var(--beat-intensity, 0) * 20px) var(--primary-color);
+        opacity: 1;
+    }
+}
+
+/* Реактивный скроллинг для фонового узора */
+body.music-playing {
+    background-position: calc(var(--beat-intensity, 0) * 20px) calc(var(--beat-intensity, 0) * 20px);
+    transition: background-position 0.1s ease;
+}
+
+/* Реактивное свечение для кнопок плеера */
+body.music-playing .main-play-btn,
+body.music-playing .play-btn {
+    animation: buttonPulse 0.5s infinite alternate ease-in-out;
+}
+
+@keyframes buttonPulse {
+    0% {
+        box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 calc(15px + var(--beat-intensity, 0) * 25px) var(--primary-color);
+    }
+}
+
+/* Аудио-реактивный прогресс-бар */
+body.music-playing .progress-current {
+    box-shadow: 0 0 calc(5px + var(--beat-intensity, 0) * 10px) var(--secondary-color);
+}
+
+/* Добавляем "танцующие" частицы */
+.music-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+body.music-playing .music-particles {
+    opacity: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--secondary-color);
+    animation: particleDance 3s infinite ease-in-out;
+}
+
+@keyframes particleDance {
+    0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: calc(0.5 + var(--beat-intensity, 0) * 0.5);
+    }
+    90% {
+        opacity: calc(0.5 + var(--beat-intensity, 0) * 0.5);
+    }
+    100% {
+        transform: translateY(calc(-100px - var(--beat-intensity, 0) * 100px)) 
+                  translateX(calc(var(--direction, 1) * (50px + var(--beat-intensity, 0) * 50px)));
+        opacity: 0;
+    }
+}
+
+/* Добавляем звуковые волны */
+.sound-waves {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+body.music-playing .sound-waves {
+    opacity: 1;
+}
+
+.sound-wave {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    box-sizing: border-box;
+    transform: scale(0);
+    opacity: 0;
+}
+
+.beat-wave {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    background: radial-gradient(circle, rgba(255,0,255,0.1) 0%, rgba(0,0,0,0) 70%);
+    transform: scale(0);
+    animation: none;
+}
+
+.wave-1 {
+    width: 100px;
+    height: 100px;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+}
+
+.wave-2 {
+    width: 200px;
+    height: 200px;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 15px var(--secondary-color);
+}
+
+.wave-3 {
+    width: 300px;
+    height: 300px;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 20px var(--accent-color);
+}
+
+@keyframes waveOut {
+    0% {
+        transform: scale(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+@keyframes beatWave {
+    0% {
+        transform: scale(0);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Дополнительные эффекты для элементов при воспроизведении музыки */
+body.music-playing .sparkles::before, 
+body.music-playing .sparkles::after {
+    animation-duration: calc(8s - var(--beat-intensity, 0) * 4s);
+}
+
+/* Яркие вспышки при сильных битах */
+.beat-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,0,255,0.2) 0%, rgba(0,0,0,0) 70%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9990;
+    transition: opacity 0.1s ease;
+}
+
+@keyframes flashFade {
+    0% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Стили для пользовательского курсора */
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(153, 0, 255, 0.3);
+    border: 2px solid var(--primary-color);
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Чтобы курсор не мешал кликам */
+    z-index: 9999;
+    transition: transform 0.2s, width 0.2s, height 0.2s, background 0.2s, opacity 0.2s;
+    mix-blend-mode: difference;
+    box-shadow: 0 0 10px rgba(153, 0, 255, 0.7);
+}
+
+.cursor-trail {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Чтобы курсор не мешал кликам */
+    z-index: 9998;
+    opacity: 0.7;
+    box-shadow: 0 0 5px var(--secondary-color);
+    transition: width 0.3s, height 0.3s, opacity 0.3s, background 0.3s;
+}
+
+/* Эффект при наведении на элементы */
+a:hover ~ .custom-cursor,
+button:hover ~ .custom-cursor,
+.custom-cursor.cursor-hover {
+    width: 40px;
+    height: 40px;
+    background: rgba(153, 0, 255, 0.5);
+    animation: pulse-cursor 1s infinite alternate;
+}
+
+.cursor-trail.cursor-hover {
+    width: 15px;
+    height: 15px;
+    opacity: 0.9;
+    background: var(--accent-color);
+}
+
+@keyframes pulse-cursor {
+    0% {
+        box-shadow: 0 0 10px rgba(153, 0, 255, 0.7);
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(153, 0, 255, 0.9);
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+/* Специальные состояния для курсора */
+.card:hover ~ .custom-cursor {
+    background: rgba(255, 0, 255, 0.3);
+    border-color: var(--accent-color);
+}
+
+.music-player-panel:hover ~ .custom-cursor {
+    background: rgba(0, 255, 255, 0.3);
+    border-color: var(--secondary-color);
+} 
