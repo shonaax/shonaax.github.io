@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TestX - Рабочее пространство</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #3a86ff;
+            --secondary-color: #8338ec;
+            --accent-color: #ff006e;
+            --text-color: #2b2d42;
+            --bg-light: #f8f9fa;
+            --transition-duration: 1s;
+            --transition-timing: cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        /* Page Container and Sections */
+        .page-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .page-section {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            transition: transform var(--transition-duration) var(--transition-timing);
+            will-change: transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background: linear-gradient(135deg, rgba(58, 134, 255, 0.05), rgba(131, 56, 236, 0.05));
+        }
+
+        .page-section.active {
+            transform: translateY(0) !important;
+            z-index: 2;
+        }
+
+        .page-section.prev {
+            transform: translateY(-100%) !important;
+            z-index: 1;
+        }
+
+        .page-section.next {
+            transform: translateY(100%) !important;
+            z-index: 1;
+        }
+
+        /* Hide scrollbar but allow scrolling */
+        .page-section {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .page-section::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Navigation Arrows */
+        .nav-arrows {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .nav-arrow {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0.9;
+        }
+
+        .nav-arrow:hover {
+            transform: scale(1.1);
+            opacity: 1;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-arrow i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .nav-arrow.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Page Indicators */
+        .page-indicators {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .page-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .page-indicator::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.3s ease;
+        }
+
+        .page-indicator.active {
+            background: var(--primary-color);
+        }
+
+        .page-indicator.active::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Navbar */
+        .workspace-nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .workspace-nav.visible {
+            transform: translateY(0);
+        }
+
+        .workspace-nav.first-section {
+            transform: translateY(0);
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(58, 134, 255, 0.3);
+        }
+
+        /* Section Content */
+        .section-content {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* Background Animation */
+        .bg-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            opacity: 0.1;
+            animation: floatShape 20s infinite;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            right: -150px;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -100px;
+            left: -100px;
+            animation-delay: 5s;
+        }
+
+        @keyframes floatShape {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(50px, 50px) rotate(90deg);
+            }
+            50% {
+                transform: translate(0, 100px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-50px, 50px) rotate(270deg);
+            }
+        }
+
+        /* Cards Styles */
+        .card-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        /* Show Nav Button */
+        .show-nav-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .show-nav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .show-nav-btn i {
+            font-size: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .section-content {
+                padding: 1rem;
+            }
+            
+            .nav-arrows, .page-indicators {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Show Nav Button -->
+    <button class="show-nav-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="workspace-nav first-section">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">Главная</a>
+                    <a href="create-test.html" class="nav-link active">Создать тест</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- Mantra Section -->
+        <section id="mantra-section" class="page-section active">
+            <div class="section-content">
+                <div class="bg-animation">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                </div>
+                <div class="container">
+                    <div class="card-container">
+                        <h3 class="mantra-title">Мантра дня</h3>
+                        <p class="mantra-text" id="dailyMantra"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Guides Section -->
+        <section id="guides-section" class="page-section next">
+            <div class="section-content">
+                <div class="bg-animation">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                </div>
+                <div class="container">
+                    <h2 class="mb-4">Советы и гайды</h2>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card-container">
+                                <div class="guide-icon">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                                <h3 class="guide-title">Создание эффективных вопросов</h3>
+                                <p>Узнайте, как составлять вопросы, которые точно измеряют знания.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card-container">
+                                <div class="guide-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <h3 class="guide-title">Оптимальное время</h3>
+                                <p>Как правильно рассчитать время на прохождение теста.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card-container">
+                                <div class="guide-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h3 class="guide-title">Анализ результатов</h3>
+                                <p>Как интерпретировать статистику и улучшать тесты.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq-section" class="page-section next">
+            <div class="section-content">
+                <div class="bg-animation">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                </div>
+                <div class="container">
+                    <h2 class="mb-4">Часто задаваемые вопросы</h2>
+                    <div class="card-container">
+                        <h3 class="faq-question">
+                            Почему не работает "Пройти тест"?
+                            <span class="status-badge closed">Закрыто на обновление</span>
+                        </h3>
+                        <p class="faq-answer">
+                            Мы работаем над улучшением системы тестирования. Пока вы можете создавать тесты в формате HTML и делиться ими. 
+                            Новая версия будет включать улучшенный интерфейс, более точную систему оценки и расширенную аналитику.
+                        </p>
+                    </div>
+                    <div class="card-container">
+                        <h3 class="faq-question">
+                            Когда появится новая версия?
+                            <span class="status-badge coming-soon">Скоро</span>
+                        </h3>
+                        <p class="faq-answer">
+                            Мы планируем запустить обновленную версию в ближайшее время. Следите за новостями в нашем блоге.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <div class="nav-arrows">
+        <div class="nav-arrow up disabled">
+            <i class="fas fa-chevron-up"></i>
+        </div>
+        <div class="nav-arrow down">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </div>
+
+    <!-- Page Indicators -->
+    <div class="page-indicators">
+        <div class="page-indicator active" data-page="0"></div>
+        <div class="page-indicator" data-page="1"></div>
+        <div class="page-indicator" data-page="2"></div>
+    </div>
+
+    <script>
+        // Массив мантр
+        const mantras = [
+            "Каждый тест - это возможность научить чему-то новому",
+            "Простота - ключ к пониманию",
+            "Хороший тест помогает учиться",
+            "Ясность вопроса - половина правильного ответа",
+            "Учить других - учиться самому",
+            "Знания проверяются действием",
+            "В каждой ошибке есть урок",
+            "Тестирование - это диалог",
+            "Оценка - не цель, а инструмент",
+            "Каждый вопрос имеет значение",
+            "Практика ведет к совершенству",
+            "Обратная связь - путь к улучшению",
+            "Учиться можно всегда и везде",
+            "Простое объяснение лучше сложного",
+            "Знание приходит через понимание",
+            "Тест - это возможность роста",
+            "Ошибки учат лучше успехов",
+            "Каждый ответ - новый опыт",
+            "Учение - это постоянный процесс",
+            "Мастерство приходит с практикой",
+            "Любопытство - двигатель знаний",
+            "Понимание важнее запоминания",
+            "Каждый день - новая возможность",
+            "Терпение - ключ к успеху",
+            "Учить других - лучший способ учиться",
+            "Знания множатся при передаче",
+            "В простоте кроется гениальность",
+            "Постоянство важнее скорости",
+            "Качество важнее количества",
+            "Повторение - мать учения",
+            "Через трудности к звездам",
+            "Учиться никогда не поздно",
+            "Знание - сила, практика - мастерство",
+            "Каждая ошибка - шаг к успеху",
+            "Мудрость приходит с опытом",
+            "Учение свет, а неучение тьма",
+            "Дорогу осилит идущий",
+            "Век живи - век учись",
+            "Знание преумножается в передаче",
+            "Успех приходит с подготовкой",
+            "Главное - начать действовать",
+            "Сложное начинается с простого",
+            "Учитель всегда учится",
+            "Каждый день - новый урок",
+            "Практика делает мастера",
+            "В знании - сила",
+            "Учиться - значит меняться",
+            "Опыт - лучший учитель",
+            "Движение - путь к цели",
+            "Знания открывают двери",
+            "Учение - свет души",
+            "Мастерство в деталях",
+            "Терпение и труд все перетрут",
+            "Знание - путь к свободе",
+            "Учиться - значит расти",
+            "Каждый может учить",
+            "Простота - признак мастерства",
+            "В учении нет предела",
+            "Знание умножается в sharing",
+            "Учить - значит вдохновлять",
+            "Практика создает уверенность",
+            "Каждый урок ценен",
+            "Учение - процесс открытий",
+            "Знание - сила перемен",
+            "Учиться - значит жить",
+            "Опыт приходит с практикой",
+            "В обучении нет мелочей",
+            "Знание освещает путь",
+            "Учение - путь к мудрости",
+            "Каждый день - новый старт",
+            "Практика ведет к мастерству",
+            "Знание - ключ к возможностям",
+            "Учиться - значит развиваться",
+            "Опыт рождает мастерство",
+            "В знании - будущее",
+            "Учение - путь к успеху",
+            "Каждый шаг важен",
+            "Практика - путь к совершенству",
+            "Знание - сила действия",
+            "Учиться - значит творить",
+            "Опыт - основа мастерства",
+            "В учении - радость открытий",
+            "Знание - путь к пониманию",
+            "Учить - значит расти вместе",
+            "Каждый может достичь мастерства",
+            "Практика рождает уверенность",
+            "Знание - основа развития",
+            "Учиться - значит двигаться вперед",
+            "Опыт - путь к мудрости",
+            "В знании - сила роста",
+            "Учение - путь к свободе",
+            "Каждый урок - возможность",
+            "Практика - ключ к успеху",
+            "Знание освобождает",
+            "Учиться - значит открывать",
+            "Опыт ведет к мастерству",
+            "В учении - сила перемен",
+            "Знание - путь к цели",
+            "Учить - значит вдохновлять других",
+            "Каждый день - новый опыт",
+            "Практика делает совершенным",
+            "Знание - сила развития",
+            "Учиться - значит расти над собой",
+            "Опыт - лучший советчик",
+            "В знании - путь к успеху"
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.querySelector('.workspace-nav');
+            const showNavBtn = document.querySelector('.show-nav-btn');
+            const sections = document.querySelectorAll('.page-section');
+            const indicators = document.querySelectorAll('.page-indicator');
+            const upArrow = document.querySelector('.nav-arrow.up');
+            const downArrow = document.querySelector('.nav-arrow.down');
+            let currentPage = 0;
+            let isNavVisible = false;
+            let isAnimating = false;
+
+            // Установка мантры
+            const mantraElement = document.getElementById('dailyMantra');
+            mantraElement.textContent = getRandomMantra();
+
+            function updateNavVisibility(newPage) {
+                if (newPage === 0) {
+                    navbar.classList.add('first-section');
+                    showNavBtn.style.display = 'none';
+                } else {
+                    navbar.classList.remove('first-section');
+                    showNavBtn.style.display = 'flex';
+                }
+            }
+
+            // Toggle navigation
+            showNavBtn.addEventListener('click', () => {
+                isNavVisible = !isNavVisible;
+                navbar.classList.toggle('visible', isNavVisible);
+                showNavBtn.innerHTML = isNavVisible ? 
+                    '<i class="fas fa-times"></i>' : 
+                    '<i class="fas fa-bars"></i>';
+            });
+
+            function updatePage(newPage) {
+                if (isAnimating || newPage === currentPage || newPage < 0 || newPage >= sections.length) return;
+                isAnimating = true;
+
+                updateNavVisibility(newPage);
+
+                if (isNavVisible) {
+                    isNavVisible = false;
+                    navbar.classList.remove('visible');
+                    showNavBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+
+                sections.forEach((section, index) => {
+                    section.classList.remove('active', 'prev', 'next');
+                    if (index < newPage) {
+                        section.classList.add('prev');
+                    } else if (index > newPage) {
+                        section.classList.add('next');
+                    } else {
+                        section.classList.add('active');
+                    }
+                });
+
+                indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === newPage);
+                });
+
+                upArrow.classList.toggle('disabled', newPage === 0);
+                downArrow.classList.toggle('disabled', newPage === sections.length - 1);
+
+                currentPage = newPage;
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 1000);
+            }
+
+            // Navigation arrows click handlers
+            upArrow.addEventListener('click', () => {
+                if (!upArrow.classList.contains('disabled')) {
+                    updatePage(currentPage - 1);
+                }
+            });
+
+            downArrow.addEventListener('click', () => {
+                if (!downArrow.classList.contains('disabled')) {
+                    updatePage(currentPage + 1);
+                }
+            });
+
+            // Mouse wheel navigation
+            let wheelTimeout;
+            document.addEventListener('wheel', (e) => {
+                clearTimeout(wheelTimeout);
+                wheelTimeout = setTimeout(() => {
+                    if (e.deltaY > 0 && currentPage < sections.length - 1) {
+                        updatePage(currentPage + 1);
+                    } else if (e.deltaY < 0 && currentPage > 0) {
+                        updatePage(currentPage - 1);
+                    }
+                }, 50);
+            });
+
+            // Touch navigation
+            let touchStartY;
+            document.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY;
+            });
+
+            document.addEventListener('touchend', (e) => {
+                if (isAnimating) return;
+                const touchEndY = e.changedTouches[0].clientY;
+                const deltaY = touchStartY - touchEndY;
+
+                if (Math.abs(deltaY) > 50) {
+                    if (deltaY > 0 && currentPage < sections.length - 1) {
+                        updatePage(currentPage + 1);
+                    } else if (deltaY < 0 && currentPage > 0) {
+                        updatePage(currentPage - 1);
+                    }
+                }
+            });
+
+            // Indicator click navigation
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    updatePage(index);
+                });
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown' && currentPage < sections.length - 1) {
+                    updatePage(currentPage + 1);
+                } else if (e.key === 'ArrowUp' && currentPage > 0) {
+                    updatePage(currentPage - 1);
+                }
+            });
+
+            // Initial setup
+            updateNavVisibility(0);
+        });
+
+        function getRandomMantra() {
+            const index = Math.floor(Math.random() * mantras.length);
+            return mantras[index];
+        }
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

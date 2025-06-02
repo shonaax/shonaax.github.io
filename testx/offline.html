@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TestX - Офлайн режим</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+            text-align: center;
+        }
+        .offline-container {
+            max-width: 400px;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .icon {
+            font-size: 48px;
+            color: #3a86ff;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            color: #2b2d42;
+            margin-bottom: 1rem;
+        }
+        p {
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #3a86ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="offline-container">
+        <div class="icon">
+            <i class="fas fa-wifi-slash"></i>
+        </div>
+        <h1>Нет подключения к интернету</h1>
+        <p>Похоже, вы находитесь в офлайн режиме. Некоторые функции могут быть недоступны.</p>
+        <p>Ранее загруженные тесты доступны для прохождения.</p>
+        <a href="/" class="btn">Обновить страницу</a>
+    </div>
+</body>
+</html> 

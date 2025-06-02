@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TestX - Создание теста</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="create-test.css">
+</head>
+<body class="create-test-page">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">TestX</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <button type="button" class="nav-link btn btn-link d-flex align-items-center" id="commandPaletteBtn">
+                            <i class="fas fa-search me-2"></i>
+                            <span>Поиск</span>
+                            <span class="command-shortcut-hint ms-2">/</span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="create-test.html">Создать тест</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="take-test.html">Пройти тест</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Create Test Section -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-md-3 sidebar">
+                <div class="tools-container">
+                    <h3>Инструменты</h3>
+                    <div class="tool-item" data-type="single-choice" data-tooltip="Вопрос с одним правильным ответом">
+                        <i class="fas fa-dot-circle"></i>
+                        <span>Один из списка</span>
+                    </div>
+                    <div class="tool-item" data-type="multiple-choice" data-tooltip="Вопрос с несколькими правильными ответами">
+                        <i class="fas fa-check-square"></i>
+                        <span>Несколько из списка</span>
+                    </div>
+                    <div class="tool-item" data-type="text" data-tooltip="Вопрос со свободным ответом">
+                        <i class="fas fa-font"></i>
+                        <span>Текстовый ответ</span>
+                    </div>
+                    <div class="tool-item" data-type="image" data-tooltip="Вопрос с изображением">
+                        <i class="fas fa-image"></i>
+                        <span>Вопрос с изображением</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 main-content">
+                <div class="test-builder">
+                    <div class="test-header">
+                        <input type="text" id="test-title" class="form-control form-control-lg" placeholder="Название теста">
+                        <div class="test-settings">
+                            <button class="btn btn-outline-danger" id="clearBtn">
+                                <i class="fas fa-trash"></i>
+                                Очистить
+                            </button>
+                            <button class="btn btn-outline-primary settings-btn" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                                <i class="fas fa-cog"></i>
+                                Настройки
+                            </button>
+                            <button id="exportBtn" class="btn btn-primary">
+                                <i class="fas fa-file-export"></i>
+                                Экспортировать
+                            </button>
+                        </div>
+                    </div>
+                    <div id="test-content" class="test-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Настройки теста</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label>Ограничение по времени</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="timeLimit" min="0">
+                            <span class="input-group-text">минут</span>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Перемешивать вопросы</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="shuffleQuestions">
+                            <label class="form-check-label">Включить</label>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Показывать результаты</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="showResults" id="showResultsImmediate" value="immediately">
+                            <label class="form-check-label">Сразу после ответа</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="showResults" id="showResultsEnd" value="end">
+                            <label class="form-check-label">После завершения теста</label>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Критерии оценивания</label>
+                        <div class="grading-criteria">
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">5 (Отлично)</span>
+                                <input type="number" class="form-control" id="gradeA" min="0" max="100" value="90">
+                                <span class="input-group-text">% и выше</span>
+                            </div>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">4 (Хорошо)</span>
+                                <input type="number" class="form-control" id="gradeB" min="0" max="100" value="75">
+                                <span class="input-group-text">% и выше</span>
+                            </div>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">3 (Удовл.)</span>
+                                <input type="number" class="form-control" id="gradeC" min="0" max="100" value="60">
+                                <span class="input-group-text">% и выше</span>
+                            </div>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text">2 (Неуд.)</span>
+                                <input type="number" class="form-control" disabled value="0">
+                                <span class="input-group-text">% - ниже проходного</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Дополнительные настройки</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="showGrade">
+                            <label class="form-check-label">Показывать оценку помимо процентов</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="showCriteria">
+                            <label class="form-check-label">Показывать критерии оценивания</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSettings()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal fade" id="exportModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-share-alt me-2"></i>
+                        Поделиться тестом
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="sharing-options">
+                        <div class="sharing-option">
+                            <div class="sharing-option-header">
+                                <i class="fas fa-file-code text-primary"></i>
+                                <h6>Автономный HTML файл</h6>
+                            </div>
+                            <p class="text-muted">
+                                На данный момент вы можете делиться тестами в виде статичных HTML файлов. 
+                                Это позволяет проходить тесты без подключения к интернету и без установки дополнительного ПО.
+                            </p>
+                            <div class="sharing-features">
+                                <div class="feature">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span>Работает без интернета</span>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span>Не требует установки</span>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span>Сохраняет все функции</span>
+                                </div>
+                            </div>
+                            <button id="downloadHtml" class="btn btn-primary w-100">
+                                <i class="fas fa-download me-2"></i>
+                                Скачать HTML файл
+                            </button>
+                        </div>
+
+                        <div class="sharing-option">
+                            <div class="sharing-option-header">
+                                <i class="fas fa-key text-secondary"></i>
+                                <h6>Ключ теста</h6>
+                            </div>
+                            <p class="text-muted">
+                                Вы также можете поделиться ключом теста. Эта функция временно ограничена, 
+                                но скоро будет доступна в полном объеме.
+                            </p>
+                            <div class="input-group mb-3">
+                                <input type="text" id="exportResult" class="form-control" readonly>
+                                <button id="copyExport" class="btn btn-outline-primary">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <div class="coming-soon">
+                        <i class="fas fa-clock text-muted me-2"></i>
+                        <span>Скоро появятся новые способы публикации тестов</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+
+    <!-- Command Palette -->
+    <div class="command-palette" id="commandPalette">
+        <div class="command-input-wrapper">
+            <span class="command-prefix">/</span>
+            <input type="text" id="commandInput" class="command-input" placeholder="Type a command..." autocomplete="off">
+        </div>
+        <div class="command-suggestions" id="commandSuggestions">
+            <!-- Suggestions will be populated dynamically -->
+        </div>
+    </div>
+
+    <script src="command-palette.js"></script>
+    <script src="create-test.js"></script>
+</body>
+</html> 

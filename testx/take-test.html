@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TestX - Прохождение теста</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <script>
+        // Отключаем контекстное меню (ПКМ)
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Отключаем клавиши
+        document.addEventListener('keydown', (e) => {
+            // Отключаем F12
+            if(e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Отключаем Ctrl+Shift+I/J/C
+            if(e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Отключаем Ctrl+U (просмотр исходного кода)
+            if(e.ctrlKey && e.key === 'U') {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Отключаем выделение текста
+        document.addEventListener('selectstart', (e) => {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Отключаем перетаскивание
+        document.addEventListener('dragstart', (e) => {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Отключаем копирование
+        document.addEventListener('copy', (e) => {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Дополнительная защита от DevTools
+        setInterval(() => {
+            const devtools = /./;
+            devtools.toString = function() {
+                this.opened = true;
+            }
+            console.log('%c', devtools);
+        }, 1000);
+        
+        // Можно также добавить CSS
+        </script>
+        
+        <style>
+        /* Отключаем выделение текста через CSS */
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Отключаем перетаскивание изображений */
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+        </style>
+        <script>
+            // Предупреждение при открытии DevTools
+    let devToolsOpened = false;
+    
+    Object.defineProperty(window, 'devtools', {
+        get: function() {
+            if(!devToolsOpened) {
+                devToolsOpened = true;
+                alert('Использование инструментов разработчика запрещено!');
+                // Можно также перенаправить пользователя или заблокировать доступ
+                // window.location.href = '/blocked.html';
+            }
+            return true;
+        }
+    });
+    
+    // Дополнительная проверка размера окна (часто меняется при открытии DevTools)
+    let width = window.outerWidth - window.innerWidth;
+    let height = window.outerHeight - window.innerHeight;
+    setInterval(() => {
+        if(width !== window.outerWidth - window.innerWidth || 
+           height !== window.outerHeight - window.innerHeight) {
+            // DevTools, вероятно, открыты
+            alert('Пожалуйста, закройте инструменты разработчика');
+        }
+    }, 1000);
+        </script>
+    <style>
+        :root {
+            --primary-color: #3a86ff;
+            --secondary-color: #8338ec;
+            --accent-color: #ff006e;
+            --text-color: #2b2d42;
+            --bg-light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(45deg, rgba(58, 134, 255, 0.05) 0%, rgba(131, 56, 236, 0.05) 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Animated background */
+        .animated-bg {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(
+                circle at center,
+                rgba(58, 134, 255, 0.1) 0%,
+                rgba(131, 56, 236, 0.1) 30%,
+                transparent 70%
+            );
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Main Content */
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .maintenance-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .maintenance-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        .maintenance-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            filter: blur(10px);
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        .maintenance-icon i {
+            font-size: 3rem;
+            color: white;
+        }
+
+        .maintenance-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .maintenance-text {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .maintenance-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-item i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .feature-item h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .feature-item p {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin: 0.5rem 0 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 0.75rem 2rem;
+            font-weight: 500;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(58, 134, 255, 0.4);
+            }
+            70% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 20px rgba(58, 134, 255, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(58, 134, 255, 0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .maintenance-card {
+                padding: 2rem;
+            }
+
+            .maintenance-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .maintenance-title {
+                font-size: 1.8rem;
+            }
+
+            .maintenance-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">TestX</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="create-test.html">Создать тест</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="take-test.html">Пройти тест</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="maintenance-card">
+            <div class="maintenance-icon">
+                <i class="fas fa-tools"></i>
+            </div>
+            <h1 class="maintenance-title">Функция временно недоступна</h1>
+            <p class="maintenance-text">
+                Мы работаем над улучшением системы тестирования, чтобы сделать её более надёжной и удобной для вас. 
+                Скоро здесь появится обновлённая версия с новыми возможностями.
+            </p>
+            <div class="maintenance-features">
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <h4>Улучшенная безопасность</h4>
+                        <p>Новая система защиты данных</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <div>
+                        <h4>Быстрая работа</h4>
+                        <p>Оптимизированная производительность</p>
+        </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <div>
+                        <h4>Адаптивный дизайн</h4>
+                        <p>Удобство на всех устройствах</p>
+                    </div>
+                </div>
+            </div>
+            <a href="index.html" class="btn btn-primary">
+                <i class="fas fa-home me-2"></i>
+                Вернуться на главную
+            </a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
