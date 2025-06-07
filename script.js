@@ -66,12 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Ваш браузер может не поддерживать некоторые функции сайта. Для наилучшего опыта используйте Chrome, Firefox или Safari последних версий.');
     }
     
-    // Вступительный экран
-    const entryScreen = document.querySelector('.entry-screen');
-    const entryContent = document.querySelector('.entry-content');
-    
-    // Первоначально блокируем прокрутку страницы
-    document.body.style.overflow = 'hidden';
+    // Разрешаем прокрутку страницы сразу
+    document.body.style.overflow = 'auto';
     
     // Загружаем аудио-файл заранее
     const audio = document.getElementById('background-music');
@@ -119,48 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         console.error('Аудио-элемент не найден!');
-    }
-    
-    // Обработчик клика на вступительный экран
-    entryContent.addEventListener('click', () => {
-        enterWebsite();
-    });
-    
-    // Добавляем обработчик нажатия клавиши Enter на вступительном экране
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !entryScreen.classList.contains('hidden')) {
-            console.log('Нажата клавиша Enter на вступительном экране');
-            enterWebsite();
-        }
-    });
-    
-    // Функция для входа на сайт
-    function enterWebsite() {
-        entryScreen.classList.add('hidden');
-        
-        // Добавляем эффект вспышки при входе
-        const flash = document.createElement('div');
-        flash.classList.add('entry-flash');
-        document.body.appendChild(flash);
-        
-        setTimeout(() => {
-            flash.remove();
-        }, 1000);
-        
-        // Задержка перед полным удалением из DOM
-        setTimeout(() => {
-            entryScreen.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Разрешаем прокрутку
-            
-            // Запускаем все анимации после входа на сайт
-            initializeWebsiteAnimations();
-            
-            // Показываем сообщение пользователю о ручном запуске музыки
-            const playerTitle = document.querySelector('.player-title span');
-            if (playerTitle) {
-                playerTitle.textContent = 'Нажмите ▶ для запуска музыки';
-            }
-        }, 500);
     }
     
     // Функции инициализации анимаций и эффектов сайта
@@ -342,21 +296,21 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Инициализация музыкального плеера
     function initMusicPlayer() {
-        const playerHeader = document.querySelector('.player-header');
-        const playerPanel = document.querySelector('.music-player-panel');
+        const musicPlayer = document.querySelector('.music-player-panel');
+        const playerToggleBtn = document.getElementById('player-toggle-btn');
         const musicToggle = document.getElementById('music-toggle');
         const playPauseBtn = document.getElementById('play-pause-btn');
-        const audio = document.getElementById('background-music');
-        const volumeSlider = document.getElementById('volume-slider');
-        const volumeBar = document.querySelector('.volume-bar');
-        const progressBar = document.querySelector('.progress-current');
-        const progressContainer = document.querySelector('.progress-bar-container');
-        const currentTimeEl = document.querySelector('.current-time');
-        const totalTimeEl = document.querySelector('.total-time');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
         const repeatBtn = document.getElementById('repeat-btn');
-        const volumeBtn = document.getElementById('volume-btn');
-        const playerTitle = document.querySelector('.player-title span');
         const reloadBtn = document.getElementById('reload-btn');
+        const volumeBtn = document.getElementById('volume-btn');
+        const volumeSlider = document.getElementById('volume-slider');
+        const audio = document.getElementById('background-music');
+        const progressBar = document.querySelector('.progress-current');
+        const currentTime = document.querySelector('.current-time');
+        const totalTime = document.querySelector('.total-time');
+        const playerTitle = document.querySelector('.player-title span');
         
         // Устанавливаем начальное состояние
         if (playerTitle) {
@@ -374,8 +328,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Инициализируем отображение времени
-        if (currentTimeEl) currentTimeEl.textContent = '00:00';
-        if (totalTimeEl) totalTimeEl.textContent = '00:00';
+        if (currentTime) currentTime.textContent = '00:00';
+        if (totalTime) totalTime.textContent = '00:00';
         
         // Устанавливаем прогресс на ноль
         if (progressBar) progressBar.style.width = '0%';
@@ -393,16 +347,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Показываем панель плеера с анимацией
         setTimeout(() => {
-            if (playerPanel) playerPanel.style.opacity = '1';
+            if (musicPlayer) musicPlayer.style.opacity = '1';
         }, 500);
         
         // Переключение развернутого/свернутого состояния плеера
-        if (playerHeader) {
-            playerHeader.addEventListener('click', (e) => {
-                // Предотвращаем срабатывание клика на кнопках внутри заголовка
-                if (e.target.closest('.player-toggle-btn')) return;
-                
-                playerPanel.classList.toggle('expanded');
+        if (playerToggleBtn) {
+            playerToggleBtn.addEventListener('click', () => {
+                musicPlayer.classList.toggle('collapsed');
+                playerToggleBtn.querySelector('i').classList.toggle('fa-chevron-down');
+                playerToggleBtn.querySelector('i').classList.toggle('fa-chevron-up');
             });
         }
         
@@ -429,23 +382,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 const durationMinutes = Math.floor(duration / 60);
                 const durationSeconds = Math.floor(duration) % 60;
                 
-                if (currentTimeEl) currentTimeEl.textContent = `${currentMinutes.toString().padStart(2, '0')}:${currentSeconds.toString().padStart(2, '0')}`;
-                if (totalTimeEl) totalTimeEl.textContent = `${durationMinutes.toString().padStart(2, '0')}:${durationSeconds.toString().padStart(2, '0')}`;
+                if (currentTime) currentTime.textContent = `${currentMinutes.toString().padStart(2, '0')}:${currentSeconds.toString().padStart(2, '0')}`;
+                if (totalTime) totalTime.textContent = `${durationMinutes.toString().padStart(2, '0')}:${durationSeconds.toString().padStart(2, '0')}`;
             }
         });
         
         // Обработчик изменения громкости
         if (volumeSlider) {
-            volumeSlider.addEventListener('input', () => {
-                audio.volume = volumeSlider.value / 100;
+            volumeSlider.addEventListener('input', (e) => {
+                audio.volume = e.target.value / 100;
                 updateVolumeBar();
             });
         }
         
         // Клик по прогресс-бару для перемотки
-        if (progressContainer) {
-            progressContainer.addEventListener('click', (e) => {
-                const progressContainerWidth = progressContainer.clientWidth;
+        if (progressBar) {
+            progressBar.addEventListener('click', (e) => {
+                const progressContainerWidth = progressBar.clientWidth;
                 const clickPosition = e.offsetX;
                 const seekTime = (clickPosition / progressContainerWidth) * audio.duration;
                 
@@ -592,7 +545,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Обновляем интерфейс
                 if (progressBar) progressBar.style.width = '0%';
-                if (currentTimeEl) currentTimeEl.textContent = '00:00';
+                if (currentTime) currentTime.textContent = '00:00';
                 
                 // Если музыка играла, продолжаем воспроизведение
                 if (wasPlaying) {

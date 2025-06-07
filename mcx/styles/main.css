@@ -14,11 +14,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
-    scroll-behavior: smooth;
-}
-
-html {
-    scroll-behavior: smooth;
+    cursor: none;
 }
 
 body {
@@ -29,6 +25,24 @@ body {
         radial-gradient(circle at 20% 20%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(0, 184, 255, 0.1) 0%, transparent 50%);
     background-attachment: fixed;
+}
+
+/* Custom Cursor */
+.cursor {
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.2s ease;
+    mix-blend-mode: difference;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+.cursor-follower {
+    display: none;
 }
 
 /* Navigation */
@@ -42,11 +56,6 @@ body {
     background: rgba(10, 10, 10, 0.8);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.nav.hidden {
-    transform: translateY(-100%);
 }
 
 .nav-content {
@@ -107,84 +116,14 @@ body {
     width: 100%;
 }
 
-/* Hamburger menu button */
-.nav-toggle {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 44px;
-    height: 44px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 1100;
-    margin-left: 1rem;
-}
-.nav-toggle .bar {
-    width: 28px;
-    height: 3px;
-    background: var(--primary);
-    margin: 4px 0;
-    border-radius: 2px;
-    transition: 0.3s;
-}
-.nav-toggle.open .bar:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-}
-.nav-toggle.open .bar:nth-child(2) {
-    opacity: 0;
-}
-.nav-toggle.open .bar:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-}
-
-@media (max-width: 768px) {
-    .nav-toggle {
-        display: flex;
-    }
-    .nav-links {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100vw;
-        background: rgba(10,10,10,0.97);
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0;
-        padding: 1.5rem 2rem 2rem 2rem;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-        transform: translateY(-30px);
-        opacity: 0;
-        pointer-events: none;
-        transition: all 0.3s;
-        z-index: 1001;
-    }
-    .nav-links.open {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateY(0);
-    }
-    .nav-link {
-        width: 100%;
-        padding: 1rem 0;
-        font-size: 1.3rem;
-        border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-}
-
-/* Sections */
-section {
-    min-height: 100vh;
-    padding: 6rem 2rem;
-    position: relative;
-    overflow: hidden;
-}
-
 /* Hero Section */
 .hero {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: center;
+    padding: 6rem 2rem;
 }
 
 .hero::before {
@@ -217,7 +156,7 @@ section {
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1.5rem;
-        opacity: 0;
+    opacity: 0;
     transform: translateY(30px);
     animation: fadeInUp 1s ease forwards;
     text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
@@ -360,7 +299,8 @@ section {
 
 /* Features Section */
 .features {
-    background: linear-gradient(to bottom, transparent, rgba(0, 255, 136, 0.05));
+    padding: 8rem 2rem;
+    position: relative;
 }
 
 .section-header {
@@ -465,295 +405,6 @@ section {
     z-index: 1;
     font-size: 1.1rem;
     line-height: 1.6;
-    margin-bottom: 1.5rem;
-}
-
-/* Contact Section */
-.contact {
-    background: linear-gradient(to bottom, rgba(0, 184, 255, 0.05), transparent);
-}
-
-.contact-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.contact-card {
-    background: var(--glass);
-    padding: 2rem;
-    border-radius: 20px;
-    text-align: center;
-    text-decoration: none;
-    color: var(--light);
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    position: relative;
-    overflow: hidden;
-}
-
-.contact-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--gradient);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 0;
-}
-
-.contact-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-}
-
-.contact-card:hover::before {
-    opacity: 0.1;
-}
-
-.contact-card i {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    position: relative;
-    z-index: 1;
-    background: var(--gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.contact-card span {
-    display: block;
-    position: relative;
-    z-index: 1;
-}
-
-.contact-card .copy-status {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.6);
-    margin-top: 0.5rem;
-}
-
-/* Music Player */
-.music-player-panel {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 400px;
-    background: var(--glass);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.player-header {
-    padding: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.player-title {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.player-toggle-btn {
-    background: none;
-    border: none;
-    color: var(--light);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.player-toggle-btn:hover {
-    transform: scale(1.1);
-}
-
-.player-content {
-    padding: 1.5rem;
-}
-
-.album-art {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto 1.5rem;
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
-}
-
-.album-art img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.album-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.album-art:hover .album-overlay {
-    opacity: 1;
-}
-
-.play-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: var(--gradient);
-    border: none;
-    color: var(--dark);
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.play-btn:hover {
-    transform: scale(1.1);
-}
-
-.music-controls {
-    text-align: center;
-}
-
-.song-info {
-    margin-bottom: 1.5rem;
-}
-
-.song-title {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.artist-name {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.progress-container {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.time {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.progress-bar-container {
-    flex: 1;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-    overflow: hidden;
-}
-
-.progress-bar {
-    height: 100%;
-    background: var(--gradient);
-    width: 0;
-    transition: width 0.1s linear;
-}
-
-.control-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-}
-
-.ctrl-btn {
-    background: var(--glass);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--light);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.ctrl-btn:hover {
-    background: var(--gradient);
-    color: var(--dark);
-    transform: scale(1.1);
-}
-
-.main-play-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 1.2rem;
-}
-
-.volume-control {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.volume-slider-container {
-    width: 100px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-    overflow: hidden;
-    position: relative;
-}
-
-.volume-slider {
-    width: 100%;
-    height: 100%;
-    -webkit-appearance: none;
-    background: transparent;
-    cursor: pointer;
-}
-
-.volume-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 12px;
-    height: 12px;
-    background: var(--primary);
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.volume-progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    background: var(--gradient);
-    width: 70%;
-    pointer-events: none;
 }
 
 /* Animations */
@@ -794,7 +445,7 @@ section {
     }
 
     .hero-buttons {
-    justify-content: center;
+        justify-content: center;
     }
 
     .hero-image {
@@ -828,19 +479,12 @@ section {
     }
 
     .btn {
-    width: 100%;
+        width: 100%;
         text-align: center;
     }
 
     .section-title {
         font-size: 2.5rem;
-    }
-
-    .music-player-panel {
-        width: 100%;
-        bottom: 0;
-        right: 0;
-        border-radius: 20px 20px 0 0;
     }
 }
 
@@ -860,45 +504,4 @@ section {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--secondary);
-}
-
-/* Project Status Badges */
-.project-status {
-    display: inline-block;
-    margin-bottom: 0.7rem;
-    margin-right: 0.5rem;
-    padding: 0.25em 0.9em;
-    font-size: 0.95em;
-    font-weight: 600;
-    border-radius: 1em;
-    letter-spacing: 0.03em;
-    background: rgba(255,255,255,0.07);
-    color: #fff;
-    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
-    transition: background 0.3s, color 0.3s;
-    vertical-align: middle;
-}
-.badge-active {
-    background: linear-gradient(90deg, #00ff88 60%, #00b8ff 100%);
-    color: #0a0a0a;
-}
-.badge-progress {
-    background: linear-gradient(90deg, #ffb300 60%, #ffec80 100%);
-    color: #0a0a0a;
-}
-.badge-paused {
-    background: linear-gradient(90deg, #bdbdbd 60%, #757575 100%);
-    color: #fff;
-}
-.badge-soon {
-    background: linear-gradient(90deg, #ff3e3e 60%, #ffb300 100%);
-    color: #fff;
 } 
-
-/* make the floating blocks to be disabled on mobile */
-@media (max-width: 768px) {
-    .floating-block {
-        display: none;
-    }
-}
-/*make the hero section on mobile more effected with cool effects*/

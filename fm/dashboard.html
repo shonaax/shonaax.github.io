@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления - FMusica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="example.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link href="relaxation.css" rel="stylesheet">
+    <link href="glass.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+
+        /* Enhanced Glass Effects */
+        .glass-dark {
+            background: rgba(17, 17, 17, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .blur-backdrop {
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+        }
+
+        /* Sidebar specific blur */
+        .sidebar {
+            background: rgba(17, 17, 17, 0.75);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Player bar specific blur */
+        .player-bar {
+            background: rgba(17, 17, 17, 0.85);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .modal-content {
+            background: rgba(17, 17, 17, 0.8) !important;
+            backdrop-filter: blur(30px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
+
+        .notification {
+            background: rgba(0, 0, 0, 0.8) !important;
+            backdrop-filter: blur(30px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .ambient-glow {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            opacity: 0.5;
+            mix-blend-mode: screen;
+            z-index: -1;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white overflow-x-hidden">
+    <div class="ambient-glow"></div>
+    <!-- Кнопка мобильного меню -->
+    <button id="mobile-menu-btn" class="mobile-menu-btn">
+        <i class="fas fa-bars text-xl"></i>
+    </button>
+
+    <!-- Мобильное наложение -->
+    <div class="mobile-overlay"></div>
+
+    <div class="flex h-screen">
+        <!-- Боковая панель -->
+        <div class="sidebar w-64 glass-dark flex-shrink-0 fixed h-full border-r border-gray-800/50 overflow-y-auto">
+            <div class="p-6">
+                <a href="index.html" class="flex items-center space-x-2 text-xl font-bold mb-8">
+                    <i class="fas fa-compact-disc animate-spin-slow text-primary"></i>
+                    <span>FMusica</span>
+                </a>
+                <nav class="space-y-2">
+                    <a href="index.html" class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-800/50">
+                        <i class="fas fa-home"></i>
+                        <span>Главная</span>
+                    </a>
+                    <a href="#add-songs" id="add-songs-tab" class="flex items-center space-x-3 text-white bg-gray-800/50 p-2 rounded-lg">
+                        <i class="fas fa-plus"></i>
+                        <span>Добавить песни</span>
+                    </a>
+                    <a href="#listen-songs" id="listen-songs-tab" class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-800/50">
+                        <i class="fas fa-headphones"></i>
+                        <span>Слушать музыку</span>
+                    </a>
+                    <a href="#liked-songs" id="liked-songs-tab" class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-800/50">
+                        <i class="fas fa-heart"></i>
+                        <span>Любимые песни</span>
+                    </a>
+                    <a href="#relaxation" id="relaxation-tab" class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-800/50">
+                        <i class="fas fa-spa"></i>
+                        <span>Релаксация</span>
+                    </a>
+                    <div class="pt-4 border-t border-gray-800/50 mt-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-xs uppercase text-gray-500 font-semibold px-2">Ваши плейлисты</h3>
+                            <button onclick="playlistManager.showCreatePlaylistModal()" class="text-gray-400 hover:text-white p-1 rounded-lg transition-colors">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-1" id="playlist-container">
+                            <!-- Плейлисты будут добавлены здесь динамически -->
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-gray-800/50 mt-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-xs uppercase text-gray-500 font-semibold px-2">Настройки</h3>
+                        </div>
+                        <button onclick="clearDatabase()" class="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-800/50 w-full">
+                            <i class="fas fa-trash-alt"></i>
+                            <span>Очистить базу данных</span>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content flex-1 ml-64">
+            <!-- Top Bar -->
+            <div class="bg-gradient-to-b from-gray-900 to-transparent sticky top-0 z-10 p-4 blur-backdrop">
+                <div class="flex justify-between items-center">
+                    <div class="flex space-x-4">
+                        <button class="w-8 h-8 rounded-full glass flex items-center justify-center hover:bg-black/80 transition-all">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="w-8 h-8 rounded-full glass flex items-center justify-center hover:bg-black/80 transition-all">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="relative search-bar">
+                            <input type="text" placeholder="Поиск..." class="bg-black/30 text-white px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary w-64">
+                            <i class="fas fa-search absolute right-3 top-2.5 text-gray-400"></i>
+                        </div>
+                        <button class="bg-primary text-white px-6 py-2 rounded-full text-sm font-bold hover:scale-105 transition-transform">
+                            Премиум
+                        </button>
+                        <button class="w-8 h-8 rounded-full glass flex items-center justify-center hover:bg-black/80 transition-all">
+                            <i class="fas fa-user"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-8 overflow-y-auto h-[calc(100vh-4rem)]">
+                <!-- Add Songs Section -->
+                <div id="add-songs-section" class="section active">
+                    <h2 class="text-2xl font-bold mb-4">Добавить песни</h2>
+                    <div class="mb-8">
+                        <label for="music-file" class="upload-area block w-full p-8 border-2 border-dashed border-gray-600 rounded-lg hover:border-primary cursor-pointer transition-all hover:glass group">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-cloud-upload-alt text-5xl mb-3 text-primary group-hover:scale-110 transition-transform"></i>
+                                <p class="text-lg">Перетащите музыкальные файлы сюда или нажмите для загрузки</p>
+                                <p class="text-sm text-gray-400 mt-2">Поддерживаются форматы MP3, WAV, OGG</p>
+                            </div>
+                            <input id="music-file" type="file" class="hidden" accept=".mp3,.wav,.ogg" multiple />
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Listen Songs Section -->
+                <div id="listen-songs-section" class="section">
+                    <h2 class="text-2xl font-bold mb-4">Слушать музыку</h2>
+                    <div class="glass-dark rounded-lg overflow-hidden">
+                        <div class="grid grid-cols-[auto,1fr,auto,auto] gap-4 p-4 text-sm text-gray-400 border-b border-gray-800">
+                            <div class="w-8">№</div>
+                            <div>НАЗВАНИЕ</div>
+                            <div class="w-32">ДЛИТЕЛЬНОСТЬ</div>
+                            <div class="w-32 text-right">ДЕЙСТВИЯ</div>
+                        </div>
+                        <div class="songs-container overflow-hidden">
+                            <div id="song-list" class="divide-y divide-gray-800 transform transition-transform duration-300">
+                                <!-- Песни будут добавлены здесь динамически -->
+                            </div>
+                            <div class="flex justify-between items-center p-4 border-t border-gray-800/50">
+                                <button id="prev-page" class="glass-button px-4 py-2 rounded-lg">
+                                    <i class="fas fa-chevron-left mr-2"></i>
+                                    Предыдущая
+                                </button>
+                                <div id="page-info" class="text-sm text-gray-400">Страница <span id="current-page">1</span> из <span id="total-pages">1</span></div>
+                                <button id="next-page" class="glass-button px-4 py-2 rounded-lg">
+                                    Следующая
+                                    <i class="fas fa-chevron-right ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Liked Songs Section -->
+                <div id="liked-songs-section" class="section">
+                    <h2 class="text-2xl font-bold mb-4">Любимые песни</h2>
+                    <div class="glass-dark rounded-lg overflow-hidden">
+                        <div class="grid grid-cols-[auto,1fr,auto,auto] gap-4 p-4 text-sm text-gray-400 border-b border-gray-800">
+                            <div class="w-8">№</div>
+                            <div>НАЗВАНИЕ</div>
+                            <div class="w-32">ДЛИТЕЛЬНОСТЬ</div>
+                            <div class="w-32 text-right">ДЕЙСТВИЯ</div>
+                        </div>
+                        <div id="liked-songs-list" class="divide-y divide-gray-800">
+                            <!-- Любимые песни будут добавлены здесь динамически -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Relaxation Section -->
+                <div id="relaxation-section" class="section">
+                    <h2 class="text-2xl font-bold mb-4">Режим релаксации</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Ambient Sounds -->
+                        <div class="glass-dark p-6 rounded-xl">
+                            <h3 class="text-lg font-semibold mb-4">Фоновые звуки</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-300">Дождь</span>
+                                    <input type="range" class="w-32 accent-primary" data-sound="rain" min="0" max="1" step="0.1" value="0.5">
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-300">Океан</span>
+                                    <input type="range" class="w-32 accent-primary" data-sound="ocean" min="0" max="1" step="0.1" value="0.5">
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-300">Лес</span>
+                                    <input type="range" class="w-32 accent-primary" data-sound="forest" min="0" max="1" step="0.1" value="0.5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Visual Effects -->
+                        <div class="glass-dark p-6 rounded-xl">
+                            <h3 class="text-lg font-semibold mb-4">Визуальные эффекты</h3>
+                            <div class="space-y-3">
+                                <button class="w-full p-3 bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors flex items-center space-x-2">
+                                    <i class="fas fa-moon text-blue-400"></i>
+                                    <span>Ночное небо</span>
+                                </button>
+                                <button class="w-full p-3 bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors flex items-center space-x-2">
+                                    <i class="fas fa-water text-blue-400"></i>
+                                    <span>Океанские волны</span>
+                                </button>
+                                <button class="w-full p-3 bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors flex items-center space-x-2">
+                                    <i class="fas fa-tree text-green-400"></i>
+                                    <span>Лес</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Meditation Timer -->
+                        <div class="glass-dark p-6 rounded-xl">
+                            <h3 class="text-lg font-semibold mb-4">Таймер медитации</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3">
+                                    <input type="number" class="w-20 p-2 bg-gray-800/50 rounded-lg text-center" value="5" min="1" max="60">
+                                    <span class="text-gray-300">минут</span>
+                                </div>
+                                <button class="w-full p-3 bg-primary hover:bg-primary/80 transition-colors rounded-lg font-medium">
+                                    Начать медитацию
+                                </button>
+                                <div class="text-4xl font-bold text-center">
+                                    05:00
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания плейлиста -->
+    <div class="modal fade" id="createPlaylistModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-gray-900 border border-gray-800">
+                <div class="modal-header border-gray-800">
+                    <h5 class="modal-title text-white">Создать новый плейлист</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="create-playlist-form">
+                    <div class="modal-body">
+                        <input type="text" id="playlist-name" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white" placeholder="Введите название плейлиста">
+                    </div>
+                    <div class="modal-footer border-gray-800">
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Создать</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавления в плейлист -->
+    <div class="modal fade" id="playlistModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-dark border border-gray-800/50">
+                <div class="modal-header border-gray-800/50">
+                    <h5 class="modal-title text-white">Добавить в плейлист</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <select id="playlist-select" class="w-full p-3 bg-black/30 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary">
+                        <!-- Плейлисты будут добавлены здесь динамически -->
+                    </select>
+                </div>
+                <div class="modal-footer border-gray-800/50">
+                    <button type="button" class="px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 text-white rounded-lg transition-colors" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="px-4 py-2 bg-primary hover:bg-primary/80 text-white rounded-lg transition-colors" id="add-to-playlist-btn">Добавить в плейлист</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div class="fixed bottom-4 right-4 z-50 flex flex-col gap-2" id="notification-container">
+        <!-- Notifications will be added here dynamically -->
+    </div>
+
+    <style>
+        .notification {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.3s ease-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 300px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .notification.success {
+            border-left: 4px solid #10B981;
+        }
+
+        .notification.error {
+            border-left: 4px solid #EF4444;
+        }
+
+        .notification.info {
+            border-left: 4px solid #3B82F6;
+        }
+
+        .notification i {
+            font-size: 1.25rem;
+        }
+
+        .notification.success i {
+            color: #10B981;
+        }
+
+        .notification.error i {
+            color: #EF4444;
+        }
+
+        .notification.info i {
+            color: #3B82F6;
+        }
+    </style>
+
+    <!-- Панель плеера -->
+    <div class="fixed bottom-0 left-0 right-0 glass-dark border-t border-gray-800/50 p-4 safe-bottom player-bar">
+        <div class="flex flex-col md:flex-row items-center justify-between max-w-screen-xl mx-auto space-y-4 md:space-y-0">
+            <!-- Сейчас играет -->
+            <div class="flex items-center space-x-4 w-full md:w-1/3 now-playing">
+                <div class="w-14 h-14 glass rounded-lg flex-shrink-0 overflow-hidden group relative" id="album-art">
+                    <i class="fas fa-music text-gray-600 w-full h-full flex items-center justify-center"></i>
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button class="text-white hover:scale-110 transition-transform">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="min-w-0">
+                    <div class="text-sm font-medium truncate" id="song-title">Песня не выбрана</div>
+                    <div class="text-xs text-gray-400 truncate" id="song-artist">-</div>
+                    <div class="flex items-center space-x-3 mt-1">
+                        <button class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <button class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-microphone-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Управление плеером -->
+            <div class="flex flex-col items-center w-full md:w-1/3 player-controls">
+                <div class="flex items-center space-x-6 mb-2">
+                    <button class="text-gray-400 hover:text-white transition-colors" id="shuffle-btn">
+                        <i class="fas fa-random"></i>
+                    </button>
+                    <button class="text-gray-400 hover:text-white transition-colors" id="prev-btn">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform" id="play-btn">
+                        <i class="fas fa-play text-black"></i>
+                    </button>
+                    <button class="text-gray-400 hover:text-white transition-colors" id="next-btn">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                    <button class="text-gray-400 hover:text-white transition-colors" id="repeat-btn">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-2 w-full">
+                    <span class="text-xs text-gray-400" id="current-time">0:00</span>
+                    <div class="flex-1 h-1 bg-gray-800 rounded-full progress-bar group cursor-pointer">
+                        <div class="relative h-full">
+                            <div class="h-1 bg-primary rounded-full" id="progress" style="width: 0%"></div>
+                            <div class="absolute h-3 w-3 bg-white rounded-full top-1/2 -translate-y-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity" style="left: 0%"></div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-400" id="duration">0:00</span>
+                </div>
+            </div>
+
+            <!-- Управление громкостью -->
+            <div class="flex items-center justify-end space-x-4 w-full md:w-1/3 volume-controls">
+                <button class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-list"></i>
+                </button>
+                <button class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-desktop"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <button class="text-gray-400 hover:text-white transition-colors volume-control-btn">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                    <div class="w-24 h-1 bg-gray-800 rounded-full volume-control group cursor-pointer">
+                        <div class="relative h-full">
+                            <div class="h-1 bg-white rounded-full volume-progress" style="width: 100%"></div>
+                            <div class="absolute h-3 w-3 bg-white rounded-full top-1/2 -translate-y-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity" style="left: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно текста песни -->
+    <div class="modal fade" id="lyricsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-gray-900 border border-gray-800">
+                <div class="modal-header border-gray-800">
+                    <h5 class="modal-title text-white">Редактировать текст песни</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="lyrics-editor" class="w-full h-64 p-4 bg-gray-800 text-white border-gray-700 rounded-lg" placeholder="Введите текст песни здесь..."></textarea>
+                </div>
+                <div class="modal-footer border-gray-800">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="save-lyrics">Сохранить текст</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно релаксации -->
+    <div class="modal fade" id="relaxationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content bg-gray-900 border border-gray-800">
+                <div class="modal-header border-gray-800">
+                    <h5 class="modal-title text-white">Режим релаксации</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="grid grid-cols-3 gap-4">
+                        <!-- Фоновые звуки -->
+                        <div class="p-4 bg-gray-800 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-3">Фоновые звуки</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span>Дождь</span>
+                                    <input type="range" class="w-32 ambient-sound-control" data-sound="rain" min="0" max="1" step="0.1" value="0.5">
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Океан</span>
+                                    <input type="range" class="w-32 ambient-sound-control" data-sound="ocean" min="0" max="1" step="0.1" value="0.5">
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Лес</span>
+                                    <input type="range" class="w-32 ambient-sound-control" data-sound="forest" min="0" max="1" step="0.1" value="0.5">
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span>Камин</span>
+                                    <input type="range" class="w-32 ambient-sound-control" data-sound="fireplace" min="0" max="1" step="0.1" value="0.5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Визуальные эффекты -->
+                        <div class="p-4 bg-gray-800 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-3">Визуальные эффекты</h3>
+                            <div class="space-y-2">
+                                <button class="w-full p-2 bg-gray-700 rounded hover:bg-gray-600 transition-colors visual-effect-btn" data-effect="fireplace">
+                                    <i class="fas fa-fire mr-2"></i>
+                                    Камин
+                                </button>
+                                <button class="w-full p-2 bg-gray-700 rounded hover:bg-gray-600 transition-colors visual-effect-btn" data-effect="ocean">
+                                    <i class="fas fa-water mr-2"></i>
+                                    Океанские волны
+                                </button>
+                                <button class="w-full p-2 bg-gray-700 rounded hover:bg-gray-600 transition-colors visual-effect-btn" data-effect="forest">
+                                    <i class="fas fa-tree mr-2"></i>
+                                    Лесной пейзаж
+                                </button>
+                            </div>
+                            <div class="mt-4 relative h-40 rounded-lg overflow-hidden">
+                                <div id="fireplace-effect" class="absolute inset-0 hidden" style="background: linear-gradient(45deg, #ff4e50, #f9d423);"></div>
+                                <div id="ocean-effect" class="absolute inset-0 hidden" style="background: linear-gradient(45deg, #4facfe, #00f2fe);"></div>
+                                <div id="forest-effect" class="absolute inset-0 hidden" style="background: linear-gradient(45deg, #56ab2f, #a8e063);"></div>
+                            </div>
+                        </div>
+
+                        <!-- Медитация и дыхание -->
+                        <div class="p-4 bg-gray-800 rounded-lg">
+                            <h3 class="text-lg font-semibold mb-3">Таймер медитации</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-2">
+                                    <input type="number" id="meditation-duration" class="bg-gray-700 rounded px-3 py-2 w-20" value="5" min="1" max="60">
+                                    <span class="text-gray-400">минут</span>
+                                </div>
+                                <button id="start-meditation" class="w-full p-2 bg-primary rounded hover:bg-primary-dark transition-colors">
+                                    Начать медитацию
+                                </button>
+                                <div id="meditation-timer" class="text-2xl font-bold text-center">
+                                    5:00
+                                </div>
+                            </div>
+
+                            <h3 class="text-lg font-semibold mb-3 mt-6">Дыхательное упражнение</h3>
+                            <div class="flex flex-col items-center">
+                                <div id="breathing-circle" class="w-24 h-24 rounded-full border-4 border-primary mb-4"></div>
+                                <div id="breathing-text" class="text-lg">
+                                    Нажмите, чтобы начать
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Playlist Modal -->
+    <div class="modal fade" id="playlistModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-gray-900 text-white">
+                <div class="modal-header border-gray-700">
+                    <h5 class="modal-title">Add to Playlist</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="playlist-list" class="space-y-2">
+                        <!-- Playlists will be populated here -->
+                    </div>
+                    <button class="mt-4 w-full p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors" data-action="new-playlist">
+                        <i class="fas fa-plus mr-2"></i>Create New Playlist
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <!-- Командная палитра -->
+    <div id="command-palette" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+        <div class="absolute top-[20%] left-1/2 -translate-x-1/2 w-full max-w-xl">
+            <div class="glass-dark border border-gray-800/50 rounded-lg shadow-2xl">
+                <div class="p-4 border-b border-gray-800/50">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-search text-gray-400"></i>
+                        <input type="text" id="command-input" class="w-full bg-transparent border-0 focus:outline-none text-white" placeholder="Введите команду или поиск...">
+                    </div>
+                </div>
+                <div class="max-h-96 overflow-y-auto">
+                    <div id="command-list" class="p-2 space-y-1">
+                        <!-- Команды будут добавлены здесь -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/playlists.js"></script>
+    <script src="js/upload.js"></script>
+    <script src="js/relaxation.js"></script>
+    <script src="js/mobile.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/commands.js"></script>
+    <script src="js/pagination.js"></script>
+    <script>
+        // Initialize Bootstrap components
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enable Bootstrap tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Initialize notification system
+            window.showNotification = function(message, type = 'info') {
+                const container = document.getElementById('notification-container');
+                
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                
+                const icon = document.createElement('i');
+                icon.className = `fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}`;
+                
+                const text = document.createElement('span');
+                text.textContent = message;
+                
+                notification.appendChild(icon);
+                notification.appendChild(text);
+                container.appendChild(notification);
+                
+                // Trigger reflow to enable animation
+                notification.offsetHeight;
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            };
+
+            // Function to clear the database
+            window.clearDatabase = async function() {
+                if (confirm('Вы уверены, что хотите очистить базу данных? Это удалит все ваши песни и плейлисты.')) {
+                    try {
+                        await window.resetDatabase();
+                        showNotification('База данных успешно очищена. Страница будет перезагружена.', 'success');
+                    } catch (error) {
+                        console.error('Ошибка при очистке базы данных:', error);
+                        showNotification('Не удалось очистить базу данных', 'error');
+                    }
+                }
+            };
+
+            // Update tab functionality to include new sections
+            const tabs = {
+                'add-songs': document.getElementById('add-songs-section'),
+                'listen-songs': document.getElementById('listen-songs-section'),
+                'liked-songs': document.getElementById('liked-songs-section'),
+                'relaxation': document.getElementById('relaxation-section')
+            };
+
+            const tabButtons = {
+                'add-songs': document.getElementById('add-songs-tab'),
+                'listen-songs': document.getElementById('listen-songs-tab'),
+                'liked-songs': document.getElementById('liked-songs-tab'),
+                'relaxation': document.getElementById('relaxation-tab')
+            };
+
+            function showSection(sectionId) {
+                Object.values(tabs).forEach(section => {
+                    if (section) {
+                        section.classList.remove('active');
+                        section.classList.add('hidden');
+                    }
+                });
+                
+                if (tabs[sectionId]) {
+                    tabs[sectionId].classList.add('active');
+                    tabs[sectionId].classList.remove('hidden');
+                }
+            }
+
+            function updateActiveTab(activeTabId) {
+                Object.values(tabButtons).forEach(tab => {
+                    if (tab) {
+                        tab.classList.remove('bg-gray-800/50', 'text-white');
+                        tab.classList.add('text-gray-300', 'hover:text-white');
+                    }
+                });
+                
+                if (tabButtons[activeTabId]) {
+                    tabButtons[activeTabId].classList.remove('text-gray-300', 'hover:text-white');
+                    tabButtons[activeTabId].classList.add('bg-gray-800/50', 'text-white');
+                }
+            }
+
+            Object.entries(tabButtons).forEach(([id, button]) => {
+                if (button) {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        showSection(id);
+                        updateActiveTab(id);
+                    });
+                }
+            });
+        });
+    </script>
+
+    
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <!-- Command Palette -->
+    <!-- ... existing command palette code ... -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <!-- ... rest of the existing scripts ... -->
+</body>
+</html>

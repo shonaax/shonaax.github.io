@@ -8,252 +8,212 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Добавляем библиотеку Howler.js для надежного воспроизведения аудио -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
     <link rel="icon" href="ico.png" type="image/png">
-
 </head>
 <body>
-    <!-- Вступительный экран -->
-    <div class="entry-screen">
-        <div class="entry-content">
-            click to <span class="enter-text">enter</span>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="#" class="nav-logo">Shonaax</a>
+            <button class="nav-toggle" aria-label="Open navigation">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <div class="nav-links">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
         </div>
+    </nav>
+
+    <!-- make the nav to be with button to show nav on mobile and make it to be on the right side of the screen and make it to be on the top of the screen -->
+    <div class="nav-toggle">
+        <i class="fas fa-bars"></i>
     </div>
+    <div class="nav-toggle-content">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#contact" class="nav-link">Contact</a> 
+        <a href="https://shark-software.ru" class="nav-link">Shark Software</a>
+        <a href="https://teamgz.itch.io" class="nav-link">Team GZ</a>
+        <a href="https://shark-software.ru" class="nav-link">Shark Software</a>
 
-    <div class="container">
-        <div class="card">
-            <div class="glitch-wrapper">
-                <div class="glitch" data-text="kiwi">Shonaax</div>
-            </div>
-            
-            <div class="avatar">
-                <!-- Замените ссылку на свою аниме-аватарку -->
-                <img src="https://i.pinimg.com/736x/3a/31/6f/3a316f94353e950dbdeedab868f11569.jpg" alt="Аватар">
-            </div>
-            
-            <div class="bio">
-                <p></p>
-            </div>
-            
-            <div class="sparkles"></div>
-            
-            <div class="links">
-                <a href="#" class="link-card copy-btn" data-copy-text="iriskalimei">
-                    <i class="fab fa-discord"></i>
-                    <span>Discord</span>
-                    <span class="copy-status">click to copy</span>
-                </a>
-                <a href="#" class="link-card copy-btn" data-copy-text="@vaebking">
-                    <i class="fab fa-telegram"></i>
-                    <span>Telegram</span>
-                    <span class="copy-status">click to copy</span>
-                </a>
-            </div>
-            
-            <div class="visitors-counter">
-                <div class="counter-icon">
-                    <i class="fas fa-eye"></i>
-                </div>
-                <div class="counter-info">
-                    <div class="counter-label">уникальные просмотры</div>
-                    <div class="counter-value" id="visitors-count">0</div>
-                </div>
-            </div>
-            
-            <div class="footer">
-                <p>Проэкты:</p>
-                <br>
-            </div>
-            <style>
-.carousel-container {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    gap: 10px;
-    padding: 10px 0;
-    scrollbar-width: none;
-    transition: all 0.5s ease; /* Плавные изменения */
-    backdrop-filter: blur(10px); /* Эффект размытия фона */
-    
-}
-
-.carousel-container::-webkit-scrollbar {
-    display: none;
-}
-
-.ctrl-btn {
-    flex: 0 0 auto;
-    white-space: nowrap;
-    min-width: 100px;
-    padding: 12px 16px;
-    background-color: #333;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.ctrl-btn:hover {
-    transform: scale(1.05);
-    background-color: #444;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.styled-link {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
-
-.styled-link:hover {
-    color: #ffd700; /* Золотой цвет при наведении */
-}
-
-@media (max-width: 768px) {
-    .ctrl-btn {
-        min-width: 90px;
-        padding: 10px 14px;
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 480px) {
-    .ctrl-btn {
-        min-width: 80px;
-        padding: 8px 12px;
-        font-size: 12px;
-    }
-}
-
-.scroll-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 10;
-    font-size: 18px;
-    border-radius: 50%;
-}
-
-.left { left: 10px; }
-.right { right: 10px; }
-            </style>
-            
-           <div class="carousel-container">
-            <button class="ctrl-btn"><a class="styled-link" href="site/index.html">k.cc</a></button>
-            <button class="ctrl-btn"><a class="styled-link" href="cookie/index.html">cookie</a></button>
-            <button class="ctrl-btn"><a class="styled-link" href="dep.html">DEP</a></button>
-            <button class="ctrl-btn"><a class="styled-link" href="https://teamgz.itch.io ">TeV</a></button>
-            <button class="ctrl-btn"><a class="styled-link" href="https://shark-software.ru ">SHK</a></button>
-            <button class="ctrl-btn"><a class="styled-link" href="games/vault.html">GameV</a></button>
-            <button class="ctrl-btn"><a class="styled-link" href="files/file.html">fstr</a></button>
-        </div>
-       
-        
-        <script>
-            const carousel = document.querySelector('.carousel-container');
-            let scrollAmount = 0;
-        
-            setInterval(() => {
-                scrollAmount += 1;
-                if (scrollAmount >= carousel.scrollWidth - carousel.clientWidth) {
-                    scrollAmount = 0;
-                }
-                carousel.scrollTo({
-                    left: scrollAmount,
-                    behavior: 'smooth'
-                });
-            }, 50);
-            
-        </script>
-            
-        </div>
-        
-        <!-- Музыкальный плеер перемещен под основной баннер -->
-        <div class="music-player-panel card-music-player" style="min-width: 100%;">
-            <div class="player-header">
-                <div class="player-title">
-                    <i class="fas fa-music"></i>
-                    <span>Music Player</span>
-                </div>
-                <button id="player-toggle-btn" class="player-toggle-btn">
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-            </div>
-            
-            <div class="player-content">
-                <div class="album-art">
-                    <img src="https://media.tenor.com/4erdKuTsKU8AAAAM/cat-bubble.gif" alt="Album Art">
-                    <div class="album-overlay">
-                        <button id="music-toggle" class="play-btn">
-                            <i class="fas fa-play"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="music-controls">
-                    <div class="song-info">
-                        <div class="song-title">PlayList</div>
-                        <div class="artist-name">Chill Mix</div>
-                    </div>
-                    
-                    <div class="progress-container">
-                        <div class="time current-time">00:00</div>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar">
-                                <div class="progress-current"></div>
-                            </div>
-                        </div>
-                        <div class="time total-time">00:00</div>
-                    </div>
-                    
-                    <div class="control-buttons">
-                        <button id="repeat-btn" class="ctrl-btn">
-                            <i class="fas fa-repeat"></i>
-                        </button>
-                        <button id="prev-btn" class="ctrl-btn" disabled>
-                            <i class="fas fa-step-backward"></i>
-                        </button>
-                        <button id="play-pause-btn" class="ctrl-btn main-play-btn">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <button id="next-btn" class="ctrl-btn" disabled>
-                            <i class="fas fa-step-forward"></i>
-                        </button>
-                        <button id="reload-btn" class="ctrl-btn">
-                            <i class="fas fa-sync-alt"></i>
-                        </button>
-                        <div class="volume-control">
-                            <button id="volume-btn" class="ctrl-btn">
-                                <i class="fas fa-volume-up"></i>
-                            </button>
-                            <div class="volume-slider-container">
-                                <input type="range" id="volume-slider" min="0" max="100" value="70" class="volume-slider">
-                                <div class="volume-progress">
-                                    <div class="volume-bar"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <audio id="background-music" preload="auto" loop>
-                    <source src="music.mp3" type="audio/mp3">
-                    <source src="music.mp3" type="audio/mpeg">
-                    <p>Ваш браузер не поддерживает аудио элемент.</p>
-                </audio>
-            </div>
-        </div>
     </div>
     
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text-wrapper">
+                <h1 class="hero-title">
+                    <span class="gradient-text">Shonaax</span><br>
+                    <span style="font-size:2.2rem;font-weight:400;">Создатель и разработчик</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Создаю сайты, игры, и многое другое.
+                </p>
+                
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">
+                        <div class="btn-content">
+                            <i class="fab fa-github"></i>
+                            <span>Просмотр проектов</span>
+                        </div>
+                    </a>
+                    <br>
+                    <a href="#contact" class="btn btn-secondary">
+                        <div class="btn-content">
+                            <i class="fas fa-envelope"></i>
+                            <span>Связаться со мной</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="floating-block"></div>
+                
+                <div class="floating-block"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="features">
+        <div class="section-header">
+            <h2 class="section-title">Мои проекты</h2>
+            <p class="section-subtitle">Посмотри мои последние работы и создания!</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-code feature-icon"></i>
+                </div>
+                <h3 class="feature-title">k.cc</h3>
+                <span class="project-status badge-active">В разработке</span>
+                <p class="feature-description">Лучший Minecraft чит на 2025 год</p>
+                <a href="site/index.html" class="btn btn-secondary">Просмотр проекта</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-cookie feature-icon"></i>
+                </div>
+                <h3 class="feature-title">Кликер</h3>
+                <span class="project-status badge-paused">На паузе</span>
+                <p class="feature-description">Кликер для игры в браузере с красивыми анимациями</p>
+                <a href="cookie/index.html" class="btn btn-secondary">Просмотр проекта</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-gamepad feature-icon"></i>
+                </div>
+                <h3 class="feature-title">GaveVault</h3>
+                <span class="project-status badge-active">Активен</span>
+                <p class="feature-description">Коллекция интерактивных игр без интернета</p>
+                <a href="games/vault.html" class="btn btn-secondary">Просмотр проекта</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-shield-alt feature-icon"></i>
+                </div>
+                <h3 class="feature-title">Казино</h3>
+                <span class="project-status badge-active">Активен</span>
+                <p class="feature-description">Онлайн казино / <span style="color:red; font-weight:bold;">ФЕЙК</span></p>
+                <a href="dep.html" class="btn btn-secondary">Просмотр проекта</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-gamepad feature-icon"></i>
+                </div>
+                <h3 class="feature-title">TypeVillage</h3>
+                <span class="project-status badge-progress">В разработке</span>
+                <p class="feature-description">Игра про город, который нужно <span style="text-color: linear-gradient(to right, #5221a1, #6434e9); font-weight:bold;">развивать и улучшать.</span></p>
+                <a href="https://teamgz.itch.io" class="btn btn-secondary">Просмотр проекта</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-shark feature-icon"></i>
+                </div>
+                <h3 class="feature-title"><span style="color: #5221a1; font-weight:bold;">Shark Software</span> SharkHack</h3>
+                <span class="project-status badge-active">Активен</span>
+                <p class="feature-description">CS2 Cheat. <span style="color:red; font-weight:bold;">На свой страх и риск!</span></p>
+                <!--добавь знак что переход  на другой сайт алеее-->
+                
+                <a href="https://shark-software.ru" class="btn btn-secondary">Просмотр проекта</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-folder feature-icon"></i>
+                </div>
+                <h3 class="feature-title">FMusic</h3>
+                <span class="project-status badge-soon">NEW!</span>
+                <p class="feature-description">Музыкальный сайт для прослушивания музыки.</p>
+                <a href="fm/index.html" class="btn btn-secondary">Просмотр проекта</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-vial feature-icon"></i>
+                </div>
+                <h3 class="feature-title">TestX</h3>
+                <span class="project-status badge-progress">В разработке</span>
+                <p class="feature-description">Сайт для создания тестов для учеников. Просто для тестирования.</p>
+                <a href="testx/index.html" class="btn btn-secondary">Просмотр проекта</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-cube feature-icon"></i>
+                </div>
+                <h3 class="feature-title">EaglerCraft</h3>
+                <span class="project-status badge-soon">NEW!</span>
+                <p class="feature-description">Browser Minecraft / 1.12.2</p>
+                <a href="mcx/index.html" class="btn btn-secondary">Просмотр проекта</a>
+            </div>
+        </div>
+        
+    </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="section-header">
+            <h2 class="section-title">Связаться со мной</h2>
+            <p class="section-subtitle">Давайте создадим что-то удивительное вместе</p>
+        </div>
+        <div class="contact-grid">
+            <a href="#" class="contact-card" data-copy-text="iriskalimei">
+                <i class="fab fa-discord"></i>
+                <span>Discord</span>
+                <span class="copy-status">Нажмите, чтобы скопировать</span>
+            </a>
+            <a href="#" class="contact-card" data-copy-text="@vaebking">
+                <i class="fab fa-telegram"></i>
+                <span>Telegram</span>
+                <span class="copy-status">Нажмите, чтобы скопировать</span>
+            </a>
+        </div>
+    </section>
+
+    
+        
+        <audio id="background-music" preload="auto" loop>
+            <source src="music.mp3" type="audio/mp3">
+            <source src="music.mp3" type="audio/mpeg">
+            <p>Your browser does not support the audio element.</p>
+        </audio>
+    </div>
+
     <script src="script.js"></script>
+    <script>
+    // Мобильное меню навигации
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+        navToggle.classList.toggle('open');
+    });
+    </script>
 </body>
 </html> 
