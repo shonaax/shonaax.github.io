@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игровой автомат</title>
+    <title>Lime Slots - Игровой автомат</title>
     <style>
-:root {
-            --primary-color: #ffd700;
-            --secondary-color: #ff6b6b;
-            --bg-color: #121212;
-            --panel-color: #222;
-            --border-color: #444;
+        :root {
+            --primary-color: #32CD32;
+            --secondary-color: #00FF00;
+            --bg-color: #1a1a1a;
+            --panel-color: #2a2a2a;
+            --border-color: #3a3a3a;
             --text-color: #fff;
-            --button-color: #4CAF50;
-            --button-hover: #45a049;
+            --button-color: #32CD32;
+            --button-hover: #228B22;
             --disabled-color: #666;
-            --win-color: #ffd700;
-            --jackpot-color: #ff0000;
+            --win-color: #32CD32;
+            --jackpot-color: #00FF00;
+            --gradient-1: linear-gradient(45deg, #32CD32, #00FF00);
+            --gradient-2: linear-gradient(45deg, #32CD32, #228B22);
         }
         
         body {
@@ -31,11 +33,11 @@
         }
         
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             background-color: var(--panel-color);
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 20px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
             border: 2px solid var(--primary-color);
             position: relative;
@@ -49,10 +51,7 @@
             left: -10px;
             right: -10px;
             bottom: -10px;
-            background: linear-gradient(45deg, 
-                var(--primary-color), 
-                var(--secondary-color), 
-                var(--primary-color));
+            background: var(--gradient-1);
             z-index: -1;
             filter: blur(20px);
             opacity: 0.3;
@@ -86,13 +85,18 @@
             font-size: 28px;
             color: var(--primary-color);
             font-weight: bold;
-            padding: 10px 20px;
+            padding: 15px 30px;
             background-color: rgba(0, 0, 0, 0.3);
             border-radius: 50px;
             border: 2px solid var(--primary-color);
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
             display: inline-flex;
             align-items: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .balance:hover {
+            transform: scale(1.05);
         }
         
         .balance::before {
@@ -104,12 +108,14 @@
         .slot-machine {
             background-color: var(--panel-color);
             border: 5px solid var(--border-color);
-            border-radius: 15px;
-            padding: 25px;
+            border-radius: 20px;
+            padding: 30px;
             margin: 25px 0;
             position: relative;
             overflow: hidden;
             box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
         
         .slot-machine::after {
@@ -119,10 +125,7 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                var(--primary-color), 
-                transparent);
+            background: var(--gradient-1);
             animation: lightEffect 3s linear infinite;
         }
         
@@ -136,24 +139,29 @@
             justify-content: center;
             margin: 30px 0;
             perspective: 1000px;
+            gap: 20px;
         }
         
         .slot {
-            width: 90px;
-            height: 90px;
+            width: 120px;
+            height: 120px;
             background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
-            margin: 0 10px;
-            border-radius: 10px;
+            border-radius: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 50px;
+            font-size: 60px;
             color: #333;
             border: 4px solid #ddd;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
             transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+        
+        .slot:hover {
+            transform: translateY(-5px);
         }
         
         .slot::before {
@@ -172,6 +180,7 @@
         .slot-value {
             position: relative;
             z-index: 1;
+            transform-style: preserve-3d;
         }
         
         .controls {
@@ -183,7 +192,7 @@
         }
         
         button {
-            background-color: var(--button-color);
+            background: var(--gradient-2);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -215,7 +224,6 @@
         }
         
         button:hover {
-            background-color: var(--button-hover);
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
@@ -233,7 +241,7 @@
         }
         
         button:disabled {
-            background-color: var(--disabled-color);
+            background: var(--disabled-color);
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
@@ -256,9 +264,15 @@
             display: flex;
             align-items: center;
             background-color: rgba(0, 0, 0, 0.3);
-            padding: 10px 20px;
+            padding: 15px 25px;
             border-radius: 50px;
             border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .bet-amount:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
         
         .bet-label {
@@ -269,7 +283,7 @@
         
         input {
             padding: 12px;
-            width: 80px;
+            width: 100px;
             font-size: 18px;
             text-align: center;
             border-radius: 8px;
@@ -346,6 +360,11 @@
             flex-direction: column;
             align-items: center;
             margin: 0 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .symbol:hover {
+            transform: scale(1.1);
         }
         
         .symbol-icon {
@@ -361,8 +380,8 @@
         .paytable {
             margin-top: 30px;
             background-color: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 10px;
+            padding: 20px;
+            border-radius: 15px;
             border: 1px solid var(--border-color);
         }
         
@@ -388,9 +407,9 @@
             margin-top: 30px;
             max-height: 150px;
             overflow-y: auto;
-            padding: 10px;
+            padding: 15px;
             background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
+            border-radius: 12px;
             scrollbar-width: thin;
             scrollbar-color: var(--primary-color) var(--panel-color);
         }
@@ -410,8 +429,13 @@
         }
         
         .history-item {
-            padding: 5px 0;
+            padding: 8px 0;
             border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .history-item:hover {
+            background-color: rgba(255, 215, 0, 0.1);
         }
         
         .history-item:last-child {
@@ -431,13 +455,18 @@
             display: flex;
             justify-content: space-around;
             margin-top: 20px;
-            padding: 15px;
+            padding: 20px;
             background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
+            border-radius: 15px;
         }
         
         .stat {
             text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat:hover {
+            transform: scale(1.1);
         }
         
         .stat-value {
@@ -451,37 +480,183 @@
             color: #aaa;
         }
         
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .slot {
-                width: 70px;
-                height: 70px;
-                font-size: 40px;
-            }
-            
-            .controls {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            button {
-                width: 100%;
-                margin: 5px 0;
-            }
-            
-            .bet-controls {
-                flex-direction: column;
-            }
+        /* Новые стили для навигации и модального окна */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
         }
         
-        /* Анимации для барабанов */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background-color: var(--panel-color);
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            border: 2px solid var(--primary-color);
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            transform: scale(1.2);
+        }
+        
+        .withdraw-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        select, input[type="text"], input[type="number"] {
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus, input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--gradient-1);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: black;
+            font-weight: bold;
+        }
+        
+        .withdraw-status {
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .success {
+            color: var(--primary-color);
+        }
+        
+        .error {
+            color: var(--secondary-color);
+        }
+        
+        /* Новые стили для квизов */
+        .quiz-container {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .quiz-question {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .quiz-option {
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+        
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 215, 0, 0.2);
+        }
+        
+        /* Анимации для слотов */
         @keyframes spin {
             0% { transform: rotateX(0deg); }
             100% { transform: rotateX(360deg); }
@@ -521,35 +696,347 @@
                 opacity: 0;
             }
         }
-
-        /* Новые стили для навигации и модального окна */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 50px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
+        
+        /* Медиа-запросы для мобильных устройств */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .slot {
+                width: 80px;
+                height: 80px;
+                font-size: 40px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            .bet-controls {
+                flex-direction: column;
+            }
+            
+            .symbols {
+                gap: 10px;
+            }
+            
+            .symbol {
+                margin: 0 5px;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+            }
         }
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        /* Enhanced particle effects */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 10;
         }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
+        .particle-circle {
             border-radius: 50%;
-            background-color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            animation: particleFloat 2s ease-out forwards;
+        }
+
+        .particle-star {
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: particleFloat 2.5s ease-out forwards;
+        }
+
+        .particle-diamond {
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            animation: particleFloat 2.2s ease-out forwards;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) rotate(var(--tr)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Enhanced slot animations */
+        .slot {
+            transition: transform 0.3s ease;
+        }
+
+        .slot.spinning {
+            animation: slotSpin 0.5s linear infinite;
+        }
+
+        .slot.win {
+            animation: slotWin 0.5s ease-in-out 3;
+        }
+
+        @keyframes slotSpin {
+            0% { transform: rotateX(0deg) scale(1); }
+            50% { transform: rotateX(180deg) scale(1.1); }
+            100% { transform: rotateX(360deg) scale(1); }
+        }
+
+        @keyframes slotWin {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Glow effects */
+        .glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, var(--primary-color) 0%, transparent 70%);
+            opacity: 0;
+            pointer-events: none;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 0.3; transform: scale(1.2); }
+            100% { opacity: 0; transform: scale(0.8); }
+        }
+
+        /* Win text animation */
+        @keyframes winTextFloat {
+            0% {
+                transform: translate(-50%, 100%) scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                transform: translate(-50%, 0) scale(1.2);
+                opacity: 1;
+            }
+            40% {
+                transform: translate(-50%, -20px) scale(1);
+            }
+            60% {
+                transform: translate(-50%, 0) scale(1.1);
+            }
+            80% {
+                transform: translate(-50%, -10px) scale(1);
+            }
+            100% {
+                transform: translate(-50%, 0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .win-text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, 0);
+            font-size: 48px;
             font-weight: bold;
-            color: #000;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+            pointer-events: none;
+            animation: winTextFloat 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            z-index: 1000;
+        }
+
+        .win-text::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            opacity: 0.3;
+            animation: winTextGlow 1s ease-out forwards;
+        }
+
+        @keyframes winTextGlow {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Cosmic animations */
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+            transition: opacity 0.5s ease;
+        }
+
+        .cosmic-bg.active {
+            opacity: 1;
+        }
+
+        .cosmic-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: cosmicFloat 3s ease-out infinite;
+        }
+
+        @keyframes cosmicFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .slot-reveal {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slot-reveal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                var(--primary-color) 50%, 
+                transparent 100%);
+            transform: translateX(-100%);
+            animation: revealLight 1s ease-out forwards;
+        }
+
+        @keyframes revealLight {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .slot-category {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: var(--primary-color);
+            opacity: 0;
+            animation: categoryReveal 0.5s ease-out forwards;
+        }
+
+        @keyframes categoryReveal {
+            0% { transform: translateX(-50%) translateY(20px); opacity: 0; }
+            100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        .mixed-reveal {
+            animation: mixedReveal 1s ease-out forwards;
+        }
+
+        @keyframes mixedReveal {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Screen color effect */
+        .screen-color {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            pointer-events: none;
+            z-index: 99;
+            transition: background-color 0.5s ease;
+        }
+
+        .screen-color.spinning {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .screen-color.win {
+            background: rgba(50, 205, 50, 0.2);
+        }
+
+        .screen-color.lose {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .bottom-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 9999;
+            pointer-events: auto;
+        }
+
+        .info-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
         }
 
         .modal {
@@ -559,92 +1046,79 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
         }
 
         .modal-content {
-            background-color: var(--panel-color);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            border: 2px solid var(--primary-color);
             position: relative;
+            background: rgba(30, 30, 30, 0.95);
+            margin: 15% auto;
+            padding: 30px;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            animation: modalSlideIn 0.3s ease;
         }
 
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
-        .withdraw-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            text-align: left;
-        }
-
-        .form-group label {
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        select, input[type="text"], input[type="number"] {
-            padding: 12px;
-            border-radius: 8px;
-            border: 2px solid var(--border-color);
-            background-color: #333;
-            color: white;
-            font-size: 16px;
-        }
-
-        .progress-bar {
-            height: 20px;
-            background-color: #333;
-            border-radius: 10px;
+        .modal-text {
+            color: #fff;
+            line-height: 1.6;
             margin-top: 20px;
-            overflow: hidden;
-            display: none;
         }
 
-        .progress {
-            height: 100%;
-            background-color: var(--primary-color);
-            width: 0%;
-            transition: width 0.3s;
+        .modal-text p {
+            margin: 10px 0;
+        }
+
+        .close-button {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-button:hover {
+            color: #ff4444;
+            transform: rotate(90deg);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: black;
-            font-weight: bold;
+            gap: 10px;
+            margin-left: 20px;
         }
 
-        .withdraw-status {
-            margin-top: 15px;
-            font-weight: bold;
-            display: none;
+        .nav-info-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
 
-        .success {
-            color: var(--primary-color);
-        }
-
-        .error {
-            color: var(--secondary-color);
+        .nav-info-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
         }
     </style>
 </head>
@@ -652,17 +1126,20 @@
     <div class="container">
         <nav>
             <div class="user-info">
-                <div class="user-avatar">Mr.</div>
+                <div class="user-avatar">S</div>
                 <div>
-                    <div><strong> Mr. Beast</strong> 
-                    </div>
+                    <div><strong>Shonaax</strong></div>
                     <div id="nav-balance">1000 ₽</div>
                 </div>
             </div>
-            <button onclick="openWithdrawModal()">Вывод</button>
+            <div class="nav-buttons">
+                <button onclick="openHowToPlayModal()" class="nav-info-button">Как играть</button>
+                <button onclick="openAuthorModal()" class="nav-info-button">Автор</button>
+            </div>
+            <!--<button onclick="openWithdrawModal()">Вывод</button>-->
         </nav>
         
-        <h1>🎰 Депер школы 🎰</h1>
+        <h1>🎰 Lime Slots 🎰</h1>
         
         <div class="balance">
             Баланс: <span id="balance">1000</span> ₽
@@ -676,9 +1153,9 @@
         
         <div class="slot-machine">
             <div class="slots">
-                <div class="slot" id="slot1">🍒</div>
-                <div class="slot" id="slot2">🍋</div>
-                <div class="slot" id="slot3">🍊</div>
+                <div class="slot" id="slot1">-</div>
+                <div class="slot" id="slot2">-</div>
+                <div class="slot" id="slot3">-</div>
             </div>
             
             <div class="controls">
@@ -693,11 +1170,26 @@
             <div class="symbol">🍋 = x3</div>
             <div class="symbol">🍊 = x4</div>
             <div class="symbol">7️⃣ = x10</div>
+            <div class="symbol">🎮 = x5</div>
+            <div class="symbol">🎲 = x6</div>
+            <div class="symbol">🎯 = x7</div>
+            <div class="symbol">🎪 = x8</div>
         </div>
         
         <div class="paytable">
-            <p>3 одинаковых символа = множитель x5</p>
-            <p>3 семёрки = ДЖЕКПОТ x100</p>
+            <h3>Таблица выплат</h3>
+            <div class="paytable-row">
+                <span>3 одинаковых символа</span>
+                <span>x5 от множителя</span>
+            </div>
+            <div class="paytable-row">
+                <span>3 семёрки</span>
+                <span>ДЖЕКПОТ x100</span>
+            </div>
+            <div class="paytable-row">
+                <span>2 одинаковых символа</span>
+                <span>x1 от множителя</span>
+            </div>
         </div>
     </div>
 
@@ -739,7 +1231,12 @@
                     <small>Доступно: <span id="available-amount">1000</span> ₽</small>
                 </div>
                 
-                <button onclick="submitWithdraw()">Вывести</button>
+                <button onclick="startQuiz()">Начать вывод</button>
+            </div>
+            
+            <div class="quiz-container" id="quiz-container">
+                <div class="quiz-question" id="quiz-question"></div>
+                <div class="quiz-options" id="quiz-options"></div>
             </div>
             
             <div class="progress-bar" id="progress-bar">
@@ -747,6 +1244,37 @@
             </div>
             
             <div class="withdraw-status" id="withdraw-status"></div>
+        </div>
+    </div>
+
+    <div class="bottom-buttons">
+        <button onclick="openHowToPlayModal()" class="info-button">Как играть</button>
+        <button onclick="openAuthorModal()" class="info-button">Автор</button>
+    </div>
+
+    <div id="how-to-play-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeHowToPlayModal()">&times;</span>
+            <h2>Как играть</h2>
+            <div class="modal-text">
+                <p>1. Выберите тип слота (Классический, Фруктовый или Счастливый)</p>
+                <p>2. Установите размер ставки</p>
+                <p>3. Нажмите кнопку "Крутить"</p>
+                <p>4. Если выпадут три одинаковых символа - вы выиграли!</p>
+                <p>5. Для вывода средств необходимо пройти викторину</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="author-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeAuthorModal()">&times;</span>
+            <h2>Автор</h2>
+            <div class="modal-text">
+                <p>Разработчик: Александр Потемкин</p>
+                <p>Версия: 1.0</p>
+                <p>© 2024 Все права защищены</p>
+            </div>
         </div>
     </div>
 
@@ -839,13 +1367,14 @@
         }
         
         // Символы для слотов
-        const symbols = ['🍒', '🍋', '🍊', '7️⃣'];
+        const oldSymbols = ['🍒', '🍋', '🍊', '7️⃣'];
+        const newSymbols = ['🎮', '🎲', '🎯', '🎪'];
+        const allSymbols = [...oldSymbols, ...newSymbols];
+
         // Множители для символов
         const multipliers = {
-            '🍒': 2,
-            '🍋': 3,
-            '🍊': 4,
-            '7️⃣': 10
+            '🍒': 2, '🍋': 3, '🍊': 4, '7️⃣': 10,
+            '🎮': 5, '🎲': 6, '🎯': 7, '🎪': 8
         };
         
         // Обновление отображения баланса
@@ -868,125 +1397,275 @@
         // Анимация вращения слота
         function spinSlot(slotElement, duration, finalSymbol) {
             let startTime = null;
-            const symbolsCount = symbols.length;
+            const symbolsCount = allSymbols.length;
             let currentIndex = 0;
-            
+            let spinSpeed = 30;
+            let maxSpeed = 10;
+            let currentSpeed = spinSpeed;
+            let spinCount = 0;
+            const totalSpins = 20;
+
+            // Add cosmic background
+            const cosmicBg = createCosmicBackground();
+            setTimeout(() => cosmicBg.classList.add('active'), 100);
+
             function animate(time) {
                 if (!startTime) startTime = time;
                 const progress = (time - startTime) / duration;
-                
+
+                if (progress < 0.2) {
+                    currentSpeed = spinSpeed - (spinSpeed - maxSpeed) * (progress / 0.2);
+                } else if (progress > 0.8) {
+                    currentSpeed = maxSpeed + (spinSpeed - maxSpeed) * ((progress - 0.8) / 0.2);
+                }
+
                 if (progress < 1) {
                     currentIndex = (currentIndex + 1) % symbolsCount;
-                    slotElement.textContent = symbols[currentIndex];
-                    requestAnimationFrame(animate);
+                    slotElement.textContent = allSymbols[currentIndex];
+                    
+                    const rotation = (currentIndex * 45) + (spinCount * 360);
+                    slotElement.style.transform = `rotateX(${rotation}deg) scale(${1 + Math.sin(progress * Math.PI) * 0.1})`;
+                    
+                    if (currentIndex === 0) spinCount++;
+                    
+                    setTimeout(() => requestAnimationFrame(animate), currentSpeed);
                 } else {
                     slotElement.textContent = finalSymbol;
+                    slotElement.style.transform = 'rotateX(0deg) scale(1)';
+                    
+                    // Add reveal animation
+                    slotElement.classList.add('slot-reveal');
+                    setTimeout(() => slotElement.classList.remove('slot-reveal'), 1000);
+
+                    // Remove cosmic background
+                    setTimeout(() => {
+                        cosmicBg.classList.remove('active');
+                        setTimeout(() => cosmicBg.remove(), 500);
+                    }, 500);
+
+                    const rect = slotElement.getBoundingClientRect();
+                    createParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
                 }
             }
-            
+
             requestAnimationFrame(animate);
         }
         
         // Основная функция вращения
         function spin() {
-            if (isSpinning || balance < betAmount) return;
-            
+            if (isSpinning) return;
+            if (balance < betAmount) {
+                alert('Недостаточно средств!');
+                return;
+            }
+
             isSpinning = true;
             balance -= betAmount;
             updateBalance();
             saveData();
-            document.getElementById('result').textContent = '';
-            document.getElementById('result').className = 'result';
-            
-            // Генерация случайных результатов
-            const results = [
-                symbols[Math.floor(Math.random() * symbols.length)],
-                symbols[Math.floor(Math.random() * symbols.length)],
-                symbols[Math.floor(Math.random() * symbols.length)]
+
+            // Add spinning effect
+            screenColor.classList.add('spinning');
+
+            const slots = [
+                document.getElementById('slot1'),
+                document.getElementById('slot2'),
+                document.getElementById('slot3')
             ];
+
+            // Determine if it's a mixed set (5% chance)
+            const isMixed = Math.random() < 0.05;
             
-            // Вращение каждого слота с разной длительностью
-            const spinDurations = [1000, 1500, 2000];
-            spinSlot(document.getElementById('slot1'), spinDurations[0], results[0]);
-            spinSlot(document.getElementById('slot2'), spinDurations[1], results[1]);
-            spinSlot(document.getElementById('slot3'), spinDurations[2], results[2]);
+            // Generate first symbol
+            const firstSymbol = allSymbols[Math.floor(Math.random() * allSymbols.length)];
+            const isNewCategory = newSymbols.includes(firstSymbol);
             
-            // Проверка результатов после завершения анимации
+            // Generate remaining symbols based on category
+            let remainingSymbols;
+            if (isMixed) {
+                remainingSymbols = allSymbols;
+            } else {
+                remainingSymbols = isNewCategory ? newSymbols : oldSymbols;
+            }
+
+            const results = [
+                firstSymbol,
+                remainingSymbols[Math.floor(Math.random() * remainingSymbols.length)],
+                remainingSymbols[Math.floor(Math.random() * remainingSymbols.length)]
+            ];
+
+            // Spin animation
+            slots.forEach((slot, index) => {
+                spinSlot(slot, 2000 + index * 500, results[index]);
+            });
+
+            // Check results after all spins complete
             setTimeout(() => {
+                const hasWin = checkResults(results);
+                // Update screen color based on result
+                screenColor.classList.remove('spinning');
+                screenColor.classList.add(hasWin ? 'win' : 'lose');
+                // Remove color effect after a delay
+                setTimeout(() => {
+                    screenColor.classList.remove('win', 'lose');
+                }, 1000);
                 isSpinning = false;
-                checkResults(results);
-            }, Math.max(...spinDurations) + 100);
+            }, 3000);
         }
         
         // Проверка результатов и расчет выигрыша
         function checkResults(results) {
             let winAmount = 0;
             const resultElement = document.getElementById('result');
+            let hasWin = false;
             
-            // Проверка на джекпот (три семёрки)
+            // Determine if it's a mixed set (5% chance)
+            const isMixed = Math.random() < 0.05;
+            
+            // Determine the category based on first symbol
+            const firstSymbol = results[0];
+            const isNewCategory = newSymbols.includes(firstSymbol);
+            
+            // Check if all symbols are from the same category (unless mixed)
+            const allSameCategory = !isMixed && results.every(symbol => 
+                isNewCategory ? newSymbols.includes(symbol) : oldSymbols.includes(symbol)
+            );
+
+            // Add category indicator
+            results.forEach((symbol, index) => {
+                const slot = document.getElementById(`slot${index + 1}`);
+                const category = document.createElement('div');
+                category.className = 'slot-category';
+                category.textContent = isMixed ? 'MIXED' : (isNewCategory ? 'NEW' : 'CLASSIC');
+                slot.appendChild(category);
+                setTimeout(() => category.remove(), 2000);
+            });
+
+            // Check for jackpot (three sevens)
             if (results[0] === '7️⃣' && results[1] === '7️⃣' && results[2] === '7️⃣') {
                 winAmount = betAmount * 100;
                 resultElement.textContent = `ДЖЕКПОТ! +${winAmount} ₽`;
                 resultElement.className = 'result jackpot';
-            } 
-            // Проверка на три одинаковых символа
-            else if (results[0] === results[1] && results[1] === results[2]) {
-                const multiplier = multipliers[results[0]] * 5;
+                createConfetti();
+                createWinText('JACKPOT!', resultElement);
+                hasWin = true;
+            } else if (isMixed) {
+                // Special mixed category win
+                const multiplier = 3; // Base multiplier for mixed sets
                 winAmount = betAmount * multiplier;
-                resultElement.textContent = `Три ${results[0]}! +${winAmount} ₽ (x${multiplier})`;
-                resultElement.className = 'result win';
-            } 
-            // Проверка на два одинаковых символа
-            else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
-                // Находим символ, который встречается дважды
-                const matchingSymbol = results[0] === results[1] ? results[0] : 
-                                     results[1] === results[2] ? results[1] : results[0];
-                const multiplier = multipliers[matchingSymbol];
-                winAmount = betAmount * multiplier;
-                resultElement.textContent = `Два ${matchingSymbol}! +${winAmount} ₽ (x${multiplier})`;
-                resultElement.className = 'result win';
-            } else {
-                resultElement.textContent = 'Попробуйте ещё раз!';
-                resultElement.className = 'result';
+                resultElement.textContent = `MIXED SET! +${winAmount} ₽ (x${multiplier})`;
+                resultElement.className = 'result win mixed-reveal';
+                createWinText('MIXED!', resultElement);
+                hasWin = true;
+            } else if (allSameCategory) {
+                // Regular category win
+                if (results[0] === results[1] && results[1] === results[2]) {
+                    // Three of a kind
+                    const multiplier = multipliers[results[0]] * (isNewCategory ? 6 : 5);
+                    winAmount = betAmount * multiplier;
+                    resultElement.textContent = `Три ${results[0]}! +${winAmount} ₽ (x${multiplier})`;
+                    resultElement.className = 'result win';
+                    createWinText('WIN!', resultElement);
+                    hasWin = true;
+                } else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
+                    // Two of a kind
+                    const matchingSymbol = results[0] === results[1] ? results[0] : 
+                                         results[1] === results[2] ? results[1] : results[0];
+                    const multiplier = multipliers[matchingSymbol] * (isNewCategory ? 1.5 : 1);
+                    winAmount = betAmount * multiplier;
+                    resultElement.textContent = `Два ${matchingSymbol}! +${winAmount} ₽ (x${multiplier})`;
+                    resultElement.className = 'result win';
+                    createWinText('WIN!', resultElement);
+                    hasWin = true;
+                }
             }
-            
+
             if (winAmount > 0) {
                 balance += winAmount;
                 updateBalance();
                 saveData();
+                
+                // Add glow effect to winning slots
+                results.forEach((symbol, index) => {
+                    const slot = document.getElementById(`slot${index + 1}`);
+                    const glow = document.createElement('div');
+                    glow.className = 'glow';
+                    slot.appendChild(glow);
+                    setTimeout(() => glow.remove(), 2000);
+                });
+            } else {
+                resultElement.textContent = 'Попробуйте ещё раз!';
+                resultElement.className = 'result';
+            }
+
+            return hasWin;
+        }
+        
+        // Создание конфетти для джекпота
+        function createConfetti() {
+            for (let i = 0; i < 150; i++) { // Increased number of confetti
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 60 + 100}, 100%, 50%)`; // Lime color range
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
             }
         }
-        
-        // Функции для модального окна вывода
-        function openWithdrawModal() {
-            document.getElementById('withdraw-modal').style.display = 'flex';
-            document.getElementById('withdraw-amount').value = Math.min(100, balance);
-            document.getElementById('withdraw-form').style.display = 'block';
-            document.getElementById('progress-bar').style.display = 'none';
-            document.getElementById('withdraw-status').style.display = 'none';
-        }
-        
-        function closeModal() {
-            document.getElementById('withdraw-modal').style.display = 'none';
-        }
-        
-        function updateWithdrawFields() {
-            const method = document.getElementById('withdraw-method').value;
+
+        // Create floating win text
+        function createWinText(text, parentElement) {
+            const winText = document.createElement('div');
+            winText.className = 'win-text';
+            winText.textContent = text;
             
-            document.getElementById('card-number-group').style.display = 'none';
-            document.getElementById('steam-id-group').style.display = 'none';
-            document.getElementById('qiwi-number-group').style.display = 'none';
-            
-            if (method === 'sber' || method === 'tinkoff') {
-                document.getElementById('card-number-group').style.display = 'flex';
-            } else if (method === 'steam') {
-                document.getElementById('steam-id-group').style.display = 'flex';
-            } else if (method === 'qiwi') {
-                document.getElementById('qiwi-number-group').style.display = 'flex';
+            // Add sparkle particles
+            for (let i = 0; i < 12; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.setProperty('--angle', `${i * 30}deg`);
+                sparkle.style.setProperty('--delay', `${i * 0.1}s`);
+                winText.appendChild(sparkle);
             }
+            
+            parentElement.appendChild(winText);
+            
+            // Remove the element after animation
+            setTimeout(() => {
+                winText.style.opacity = '0';
+                winText.style.transform = 'translate(-50%, -20px) scale(0.8)';
+                setTimeout(() => winText.remove(), 300);
+            }, 1000);
         }
+
+        // Квизы для вывода
+        const quizzes = [
+            {
+                question: "Какой банк выпустил первую кредитную карту?",
+                options: ["American Express", "Bank of America", "Chase", "Citibank"],
+                correct: 0
+            },
+            {
+                question: "В каком году была основана компания Visa?",
+                options: ["1958", "1966", "1970", "1976"],
+                correct: 1
+            },
+            {
+                question: "Какой процент комиссии обычно берут банки за международные переводы?",
+                options: ["1-2%", "3-5%", "5-7%", "7-10%"],
+                correct: 1
+            }
+        ];
         
-        function submitWithdraw() {
+        let currentQuiz = 0;
+        let quizAttempts = 0;
+        const maxAttempts = 3;
+        
+        function startQuiz() {
             const amount = parseInt(document.getElementById('withdraw-amount').value);
             const method = document.getElementById('withdraw-method').value;
             
@@ -1016,40 +1695,184 @@
                 return;
             }
             
-            // Скрываем форму и показываем прогресс бар
+            // Скрываем форму и показываем квиз
             document.getElementById('withdraw-form').style.display = 'none';
-            document.getElementById('progress-bar').style.display = 'block';
+            document.getElementById('quiz-container').style.display = 'block';
             
-            // Генерируем случайное время обработки (60-300 секунд)
-            const processingTime = Math.floor(Math.random() * 241) + 60;
-            
-            // Запускаем прогресс бар
-            let progress = 0;
-            const progressInterval = setInterval(() => {
-                progress += 1;
-                document.getElementById('progress').style.width = progress + '%';
-                document.getElementById('progress').textContent = progress + '%';
-                
-                if (progress >= 100) {
-                    clearInterval(progressInterval);
-                    completeWithdraw(amount);
-                }
-            }, (processingTime * 10));
+            showQuiz();
         }
         
-        function completeWithdraw(amount) {
-            balance -= amount;
-            updateBalance();
-            saveData();
+        function showQuiz() {
+            const quiz = quizzes[currentQuiz];
+            document.getElementById('quiz-question').textContent = quiz.question;
             
-            document.getElementById('withdraw-status').textContent = 'Вывод успешно выполнен!';
-            document.getElementById('withdraw-status').className = 'withdraw-status success';
-            document.getElementById('withdraw-status').style.display = 'block';
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
             
-            // Через 3 секунды закрываем модальное окно
-            setTimeout(() => {
-                closeModal();
-            }, 3000);
+            quiz.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'quiz-option';
+                optionElement.textContent = option;
+                optionElement.onclick = () => checkAnswer(index);
+                optionsContainer.appendChild(optionElement);
+            });
+        }
+        
+        function checkAnswer(selectedIndex) {
+            const quiz = quizzes[currentQuiz];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            options.forEach(option => option.classList.remove('selected'));
+            options[selectedIndex].classList.add('selected');
+            
+            if (selectedIndex === quiz.correct) {
+                // Правильный ответ
+                if (currentQuiz < quizzes.length - 1) {
+                    currentQuiz++;
+                    setTimeout(showQuiz, 1000);
+                } else {
+                    // Все квизы пройдены
+                    startWithdraw();
+                }
+            } else {
+                // Неправильный ответ
+                quizAttempts++;
+                if (quizAttempts >= maxAttempts) {
+                    alert('Превышено количество попыток. Попробуйте позже.');
+                    closeModal();
+                    resetQuiz();
+                } else {
+                    alert('Неверный ответ. Попробуйте еще раз.');
+                }
+            }
+        }
+        
+        function resetQuiz() {
+            currentQuiz = 0;
+            quizAttempts = 0;
+        }
+        
+        function startWithdraw() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('progress-bar').style.display = 'block';
+            
+            // 60% шанс ошибки банка
+            const bankError = Math.random() < 0.6;
+            
+            if (bankError) {
+                // Имитация ошибки банка
+                setTimeout(() => {
+                    document.getElementById('withdraw-status').textContent = 'Ошибка банка: транзакция отклонена';
+                    document.getElementById('withdraw-status').className = 'withdraw-status error';
+                    document.getElementById('withdraw-status').style.display = 'block';
+                    
+                    setTimeout(() => {
+                        closeModal();
+                        resetQuiz();
+                    }, 3000);
+                }, 2000);
+            } else {
+                // Успешный вывод
+                const amount = parseInt(document.getElementById('withdraw-amount').value);
+                balance -= amount;
+                updateBalance();
+                saveData();
+                
+                document.getElementById('withdraw-status').textContent = 'Вывод успешно выполнен!';
+                document.getElementById('withdraw-status').className = 'withdraw-status success';
+                document.getElementById('withdraw-status').style.display = 'block';
+                
+                setTimeout(() => {
+                    closeModal();
+                    resetQuiz();
+                }, 3000);
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('withdraw-modal').style.display = 'none';
+            document.getElementById('withdraw-form').style.display = 'block';
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('progress-bar').style.display = 'none';
+            document.getElementById('withdraw-status').style.display = 'none';
+            resetQuiz();
+        }
+        
+        function updateWithdrawFields() {
+            const method = document.getElementById('withdraw-method').value;
+            
+            document.getElementById('card-number-group').style.display = 'none';
+            document.getElementById('steam-id-group').style.display = 'none';
+            document.getElementById('qiwi-number-group').style.display = 'none';
+            
+            if (method === 'sber' || method === 'tinkoff') {
+                document.getElementById('card-number-group').style.display = 'flex';
+            } else if (method === 'steam') {
+                document.getElementById('steam-id-group').style.display = 'flex';
+            } else if (method === 'qiwi') {
+                document.getElementById('qiwi-number-group').style.display = 'flex';
+            }
+        }
+        
+        // Add the missing openWithdrawModal function
+        function openWithdrawModal() {
+            document.getElementById('withdraw-modal').style.display = 'flex';
+            document.getElementById('withdraw-amount').value = Math.min(100, balance);
+            document.getElementById('withdraw-form').style.display = 'block';
+            document.getElementById('progress-bar').style.display = 'none';
+            document.getElementById('withdraw-status').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'none';
+        }
+        
+        // Enhanced particle creation
+        function createParticles(x, y, count = 20) {
+            const particleTypes = ['circle', 'star', 'diamond'];
+            const colors = ['#32CD32', '#00FF00', '#228B22', '#90EE90', '#98FB98'];
+
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                const type = particleTypes[Math.floor(Math.random() * particleTypes.length)];
+                const size = Math.random() * 10 + 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+
+                particle.className = `particle particle-${type}`;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.backgroundColor = color;
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+
+                // Random movement
+                const tx = (Math.random() - 0.5) * 200;
+                const ty = (Math.random() - 0.5) * 200;
+                const tr = Math.random() * 360;
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.setProperty('--tr', `${tr}deg`);
+
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 2000);
+            }
+        }
+        
+        // Create cosmic background
+        function createCosmicBackground() {
+            const bg = document.createElement('div');
+            bg.className = 'cosmic-bg';
+            document.body.appendChild(bg);
+
+            // Create cosmic particles
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'cosmic-particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.setProperty('--tx', `${(Math.random() - 0.5) * 200}px`);
+                particle.style.setProperty('--ty', `${(Math.random() - 0.5) * 200}px`);
+                bg.appendChild(particle);
+            }
+
+            return bg;
         }
         
         // Инициализация при загрузке страницы
@@ -1058,6 +1881,54 @@
             await loadData();
             updateBalance();
         };
+
+        // Add screen color element
+        const screenColor = document.createElement('div');
+        screenColor.className = 'screen-color';
+        document.body.appendChild(screenColor);
+
+        function openHowToPlayModal() {
+            document.getElementById('how-to-play-modal').style.display = 'block';
+        }
+
+        function closeHowToPlayModal() {
+            document.getElementById('how-to-play-modal').style.display = 'none';
+        }
+
+        function openAuthorModal() {
+            document.getElementById('author-modal').style.display = 'block';
+        }
+
+        function closeAuthorModal() {
+            document.getElementById('author-modal').style.display = 'none';
+        }
+
+        // Закрытие модальных окон при клике вне их содержимого
+        window.onclick = function(event) {
+            const howToPlayModal = document.getElementById('how-to-play-modal');
+            const authorModal = document.getElementById('author-modal');
+            
+            if (event.target === howToPlayModal) {
+                closeHowToPlayModal();
+            }
+            if (event.target === authorModal) {
+                closeAuthorModal();
+            }
+        }
+    </script>
+    <script>
+        setInterval(function() {
+    const inputElement = document.getElementById('bet-amount');
+    const inputValue = parseInt(inputElement.value, 10);
+
+    if (isNaN(inputValue)) {
+        console.log("значение пусто");
+    } else if (inputValue !== betAmount) {
+        betAmount = inputValue;
+        console.log("Изменение ставки на ", betAmount);
+    }
+}, 10); // проверка на изменение ставки
+
     </script>
 </body>
 </html>
