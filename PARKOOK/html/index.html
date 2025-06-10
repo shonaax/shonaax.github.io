@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/styles.css">
+    <title>Fighting game</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div id="menu" class="menu">
+
+            <div class="title; animate-charcter">
+                Fighting Game!
+            </div>
+            <div class="options">
+                <div id="1player" class="menuOption">
+                    Player vs AI
+                </div>
+                <div id="2players" class="menuOption">
+                    Player vs Player
+                </div>
+            </div>
+            <div class="author">Made by Adrizen</div>
+        </div>
+
+        <div id="hud" class="hud">
+
+            <!-- Player's health -->
+            <div class="healthLayout">
+                <div class="remainingHealthbar"></div>
+                <!-- TODO: Arreglar nombre barras. La vida del jugador se reduzca hacia el timer. -->
+                <div id="playerHealth" class="totalHealthBar"></div>
+            </div>
+            <!-- Timer -->
+            <div id="timer" class="timer"> -- </div>
+
+            <!-- Enemy's health -->
+            <div class="healthLayout">
+                <div class="remainingHealthbar"></div> <!-- TODO: Arreglar nombre barras. -->
+                <div id="enemyHealth" class="totalHealthBar"></div>
+            </div>
+        </div>
+        <div id="result" class="result"> result </div>
+        <div class="game">
+            <canvas id="gameWindow"> </canvas>
+        </div>
+
+    </div>
+
+    <div class="information">
+        <div class="keymapping">
+            <div class="keys">
+                <h1> Player 1 </h1>
+                <p> Movement: WASD </p>
+                <p> Attack: Spacebar </p>
+            </div>
+            <div class="keys">
+                <h1> Player 2 </h1>
+                <p> Movement: Arrow keys </p>
+                <p> Attack: Alt key (right) </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"
+        integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="module" src="../js/index.js"> </script>
+</body>
+
+</html>

@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Фейверк: Джекпот!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6f42c1',
+                        secondary: '#28a745',
+                    },
+                    animation: {
+                        'gradient': 'gradient 8s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        gradient: {
+                            '0%, 100%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Alpine.js for reactivity -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-gradient: linear-gradient(45deg, #6f42c1, #8a2be2);
+            --secondary-gradient: linear-gradient(45deg, #28a745, #20c997);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #6f42c1, #8a2be2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 8s linear infinite;
+        }
+
+        .gradient-border {
+            position: relative;
+            border-radius: 1rem;
+            padding: 1px;
+            background: linear-gradient(45deg, #6f42c1, #8a2be2);
+        }
+
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 1rem;
+            padding: 2px;
+            background: linear-gradient(45deg, #6f42c1, #8a2be2);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); visibility: hidden; }
+        }
+
+        .jackpot-alert {
+            animation: fadeOut 5s ease-out forwards;
+            background: linear-gradient(45deg, #ffd700, #ffa500);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .relaxation-mode {
+            transition: all 0.5s ease;
+        }
+
+        .relaxation-mode.active {
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+        }
+
+        .firework-particle {
+            will-change: transform, opacity;
+        }
+
+        .modal-transition {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glow::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-glow:hover::after {
+            opacity: 1;
+        }
+
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .firework-card {
+            transition: all 0.3s ease;
+        }
+
+        .firework-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(111, 66, 193, 0.3);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(111, 66, 193, 0.5);
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(111, 66, 193, 0.7);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-8">
+    <!-- Main Game Card -->
+    <div class="w-full max-w-4xl glass-effect rounded-2xl shadow-2xl p-8 mb-8 transform hover:scale-[1.01] transition-all duration-300">
+        <h2 class="text-4xl font-bold text-center mb-8 gradient-text">🚀 Фейверк: Уровни и Баффы</h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="stat-card glass-effect p-4 rounded-xl">
+                <p class="text-lg text-gray-300 mb-1">
+                    <i class="fas fa-coins text-yellow-400 mr-2"></i>Баланс
+                </p>
+                <p class="text-2xl font-bold text-green-400" id="balance">0 $</p>
+            </div>
+            <div class="stat-card glass-effect p-4 rounded-xl">
+                <p class="text-lg text-gray-300 mb-1">
+                    <i class="fas fa-fire text-orange-400 mr-2"></i>Уровень
+                </p>
+                <p class="text-2xl font-bold text-yellow-400" id="level">1</p>
+            </div>
+            <div class="stat-card glass-effect p-4 rounded-xl">
+                <p class="text-lg text-gray-300 mb-1">
+                    <i class="fas fa-money-bill-wave text-green-400 mr-2"></i>Доход
+                </p>
+                <p class="text-2xl font-bold text-blue-400" id="incomePerFirework">1 $</p>
+            </div>
+            <div class="stat-card glass-effect p-4 rounded-xl">
+                <p class="text-lg text-gray-300 mb-1">
+                    <i class="fas fa-rocket text-purple-400 mr-2"></i>Фейверк
+                </p>
+                <p class="text-2xl font-bold text-purple-400" id="currentFireworkName">Обычный</p>
+            </div>
+        </div>
+
+        <div class="text-center mb-6">
+            <span id="buffText" class="text-gray-400 text-sm bg-gray-800 px-4 py-2 rounded-full inline-block">
+                <i class="fas fa-magic mr-2"></i>—
+            </span>
+        </div>
+
+        <div class="flex flex-col gap-4">
+            <button id="launchBtn" class="btn-glow w-full py-4 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg">
+                <i class="fas fa-rocket mr-2"></i>Запустить фейверк (пробел)
+            </button>
+            <button id="upgradeBtn" class="btn-glow w-full py-3 bg-gradient-to-r from-green-600 to-green-800 hover:from-green-700 hover:to-green-900 text-white font-bold rounded-xl transition-all shadow-lg">
+                <i class="fas fa-arrow-up mr-2"></i>Прокачать фейверк (10$)
+            </button>
+            <button id="openStoreBtn" class="btn-glow w-full py-3 bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-700 hover:to-gray-900 text-white font-bold rounded-xl transition-all shadow-lg">
+                <i class="fas fa-store mr-2"></i>Открыть магазин фейверков
+            </button>
+            <button id="relaxationBtn" class="btn-glow w-full py-3 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-bold rounded-xl transition-all shadow-lg">
+                <i class="fas fa-moon mr-2"></i>Режим релаксации
+            </button>
+        </div>
+    </div>
+
+    <!-- Store Modal -->
+    <div id="storeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="glass-effect rounded-2xl p-8 w-full max-w-5xl max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-3xl font-bold gradient-text">
+                    <i class="fas fa-store mr-2"></i>Магазин фейверков
+                </h3>
+                <button id="closeStoreBtn" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div id="fireworkStore" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </div>
+    </div>
+
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        // Optimized DOM caching
+        const DOM = {
+            balanceEl: document.getElementById('balance'),
+            levelEl: document.getElementById('level'),
+            incomeEl: document.getElementById('incomePerFirework'),
+            buffEl: document.getElementById('buffText'),
+            currentFireworkName: document.getElementById('currentFireworkName'),
+            launchBtn: document.getElementById('launchBtn'),
+            upgradeBtn: document.getElementById('upgradeBtn'),
+            openStoreBtn: document.getElementById('openStoreBtn'),
+            closeStoreBtn: document.getElementById('closeStoreBtn'),
+            storeModal: document.getElementById('storeModal'),
+            fireworkStore: document.getElementById('fireworkStore'),
+            relaxationBtn: document.getElementById('relaxationBtn')
+        };
+
+        // Game state
+        let state = {
+            balance: 0,
+            fireworkLevel: 1,
+            lastFireworkTime: 0,
+            selectedFireworkId: 0,
+            isRelaxationMode: false,
+            FIREWORK_COOLDOWN: 200
+        };
+
+        // Optimized firework configurations
+        const fireworksList = [
+            {
+                id: 0,
+                name: 'Обычный',
+                purchased: true,
+                colorPalette: ['#FF0000', '#00FF00', '#0000FF'],
+                particleCount: 30,
+                scalar: 1,
+                spread: 120,
+                upgradeCost: 10,
+                specialEffect: null,
+                description: "Стандартный фейверк без особых эффектов"
+            },
+            {
+                id: 1,
+                name: 'Огненный',
+                purchased: false,
+                price: 50,
+                colorPalette: ['#FF4500', '#FFA500', '#FFD700'],
+                particleCount: 50,
+                scalar: 1.5,
+                spread: 150,
+                upgradeCost: 15,
+                specialEffect: function() {
+                    // Эффект дыма
+                    confetti({
+                        particleCount: 20,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0.2, y: 0.6 },
+                        colors: ['#333', '#555', '#777'],
+                        scalar: 0.8,
+                        ticks: 100
+                    });
+                    confetti({
+                        particleCount: 20,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 0.8, y: 0.6 },
+                        colors: ['#333', '#555', '#777'],
+                        scalar: 0.8,
+                        ticks: 100
+                    });
+                },
+                description: "Создает эффект огня с дымом по бокам"
+            },
+            {
+                id: 2,
+                name: 'Небесный',
+                purchased: false,
+                price: 100,
+                colorPalette: ['#1E90FF', '#87CEEB', '#FFFFFF'],
+                particleCount: 60,
+                scalar: 1.7,
+                spread: 160,
+                upgradeCost: 20,
+                specialEffect: function() {
+                    // Эффект звездного неба
+                    setTimeout(() => {
+                        confetti({
+                            particleCount: 10,
+                            spread: 360,
+                            origin: { y: 0.4 },
+                            colors: ['#FFF'],
+                            shapes: ['star'],
+                            scalar: 1.5,
+                            ticks: 300
+                        });
+                    }, 500);
+                },
+                description: "Создает эффект звездного неба после взрыва"
+            },
+            {
+                id: 3,
+                name: 'Золотой',
+                purchased: false,
+                price: 200,
+                colorPalette: ['#FFD700', '#FFA500', '#FF4500'],
+                particleCount: 70,
+                scalar: 2,
+                spread: 180,
+                upgradeCost: 30,
+                specialEffect: function() {
+                    // Мерцающий эффект
+                    const interval = setInterval(() => {
+                        confetti({
+                            particleCount: 5,
+                            spread: 20,
+                            origin: { y: 0.5 },
+                            colors: ['#FFD700'],
+                            scalar: 0.5,
+                            ticks: 100
+                        });
+                    }, 100);
+                    
+                    setTimeout(() => clearInterval(interval), 2000);
+                },
+                description: "Сверкает золотыми искрами после взрыва"
+            },
+            {
+                id: 4,
+                name: 'Электрический',
+                purchased: false,
+                price: 300,
+                colorPalette: ['#00FFFF', '#0000FF', '#00BFFF'],
+                particleCount: 80,
+                scalar: 2.2,
+                spread: 190,
+                upgradeCost: 40,
+                specialEffect: function() {
+                    // Эффект молний
+                    for (let i = 0; i < 3; i++) {
+                        setTimeout(() => {
+                            confetti({
+                                particleCount: 5,
+                                angle: 90,
+                                spread: 5,
+                                origin: { y: 0.3 },
+                                colors: ['#FFF'],
+                                shapes: ['circle'],
+                                scalar: 3,
+                                ticks: 50
+                            });
+                        }, i * 200);
+                    }
+                },
+                description: "Создает эффект электрических разрядов"
+            },
+            {
+                id: 5,
+                name: 'Радужный',
+                purchased: false,
+                price: 400,
+                colorPalette: ['#FF0000', '#FFA500', '#FFFF00', '#00FF00', '#0000FF', '#8A2BE2'],
+                particleCount: 90,
+                scalar: 2.4,
+                spread: 200,
+                upgradeCost: 50,
+                specialEffect: function() {
+                    // Волнообразный эффект
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(() => {
+                            confetti({
+                                particleCount: 30,
+                                spread: 100,
+                                origin: { y: 0.6 },
+                                scalar: 1.5,
+                                ticks: 100
+                            });
+                        }, i * 150);
+                    }
+                },
+                description: "Создает волны разноцветных частиц"
+            },
+            {
+                id: 6,
+                name: 'Ледяной',
+                purchased: false,
+                price: 500,
+                colorPalette: ['#00BFFF', '#87CEFA', '#FFFFFF'],
+                particleCount: 100,
+                scalar: 2.5,
+                spread: 210,
+                upgradeCost: 60,
+                specialEffect: function() {
+                    // Эффект снега
+                    setTimeout(() => {
+                        confetti({
+                            particleCount: 50,
+                            spread: 360,
+                            origin: { y: 0.1 },
+                            colors: ['#FFF'],
+                            shapes: ['circle'],
+                            scalar: 0.5,
+                            ticks: 200
+                        });
+                    }, 300);
+                },
+                description: "Создает эффект снегопада после взрыва"
+            },
+            {
+                id: 7,
+                name: 'Грозовой',
+                purchased: false,
+                price: 600,
+                colorPalette: ['#4B0082', '#000080', '#000000'],
+                particleCount: 110,
+                scalar: 2.7,
+                spread: 220,
+                upgradeCost: 70,
+                specialEffect: function() {
+                    // Эффект грома
+                    document.body.style.backgroundColor = '#333';
+                    setTimeout(() => {
+                        document.body.style.backgroundColor = '#121212';
+                    }, 100);
+                },
+                description: "Создает эффект вспышки молнии"
+            },
+            {
+                id: 8,
+                name: 'Праздничный',
+                purchased: false,
+                price: 700,
+                colorPalette: ['#FF69B4', '#FF1493', '#C71585'],
+                particleCount: 120,
+                scalar: 3,
+                spread: 230,
+                upgradeCost: 80,
+                specialEffect: function() {
+                    // Сердечки
+                    setTimeout(() => {
+                        confetti({
+                            particleCount: 20,
+                            spread: 60,
+                            origin: { y: 0.5 },
+                            colors: ['#FF69B4'],
+                            shapes: ['heart'],
+                            scalar: 1.5,
+                            ticks: 150
+                        });
+                    }, 400);
+                },
+                description: "Создает сердечки после взрыва"
+            },
+            {
+                id: 9,
+                name: 'Драконий',
+                purchased: false,
+                price: 1000,
+                colorPalette: ['#8B0000', '#CD5C5C', '#DC143C'],
+                particleCount: 130,
+                scalar: 3.2,
+                spread: 240,
+                upgradeCost: 100,
+                specialEffect: function() {
+                    // Эффект драконьего дыхания
+                    confetti({
+                        particleCount: 30,
+                        angle: 60,
+                        spread: 30,
+                        origin: { x: 0.3, y: 0.7 },
+                        colors: ['#8B0000'],
+                        scalar: 2,
+                        ticks: 100
+                    });
+                    confetti({
+                        particleCount: 30,
+                        angle: 120,
+                        spread: 30,
+                        origin: { x: 0.7, y: 0.7 },
+                        colors: ['#8B0000'],
+                        scalar: 2,
+                        ticks: 100
+                    });
+                },
+                description: "Создает эффект драконьего дыхания"
+            }
+        ];
+
+        // Optimized utility functions
+        const utils = {
+            getIncome() {
+                return Math.floor(state.fireworkLevel * (1 + state.fireworkLevel / 5));
+            },
+
+            getUpgradeCost() {
+                const selected = fireworksList.find(f => f.id === state.selectedFireworkId);
+                return selected.upgradeCost + (state.fireworkLevel - 1) * selected.upgradeCost;
+            },
+
+            getBuffDescription() {
+                if (state.fireworkLevel >= 4) return "+25% к частицам и +10% к доходу";
+                if (state.fireworkLevel >= 3) return "+50% к деньгам от взрывов";
+                if (state.fireworkLevel >= 2) return "+10% к скорости получения денег";
+                return "—";
+            }
+        };
+
+        // Optimized UI updates
+        function updateUI() {
+            DOM.balanceEl.textContent = state.balance.toLocaleString();
+            DOM.levelEl.textContent = state.fireworkLevel;
+            DOM.incomeEl.textContent = utils.getIncome().toLocaleString();
+            DOM.buffEl.textContent = utils.getBuffDescription();
+            
+            const selectedFirework = fireworksList.find(f => f.id === state.selectedFireworkId);
+            DOM.currentFireworkName.textContent = selectedFirework.name;
+            
+            DOM.upgradeBtn.disabled = state.balance < utils.getUpgradeCost();
+            DOM.upgradeBtn.textContent = `Прокачать фейверк (${utils.getUpgradeCost().toLocaleString()} $)`;
+        }
+
+        // Optimized firework launch
+        function launchFirework() {
+            const now = Date.now();
+            if (now - state.lastFireworkTime < state.FIREWORK_COOLDOWN) return;
+            state.lastFireworkTime = now;
+
+            let income = utils.getIncome();
+
+            // Jackpot chance
+            if (Math.random() * 100000000 <= 1) {
+                income = 1_000_000_000;
+                showJackpotAlert();
+            }
+
+            state.balance += income;
+            updateUI();
+
+            const selected = fireworksList.find(f => f.id === state.selectedFireworkId);
+            // Ограничиваем количество частиц для сохранения качества эффекта
+            let particleCount = Math.min(selected.particleCount + state.fireworkLevel * 5, 150);
+            let colors = [...selected.colorPalette];
+
+            // Применяем баффы, но сохраняем оригинальные цвета
+            if (state.fireworkLevel >= 2) {
+                // Добавляем дополнительные цвета только если их меньше 3
+                if (colors.length < 3) {
+                    colors.push('#FF00FF', '#00FFFF');
+                }
+            }
+            if (state.fireworkLevel >= 3) {
+                // Добавляем дополнительные цвета только если их меньше 4
+                if (colors.length < 4) {
+                    colors.push('#FFA500', '#FFFFFF');
+                }
+            }
+            if (state.fireworkLevel >= 4) {
+                particleCount = Math.floor(particleCount * 1.25);
+                income = Math.floor(income * 1.1);
+            }
+
+            // Оптимизированный эффект конфетти
+            requestAnimationFrame(() => {
+                // Основной взрыв
+                confetti({
+                    particleCount: income === 1_000_000_000 ? 500 : particleCount,
+                    spread: selected.spread,
+                    origin: { y: 0.6 },
+                    ticks: income === 1_000_000_000 ? 400 : 200,
+                    scalar: income === 1_000_000_000 ? 3 : selected.scalar,
+                    gravity: 0.5,
+                    colors: colors,
+                    shapes: income === 1_000_000_000 ? ['star'] : ['circle']
+                });
+
+                // Дополнительный эффект для высоких уровней
+                if (state.fireworkLevel >= 3) {
+                    setTimeout(() => {
+                        confetti({
+                            particleCount: Math.floor(particleCount * 0.5),
+                            spread: selected.spread * 0.8,
+                            origin: { y: 0.5 },
+                            ticks: 150,
+                            scalar: selected.scalar * 0.8,
+                            gravity: 0.4,
+                            colors: colors,
+                            shapes: ['circle']
+                        });
+                    }, 100);
+                }
+
+                if (selected.specialEffect) {
+                    selected.specialEffect();
+                }
+            });
+        }
+
+        // Updated store rendering with new design
+        function renderFireworkStore() {
+            DOM.fireworkStore.innerHTML = '';
+            
+            fireworksList.forEach(fw => {
+                const item = document.createElement('div');
+                item.className = `firework-card glass-effect rounded-xl p-6 ${fw.id === state.selectedFireworkId ? 'ring-2 ring-purple-500' : ''}`;
+
+                const info = document.createElement('div');
+                info.className = 'mb-4';
+                info.innerHTML = `
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-rocket text-2xl text-purple-400 mr-3"></i>
+                        <h4 class="text-xl font-bold gradient-text">${fw.name}</h4>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-3">${fw.description}</p>
+                    <p class="text-yellow-400">
+                        <i class="fas fa-tag mr-2"></i>
+                        Цена: ${fw.price ? fw.price.toLocaleString() + ' $' : 'Бесплатно'}
+                    </p>
+                `;
+
+                const btn = document.createElement('button');
+                btn.className = 'w-full py-3 px-4 rounded-xl transition-all mt-4';
+
+                if (fw.purchased) {
+                    btn.className += fw.id === state.selectedFireworkId 
+                        ? ' bg-gray-600 cursor-not-allowed' 
+                        : ' bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900';
+                    btn.innerHTML = fw.id === state.selectedFireworkId 
+                        ? '<i class="fas fa-check mr-2"></i>Выбран' 
+                        : '<i class="fas fa-check mr-2"></i>Выбрать';
+                    btn.disabled = fw.id === state.selectedFireworkId;
+                    btn.onclick = () => {
+                        state.selectedFireworkId = fw.id;
+                        updateUI();
+                        renderFireworkStore();
+                    };
+                } else {
+                    btn.className += state.balance >= fw.price 
+                        ? ' bg-gradient-to-r from-green-600 to-green-800 hover:from-green-700 hover:to-green-900' 
+                        : ' bg-gray-600 cursor-not-allowed';
+                    btn.innerHTML = `<i class="fas fa-shopping-cart mr-2"></i>Купить (${fw.price.toLocaleString()} $)`;
+                    btn.onclick = () => {
+                        if (state.balance >= fw.price) {
+                            state.balance -= fw.price;
+                            fw.purchased = true;
+                            state.selectedFireworkId = fw.id;
+                            updateUI();
+                            renderFireworkStore();
+                            
+                            confetti({
+                                particleCount: 30,
+                                spread: 70,
+                                origin: { y: 0.5 },
+                                colors: fw.colorPalette,
+                                scalar: 1,
+                                ticks: 100
+                            });
+                        }
+                    };
+                    btn.disabled = state.balance < fw.price;
+                }
+
+                item.appendChild(info);
+                item.appendChild(btn);
+                DOM.fireworkStore.appendChild(item);
+            });
+        }
+
+        // Relaxation mode
+        function toggleRelaxationMode() {
+            state.isRelaxationMode = !state.isRelaxationMode;
+            document.body.classList.toggle('relaxation-mode', state.isRelaxationMode);
+            
+            if (state.isRelaxationMode) {
+                // Start auto-launching fireworks
+                state.relaxationInterval = setInterval(() => {
+                    if (Math.random() < 0.3) { // 30% chance to launch
+                        launchFirework();
+                    }
+                }, 2000);
+            } else {
+                clearInterval(state.relaxationInterval);
+            }
+        }
+
+        // Event listeners
+        function initEvents() {
+            DOM.launchBtn.addEventListener('click', launchFirework);
+            DOM.upgradeBtn.addEventListener('click', () => {
+                const cost = utils.getUpgradeCost();
+                if (state.balance >= cost) {
+                    state.balance -= cost;
+                    state.fireworkLevel++;
+                    updateUI();
+                    
+                    confetti({
+                        particleCount: 20,
+                        spread: 70,
+                        origin: { y: 0.5 },
+                        scalar: 0.8,
+                        ticks: 100
+                    });
+                }
+            });
+
+            DOM.openStoreBtn.addEventListener('click', () => {
+                DOM.storeModal.classList.remove('hidden');
+                DOM.storeModal.classList.add('flex');
+                renderFireworkStore();
+            });
+
+            DOM.closeStoreBtn.addEventListener('click', () => {
+                DOM.storeModal.classList.add('hidden');
+                DOM.storeModal.classList.remove('flex');
+            });
+
+            DOM.relaxationBtn.addEventListener('click', toggleRelaxationMode);
+
+            document.addEventListener('keydown', (event) => {
+                if (event.code === 'Space') {
+                    event.preventDefault();
+                    launchFirework();
+                }
+            });
+        }
+
+        // Initialize game
+        function initGame() {
+            initEvents();
+            updateUI();
+            
+            setTimeout(() => {
+                confetti({
+                    particleCount: 30,
+                    spread: 70,
+                    origin: { y: 0.5 },
+                    scalar: 0.8,
+                    ticks: 100
+                });
+            }, 500);
+        }
+
+        initGame();
+
+        // Debug Tool - Make it globally accessible
+        window.debugtool = {
+            enable: 'off',
+            one: function(value) {
+                if (this.enable === 'on') {
+                    state.balance = Number(value);
+                    updateUI();
+                    console.log(`Balance set to: ${value}`);
+                } else {
+                    console.log('Debug tool is disabled. Set debugtool.enable = "on" to use it.');
+                }
+            },
+            two: function(id) {
+                if (this.enable === 'on') {
+                    const firework = fireworksList.find(f => f.id === Number(id));
+                    if (firework) {
+                        firework.purchased = true;
+                        state.selectedFireworkId = firework.id;
+                        updateUI();
+                        console.log(`Firework ${firework.name} unlocked and selected`);
+                    } else {
+                        console.log('Firework not found. Available IDs: 0-9');
+                    }
+                } else {
+                    console.log('Debug tool is disabled. Set debugtool.enable = "on" to use it.');
+                }
+            },
+            three: function(level) {
+                if (this.enable === 'on') {
+                    state.fireworkLevel = Number(level);
+                    updateUI();
+                    console.log(`Level set to: ${level}`);
+                } else {
+                    console.log('Debug tool is disabled. Set debugtool.enable = "on" to use it.');
+                }
+            },
+            help: function() {
+                console.log(`
+## DEBUG TOOL ##
+debugtool.enable = "on" - включить отладку
+debugtool.one("значение") - изменить баланс
+debugtool.two("id") - выдать фейверк
+debugtool.three("уровень") - установить уровень
+debugtool.help() - показать это сообщение
+                `);
+            }
+        };
+
+        // Show debug tool help on load
+        console.log(`
+## DEBUG TOOL ##
+debugtool.enable = "on" - включить отладку
+debugtool.one("значение") - изменить баланс
+debugtool.two("id") - выдать фейверк
+debugtool.three("уровень") - установить уровень
+debugtool.help() - показать это сообщение
+        `);
+    </script>
+</body>
+</html>
